@@ -1,0 +1,71 @@
+.form {
+  padding: 10vh;
+  width: 40vw;
+  margin: 2rem auto;
+  background-color: #131b59;
+  border-radius: 1rem;
+  box-shadow: 7px 7px 17px #2a3679;
+}
+
+.h1 {
+  text-align: center;
+  font-size: 2.5rem;
+}
+
+.div {
+  background-image: url("https://img.freepik.com/free-vector/halftone-background-with-circles_23-2148907689.jpg?t=st=1718035102~exp=1718035702~hmac=9afde2cd0af69e894979a52ff018a7cf82616ff5bb9faf7ef366bac373fec1a3");
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* background-color: #eae6eb; */
+  height: 96vh;
+  padding: 2vh;
+  margin: -2vh 0vh;
+}
+
+.form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.form input {
+  display: block;
+  width: 100%;
+  font: inherit;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  background-color: #8f9fff;
+  border: none;
+  border-bottom: 2px solid #494844;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-bottom: 0.5rem;
+}
+
+.form button {
+  font: inherit;
+  background-color: #192c91;
+  border: 1px solid #9c27b0;
+  color: #ffffff;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form button:hover,
+.form button:active {
+  background-color: #111e69;
+  border-color: #ac31c1;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.h1 {
+  text-align: center;
+  color: aliceblue;
+}

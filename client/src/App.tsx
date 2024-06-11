@@ -1,21 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { Outlet } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import HomePage from './pages/Home';
 
 function App() {
+  const routers = createBrowserRouter([
+    {
+      path:'/',
+      element:<HomePage/>
+    },
+    {
+      path:'/login',
+      element:<LoginPage/>
+    },
+    {
+      path:'/signup',
+      element:<SignupPage/>
+    }
+  ])
   return (
-    <>
-    <Header/>
-    
-    <main>
-      <Outlet/>
-    </main>
-
-    <Footer/>
-    </>
+    <RouterProvider router = {routers}/>
   );
 }
 
