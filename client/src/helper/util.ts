@@ -10,12 +10,20 @@ export async function sendData(
   if (payload) {
     requestMethod = "POST";
   }
-  // const token  = localStorage.getItem('token');
+  const token  = localStorage.getItem('token');
+  let headers={
+    "Content-Type": "application/json",
+    "Authorization":''
+  }
+  if(token && authBool){
+    headers={
+      "Content-Type": "application/json",
+      "Authorization": token
+    }
+  }
   const response = await fetch(`http://localhost:5000/api/${path}`, {
     method: requestMethod,
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: headers,
     body: JSON.stringify(payload),
   });
   if (response.status === 422 || response.status === 401) {
