@@ -1,14 +1,9 @@
 import { json, redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 
-interface authObject {
-  email: string;
-  password: string;
-}
-
 export async function sendData(
   path: string,
-  payload: authObject,
+  payload: object,
   authBool: boolean
 ) {
   let requestMethod: string = "GET";
