@@ -6,3 +6,9 @@ export const registerValidationSchema = Joi.object({
     password: Joi.string().min(8).required(),
     // repeat_password: Joi.ref('password'),
 });
+
+
+export const loginValidationSchema = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).required()
+});

@@ -7,11 +7,3 @@ export const getAcessTokenSecret = ():string => {
     
     return config.ACCESS_TOKEN_SECRET;
 }
-
-export const getRefreshTokenSecret = ():string => {
-    if(!config.REFRESH_TOKEN_SECRET){
-        throw new Error("Refresh Token Secret not set");
-    }
-    
-    return config.REFRESH_TOKEN_SECRET;
-}
