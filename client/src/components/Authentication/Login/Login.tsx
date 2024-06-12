@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import classes from "./Login&signup.module.css";
+import classes from '../Authentication.module.css';
+import { sendData } from "../Util";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -9,21 +10,8 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:5000/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await response.json();
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-      navigate("/");
-    } else {
-      alert("Login failed");
-    }
+    sendData('login', email, password);
+    navigate('/');
   };
 
   return (
@@ -46,6 +34,7 @@ const Login: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            minLength={8}
           />
         </div>
         <button type="submit">Login</button>

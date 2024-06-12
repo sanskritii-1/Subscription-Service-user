@@ -1,5 +1,5 @@
 import React from 'react'
-import Signup from '../components/login&signup/Signup'
+import Signup from '../components/Authentication/Signup/Signup'
 
 export default function SignupPage() {
   return (

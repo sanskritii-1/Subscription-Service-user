@@ -1,10 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap");
 .form {
   padding: 10vh;
   width: 40vw;
   margin: 2rem auto;
-  background-color: #131b59;
+  background-color: #4717ac;
   border-radius: 1rem;
-  box-shadow: 7px 7px 17px #2a3679;
+  box-shadow: 7px 7px 17px #850d99;
 }
 
 .h1 {
@@ -13,13 +14,16 @@
 }
 
 .div {
-  background-image: url("https://img.freepik.com/free-vector/halftone-background-with-circles_23-2148907689.jpg?t=st=1718035102~exp=1718035702~hmac=9afde2cd0af69e894979a52ff018a7cf82616ff5bb9faf7ef366bac373fec1a3");
+  background-image: url("https://img.freepik.com/free-vector/gradient-minimalist-background_23-2149976737.jpg?t=st=1718122382~exp=1718125982~hmac=af97d3e4f2583ec4f2c4a24140d87dcc699d1d343b59eb09467cd57340b1b735&w=996");
   background-repeat: no-repeat;
   background-size: cover;
   /* background-color: #eae6eb; */
   height: 96vh;
   padding: 2vh;
   margin: -2vh 0vh;
+  font-family: "Mukta", sans-serif;
+  font-weight: 500;
+  font-style: normal;
 }
 
 .form label {
@@ -36,7 +40,7 @@
   font-size: 1.5rem;
   padding: 0.5rem;
   border-radius: 4px;
-  background-color: #8f9fff;
+  background-color: #d5c5ff;
   border: none;
   border-bottom: 2px solid #494844;
   border-bottom-right-radius: 0;
@@ -46,7 +50,7 @@
 
 .form button {
   font: inherit;
-  background-color: #192c91;
+  background-color: #9c27b0;
   border: 1px solid #9c27b0;
   color: #ffffff;
   padding: 0.5rem 1.5rem;
@@ -56,7 +60,7 @@
 
 .form button:hover,
 .form button:active {
-  background-color: #111e69;
+  background-color: #761e86;
   border-color: #ac31c1;
 }
 
