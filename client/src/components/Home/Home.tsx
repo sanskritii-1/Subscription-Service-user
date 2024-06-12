@@ -13,7 +13,10 @@ export default function Home() {
         <NavLink to="/login" className={classes.button}>
           Login
         </NavLink>
-        <NavLink to="/signup" className={classes.button}>
+        <NavLink
+          to="/register"
+          className={classes.button}
+        >
           Signup
         </NavLink>
       </div>

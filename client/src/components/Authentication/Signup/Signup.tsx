@@ -1,26 +1,46 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "../Authentication.module.css";
-import { sendData } from "../Util";
+import { sendData } from "../../../helper/util";
 
 const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const navigate = useNavigate();
-
+  const [toastContent, settoastContent] = useState("");
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      settoastContent("Passwords do not match!");
+      console.log("error");
       return;
     }
-    sendData('signup', email, password);
-    navigate('/');
+    sendData("register", { email: email, password: password }, true);
+    navigate("/");
+  };
+
+  const closeToastHandler = () => {
+    settoastContent("");
   };
 
   return (
     <div className={classes.div}>
+      <div className={toastContent !== "" ? classes.toast : undefined}>
+        <div>
+          <p className={classes.toastContent}>{toastContent}</p>
+        </div>
+        <div>
+          <button
+            className={classes.toastcloseButton}
+            disabled={toastContent === "" && true}
+            onClick={closeToastHandler}
+          >
+            X
+          </button>
+        </div>
+      </div>
       <h2 className={classes.h1}>Signup</h2>
       <form onSubmit={handleSubmit} className={classes.form}>
         <div>
@@ -30,6 +50,17 @@ const Signup: React.FC = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+          />
+        </div>
+        <div>
+          <label>User Name:</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            minLength={3}
+            maxLength={30}
           />
         </div>
         <div>
