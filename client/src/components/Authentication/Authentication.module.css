@@ -1,0 +1,108 @@
+@import url("https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap");
+.form {
+  padding: 1rem 5rem;
+  width: 40vw;
+  margin: 2rem auto;
+  background-color: #4717ac;
+  border-radius: 1rem;
+  box-shadow: 7px 7px 17px #850d99;
+}
+
+.h1 {
+  text-align: center;
+  font-size: 2.5rem;
+}
+
+.div {
+  background-image: url("https://img.freepik.com/free-vector/gradient-minimalist-background_23-2149976737.jpg?t=st=1718122382~exp=1718125982~hmac=af97d3e4f2583ec4f2c4a24140d87dcc699d1d343b59eb09467cd57340b1b735&w=996");
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* background-color: #eae6eb; */
+  height: 99vh;
+  /* padding: 2vh; */
+  margin: -2vh 0vh;
+  font-family: "Mukta", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.form input {
+  display: block;
+  width: 100%;
+  font: inherit;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  background-color: #d5c5ff;
+  border: none;
+  border-bottom: 2px solid #494844;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-bottom: 0.5rem;
+}
+
+.form button {
+  font: inherit;
+  background-color: #9c27b0;
+  border: 1px solid #9c27b0;
+  color: #ffffff;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form button:hover,
+.form button:active {
+  background-color: #761e86;
+  border-color: #ac31c1;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.h1 {
+  text-align: center;
+  color: aliceblue;
+}
+
+.toast {
+  display: flex;
+  height: 7vh;
+  background-color: rgba(255, 0, 0, 0.486);
+  top: 0px;
+  padding: 1vh;
+  color: white;
+  /* font-size: 1.5rem; */
+}
+
+.toastContent {
+  text-align: center;
+  margin: 0vh 43vw;
+}
+
+.toastcloseButton {
+  background-color: transparent;
+  color: white;
+  border-color: transparent;
+  /* padding: 0vw 0vw 0vw 20vw; */
+}
+
+.toastcloseButton:disabled {
+  color: transparent;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.error{
+  text-align: center;
+  color: white;
+}

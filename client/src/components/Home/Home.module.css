@@ -1,0 +1,40 @@
+.button {
+  font: inherit;
+  background-color: #192c91;
+  border: 1px solid #9c27b0;
+  color: #ffffff;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.button:hover {
+  background-color: #111e69;
+  border-color: #ac31c1;
+}
+
+.div {
+  text-align: center;
+  background-image: url("https://img.freepik.com/free-vector/halftone-background-with-circles_23-2148907689.jpg?t=st=1718035102~exp=1718035702~hmac=9afde2cd0af69e894979a52ff018a7cf82616ff5bb9faf7ef366bac373fec1a3");
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* background-color: #eae6eb; */
+  height: 70vh;
+  padding: 15vh 36vw;
+  color: white;
+  margin: -2vh 0vh;
+}
+
+.h1 {
+  font-size: 3.5rem;
+}
+
+.p {
+  font-size: 1.3rem;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}

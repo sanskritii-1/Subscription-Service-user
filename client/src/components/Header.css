@@ -1,0 +1,71 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background-image: url("https://img.freepik.com/free-vector/halftone-background-with-circles_23-2148907689.jpg?t=st=1718035102~exp=1718035702~hmac=9afde2cd0af69e894979a52ff018a7cf82616ff5bb9faf7ef366bac373fec1a3");
+    position: relative;
+  }
+
+  .search {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px;
+    background-color: #eaeaea;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .search input {
+    padding: 8px;
+    background-color: #eaeaea; 
+    border: 10px solid #ccc;    
+    border-radius: 50px;
+    text-align: center;
+    width: 500px; 
+  }
+
+  .search input::placeholder {
+    color: #333; 
+  }
+
+  .search-icon {
+    position: absolute; 
+    top: 50%; 
+    transform: translateY(-50%); /* Center the icon vertically */
+    left: calc(100% + 4px); /* Adjust horizontal position */
+    background-color: red; /* Set background color for the icon */
+    padding: 7px; /* Add padding for better appearance */
+    border-radius: 0%; /* Optional: Add border radius to make it round */
+  }
+  
+  
+  .icons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .user-icon, .cart-icon {
+    padding: 10px;
+    background-color: #eaeaea;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    transform: scale(1.2); 
+  }
+  
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    width: 120px; /* Adjust the size of the logo */
+    height: 70px;
+    opacity: 0.75;
+  }
+  
+  

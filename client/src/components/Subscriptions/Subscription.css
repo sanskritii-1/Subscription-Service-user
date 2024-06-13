@@ -1,0 +1,66 @@
+.subscription-container {
+    background-image: url("https://img.freepik.com/free-vector/halftone-background-with-circles_23-2148907689.jpg?t=st=1718035102~exp=1718035702~hmac=9afde2cd0af69e894979a52ff018a7cf82616ff5bb9faf7ef366bac373fec1a3");
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    margin: auto;
+    padding: 0.1px;
+}
+
+.BannerText {
+  text-align: center;
+  font-size: 24px; 
+  margin: 20px 0; 
+  font-weight: bold; 
+  color: #fff; 
+}
+
+.subscription-slideshow {
+    position: relative;
+    overflow: hidden;
+    margin-top:60px;
+    height: 400px;
+}
+
+.slideshow-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-60%);
+    background-color: rgb(190, 162, 162);
+    border: 30;
+    border-radius: 70%;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 45;
+}
+
+.slideshow-button:first-child {
+    left: 0;
+}
+
+.slideshow-button:last-child {
+    right: 0;
+}
+
+.slideshow-images {
+    display: flex;
+    transition: transform 0.1s ease;
+}
+
+.slideshow-image {
+    flex: 1% 1 100%;
+    overflow: hidden;
+}
+
+.slideshow-image img {
+    width: 90%;
+    height:82%;
+    object-fit: cover;
+}
+
+.add-to-cart-button {
+  margin-top: 10px;
+  font-size: 18px; 
+  margin:15px 0; 
+  font-weight: bold; 
+}
