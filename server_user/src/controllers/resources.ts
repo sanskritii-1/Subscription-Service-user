@@ -33,14 +33,15 @@ export const accessResource = async (req: CustomRequest, res: Response):Promise<
         const userId = <JwtPayload>req.id;
         
         const foundUser = await UserResource.findOne({userId: userId.id});
+        console.log("founduser in resources: ", foundUser)
 
         if(!foundUser) return res.status(500).json({error: "User resource record not found"});
 
-        if(foundUser.leftResources == 0){
-            return res.json(403).json({error: "Cannot access anymore resources"});
+        if(foundUser.leftResources === 0){
+            return res.status(403).json({error: "Cannot access anymore resources"});
         }
 
-        foundUser.updateOne({userId: userId}, {$inc: {count:-1}});
+        await UserResource.updateOne({userId: userId.id}, {$inc: {leftResources:-1}});
         return res.status(200).json({msg: "Successfully accessed resource"});
     } 
     catch (err) {

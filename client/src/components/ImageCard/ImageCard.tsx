@@ -1,19 +1,35 @@
 import React, { useState } from 'react';
 import styles from './ImageCard.module.css';
+import { sendData } from '../../helper/util';
+import axios from "axios";
 
 interface ImageCardProps {
+  id: string,
   title: string;
   description: string;
   url: string;
 }
 
-const ImageCard: React.FC<ImageCardProps> = ({ title, description, url }) => {
+const ImageCard: React.FC<ImageCardProps> = ({ id, title, description, url }) => {
   const [isClicked, setIsClicked] = useState(false);
 
-  const handleClick = () => {
+  const token = localStorage.getItem('token');
+
+  const handleClick = async () => {
     console.log('clicked');
-    setIsClicked(true);
-    
+    // await sendData('access-resource', )
+    try {
+      
+      const response = await axios.post('http://localhost:5000/api/access-resource',{imageId: id}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+          }
+          });
+        setIsClicked(true);
+      } catch (error) {
+        console.error('Error fetching image:', error);
+        window.alert('error fetching resource')
+      }
   };
 
   return (
