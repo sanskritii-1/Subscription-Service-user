@@ -18,7 +18,7 @@ const Signup: React.FC = () => {
       return;
     }
     sendData("register", { email: email, name:name, password: password }, true);
-    navigate("/protected");
+    navigate("/login");
   };
 
   const closeToastHandler = () => {
