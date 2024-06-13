@@ -1,27 +1,27 @@
 import express, { Request, Response, Express } from 'express';
-import cors from "cors";
+import cors from 'cors';
 import connectDB from './config/dbConfig';
-import authenticationRoute from "./routes/authentication"
+import authenticationRoute from './routes/authentication';
+import paymentHistoryRoutes from './routes/paymentHistoryRoutes';
 import { authMiddleware } from './middleware/auth';
-// const mongoose=require("mongoose");
 
 // Create an Express application
-const app:Express = express();
+const app: Express = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', authenticationRoute);
+app.use('/api', paymentHistoryRoutes); // Include payment history routes
 
 connectDB();
 
-
 app.get('/', (req: Request, res: Response) => {
-    res.send('Hello, TypeScript + Node.js + Express!');
+  res.send('Hello, TypeScript + Node.js + Express!');
 });
 
 app.get('/protected', authMiddleware, (req: Request, res: Response) => {
-    res.send('Hello, from protected route');
+  res.send('Hello, from protected route');
 });
 
 export default app;

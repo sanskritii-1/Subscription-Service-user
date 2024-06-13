@@ -1,45 +1,72 @@
-// handling tokens
-import {Request, Response, NextFunction} from "express";
+import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { getAcessTokenSecret } from "../utils";
+import User, { IUser } from "../models/user";
 
-
-interface CustomRequest extends Request{
-    id?:string | JwtPayload;
+interface CustomRequest extends Request {
+    user?: IUser;
 }
 
-// authorization for accessing a website
-export const authMiddleware = (req: CustomRequest, res:Response, next: NextFunction) => {
-    // checking for access token in authorization Bearer
-    const authHeader = req.headers['authorization'];
-    const token = authHeader?.split(' ')[1];
-    if(!token){
-        return res.status(401).json({error: "Token not found"})
-    }
-
-    // checking validity of access token and adding payload (user info) to req
+// Authorization middleware
+export const authMiddleware = async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
+        const token = req.header('Authorization')?.replace('Bearer ', '');
+
+        if (!token) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
+
         const accessSecret = getAcessTokenSecret();
-        const payloadData = jwt.verify(token, accessSecret);
-        req.id = payloadData;
-        console.log("payloadData: ", payloadData);
+        const decoded = jwt.verify(token, accessSecret) as JwtPayload;
+        
+        // Fetch user from database using user ID from token payload
+        const user = await User.findById(decoded.id);
+        if (!user) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
+
+        // Set user on the request object
+        req.user = user;
+
         next();
-    } 
-    catch (err) {
-        console.log(err);
-        res.status(403).json({error: "Invalid token"});
-        // if access secret is not set
-        // res.status(500).json({error: err.message});
+    } catch (err) {
+        console.error(err);
+        if (err instanceof jwt.JsonWebTokenError) {
+            res.status(403).json({ error: "Invalid token" });
+        } else {
+            res.status(500).json({ error: "Server error" });
+        }
     }
-}
+};
 
+// Admin middleware
+export const adminMiddleware = async (req: CustomRequest, res: Response, next: NextFunction) => {
+    try {
+        const user = req.user;
 
-// creating an access token
-export const generateAccessToken = (payload:JwtPayload) => {
+        if (!user) {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+
+        // Check if user is an admin
+        if (user.isAdmin) {
+            next();
+        } else {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+};
+
+// Function to generate access token
+export const generateAccessToken = (payload: JwtPayload): string => {
     try {
         const accessSecret = getAcessTokenSecret();
-        return jwt.sign(payload, accessSecret, {expiresIn: '15d'});
+        return jwt.sign(payload, accessSecret, { expiresIn: '15d' });
     } catch (err) {
+        console.error(err);
         throw err;
     }
-}
+};
