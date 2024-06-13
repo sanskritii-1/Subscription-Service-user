@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import HomePage from './pages/Home';
 import TestPage from './pages/Test';
+import ResourcePage from './pages/Resources';
 
 function App() {
   const routers = createBrowserRouter([
@@ -21,7 +22,7 @@ function App() {
       element:<SignupPage/>
     },{
       path: '/protected',
-      element: <TestPage />
+      element: <ResourcePage />
     }
   ])
   return (

@@ -3,6 +3,7 @@ import cors from "cors";
 import connectDB from './config/dbConfig';
 import authenticationRoute from "./routes/authentication"
 import { authMiddleware } from './middleware/auth';
+// const mongoose=require("mongoose");
 
 // Create an Express application
 const app:Express = express();
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', authenticationRoute);
 
 connectDB();
+
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello, TypeScript + Node.js + Express!');
