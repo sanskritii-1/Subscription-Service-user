@@ -2,6 +2,7 @@ import express, { Request, Response, Express } from 'express';
 import cors from "cors";
 import connectDB from './config/dbConfig';
 import authenticationRoute from "./routes/authentication"
+import resourceRoute from './routes/resources';
 import { authMiddleware } from './middleware/auth';
 
 // Create an Express application
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', authenticationRoute);
+app.use('/api', resourceRoute);
 
 connectDB();
 
