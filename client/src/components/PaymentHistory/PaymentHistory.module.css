@@ -1,0 +1,49 @@
+@import url("https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap");
+
+.div {
+  background-image: url("https://img.freepik.com/free-vector/gradient-minimalist-background_23-2149976755.jpg?t=st=1718278731~exp=1718282331~hmac=ca214d36dae4f9664552035d3b0d8ddac473a8c69ac309803de278cd334a0dcc&w=996");
+  background-repeat: repeat-y;
+  background-size: cover;
+  font-family: "Mukta", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  min-height: 94vh;
+}
+
+.ul {
+  list-style: none;
+  background-color: #673ab7;
+  width: 50vw;
+  margin: 0vh 25vw;
+  padding: 2vh 6vh;
+  border-radius: 1rem;
+  box-shadow: 6px 6px 16px #330f39;
+}
+
+.noPayments {
+  color: white;
+  font-family: "Mukta", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  text-align: center;
+  color: black;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.payment {
+  box-shadow: 1px 1px 9px #e4d0ff;
+  border-radius: 1rem;
+}
+
+.paymentDesc {
+  background-color: #f0d9ff;
+  padding: 0.5rem 0rem 0.5rem 1rem;
+}
+
+.h1 {
+  text-align: center;
+  color: #e4e4e4;
+  padding: 2rem 0rem 0rem 0rem;
+  font-size: 2.7rem;
+}

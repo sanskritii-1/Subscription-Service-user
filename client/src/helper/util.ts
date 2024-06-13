@@ -1,25 +1,25 @@
-import { json, redirect } from "react-router-dom";
-import { toast } from "react-toastify";
+import { json } from "react-router-dom";
+// import { toast } from "react-toastify";
 
 export async function sendData(
   path: string,
-  payload: object,
+  payload: object|null,
   authBool: boolean
 ) {
   let requestMethod: string = "GET";
   if (payload) {
     requestMethod = "POST";
   }
-  const token  = localStorage.getItem('token');
-  let headers={
+  const token = localStorage.getItem("token");
+  let headers = {
     "Content-Type": "application/json",
-    "Authorization":''
-  }
-  if(token && authBool){
-    headers={
+    "Authorization": "",
+  };
+  if (token) {
+    headers = {
       "Content-Type": "application/json",
-      "Authorization": token
-    }
+      "Authorization": token,
+    };
   }
   const response = await fetch(`http://localhost:5000/api/${path}`, {
     method: requestMethod,
@@ -33,10 +33,15 @@ export async function sendData(
     throw json({ message: "Could not authenticate user" }, { status: 500 });
   }
   const resData = await response.json();
-  if (resData.token) {
-    localStorage.setItem("token", resData.token);
+  if (authBool) {
+    if (resData.token) {
+      localStorage.setItem("token", resData.token);
+    } else {
+      // toast.error("Authentication failed!");
+      throw json({ message: resData.message|| "Authentication failed!" }, { status: 500 });
+    }
   } else {
-    toast.error('Authentication failed!');
+    return resData;
   }
   // return redirect("/");
 }
