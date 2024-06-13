@@ -3,10 +3,16 @@ import {Request, Response, NextFunction} from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { getAcessTokenSecret } from "../utils";
 
+declare module "jsonwebtoken" {
+    export interface JwtPayload {
+        id: string;
+    }
+}
 
 interface CustomRequest extends Request{
-    id?:string | JwtPayload;
+    id?: string | JwtPayload;
 }
+
 
 // authorization for accessing a website
 export const authMiddleware = (req: CustomRequest, res:Response, next: NextFunction) => {
@@ -20,7 +26,7 @@ export const authMiddleware = (req: CustomRequest, res:Response, next: NextFunct
     // checking validity of access token and adding payload (user info) to req
     try {
         const accessSecret = getAcessTokenSecret();
-        const payloadData = jwt.verify(token, accessSecret);
+        const payloadData = <JwtPayload>jwt.verify(token, accessSecret);
         req.id = payloadData;
         console.log("payloadData: ", payloadData);
         next();

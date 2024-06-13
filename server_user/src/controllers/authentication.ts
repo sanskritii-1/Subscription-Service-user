@@ -2,6 +2,7 @@ import User from "../models/user";
 import { Request, Response } from "express";
 import { registerValidationSchema, loginValidationSchema } from "../validations/userValidation";
 import { generateAccessToken } from "../middleware/auth";
+import { JwtPayload } from "jsonwebtoken";
 
 
 export const register = async (req: Request, res: Response):Promise<Response> => {
@@ -26,7 +27,7 @@ export const register = async (req: Request, res: Response):Promise<Response> =>
 
 
         // generating access token
-        const payload = {
+        const payload:JwtPayload = {
             id: userData.id,
         }
         
@@ -61,8 +62,8 @@ export const login = async (req: Request, res:Response):Promise<Response> => {
         }
 
         // generating token
-        const payload={
-            userId:user.id.toString(),
+        const payload:JwtPayload={
+            id: user.id.toString(),
         };
 
         const accessToken:string = generateAccessToken(payload);
