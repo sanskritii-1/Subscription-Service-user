@@ -16,7 +16,7 @@ const Login: React.FC = () => {
     if (response) {
       invalidInput = <p>Invalid Email or Password!</p>;
     }
-    navigate("/");
+    navigate("/protected");
   };
 
   return (

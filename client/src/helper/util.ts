@@ -38,5 +38,5 @@ export async function sendData(
   } else {
     toast.error('Authentication failed!');
   }
-  return redirect("/");
+  // return redirect("/");
 }

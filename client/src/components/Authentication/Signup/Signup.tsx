@@ -17,8 +17,8 @@ const Signup: React.FC = () => {
       console.log("error");
       return;
     }
-    sendData("register", { email: email, password: password }, true);
-    navigate("/");
+    sendData("register", { email: email, name:name, password: password }, true);
+    navigate("/protected");
   };
 
   const closeToastHandler = () => {
@@ -53,7 +53,7 @@ const Signup: React.FC = () => {
           />
         </div>
         <div>
-          <label>User Name:</label>
+          <label>Name:</label>
           <input
             type="text"
             value={name}
