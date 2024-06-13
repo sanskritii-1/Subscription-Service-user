@@ -23,7 +23,7 @@
     width: 100%;
     height: auto;
     object-fit: cover;
-    filter: blur(10px); 
+    filter: blur(30px); 
     transition: filter 0.3s ease;
   }
   

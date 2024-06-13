@@ -20,8 +20,13 @@ function App() {
     {
       path:'/register',
       element:<SignupPage/>
-    },{
+    },
+    {
       path: '/protected',
+      element: <TestPage />
+    },
+    {
+      path: '/resources',
       element: <ResourcePage />
     }
   ])
