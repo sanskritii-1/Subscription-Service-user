@@ -10,15 +10,15 @@ export const register = async (req: Request, res: Response):Promise<Response> =>
         const {error} = registerValidationSchema.validate(req.body);
         
         if(error){
-            return res.json({error: error.details[0].message});
+            return res.status(400).json({error: error.details[0].message});
         }
         
         const data = req.body;
 
-        // saving user data in user table
+        // saving user data in user table if it doesn't exist
         const foundUser = await User.findOne({email: data.email});
         if(foundUser){
-            return res.json({msg: "User already registered"});
+            return res.status(409).json({msg: "User already registered"});
         }
 
         const newUser = new User(data);
@@ -32,7 +32,7 @@ export const register = async (req: Request, res: Response):Promise<Response> =>
         
         const accessToken = generateAccessToken(payload);
 
-        return res.json({accessToken: accessToken});
+        return res.status(200).json({token: accessToken});
     } 
     catch (err) {
         console.log(err);
@@ -43,6 +43,7 @@ export const register = async (req: Request, res: Response):Promise<Response> =>
 
 export const login = async (req: Request, res:Response):Promise<Response> => {
     try{
+        // joi validation
         const {error} = loginValidationSchema.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
@@ -50,6 +51,7 @@ export const login = async (req: Request, res:Response):Promise<Response> => {
 
         const{email,password} = req.body;
 
+        // checking if user exists
         const user = await User.findOne({ email });
         if (!user || !(await user.comparePassword(password))){
             return res.status(400).json({
@@ -58,13 +60,14 @@ export const login = async (req: Request, res:Response):Promise<Response> => {
             });
         }
 
+        // generating token
         const payload={
             userId:user.id.toString(),
         };
 
         const accessToken:string = generateAccessToken(payload);
         
-        return res.json({accessToken: accessToken});
+        return res.status(200).json({token: accessToken});
     } 
     catch (error) {
         console.log(error);

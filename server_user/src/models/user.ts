@@ -49,7 +49,7 @@ userSchema.pre<IUser>('save', async function(next){
     }
     catch(err){
         console.log(err);
-        return next(err as CallbackError);
+        next(err as CallbackError);
     }
 })
 

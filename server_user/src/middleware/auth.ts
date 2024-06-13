@@ -13,10 +13,10 @@ export const authMiddleware = (req: CustomRequest, res:Response, next: NextFunct
     const authHeader = req.headers['authorization'];
     const token = authHeader?.split(' ')[1];
     if(!token){
-        return res.json({error: "Token not found"})
+        return res.status(401).json({error: "Token not found"})
     }
 
-    // checking validity of access token and getting the payload (user info)
+    // checking validity of access token and adding payload (user info) to req
     try {
         const accessSecret = getAcessTokenSecret();
         const payloadData = jwt.verify(token, accessSecret);
@@ -26,7 +26,9 @@ export const authMiddleware = (req: CustomRequest, res:Response, next: NextFunct
     } 
     catch (err) {
         console.log(err);
-        res.json({error: "Invalid token"});
+        res.status(403).json({error: "Invalid token"});
+        // if access secret is not set
+        // res.status(500).json({error: err.message});
     }
 }
 
