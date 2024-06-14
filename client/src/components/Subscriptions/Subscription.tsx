@@ -1,28 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './Subscription.css';
-import axios from 'axios';
-
-/*
-const addPlan = async () => {
-  try {
-    const newPlan = {
-      name: 'Free Plan',
-      features: 'Feature 1 Feature 2',
-      price: 29.99,
-      duration: 12,
-    };
-
-    const response = await axios.post('http://localhost:5000/api/manage-subscription', newPlan);
-
-    console.log(response.data); 
-  } catch (error) {
-    console.error('Error adding plan:', error);
-  }
-};
-
-addPlan();
-*/
-
 
 const Subscriptions: React.FC = () => {
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
