@@ -8,13 +8,16 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
 
-  let invalidInput = <p></p>;
+  const [error, setError] = useState("");
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = { email: email, password: password };
-    const response = await sendData('login', data, true);
+    const response = await sendData("login", data, true);
     if (response) {
-      invalidInput = <p>Invalid Email or Password!</p>;
+      setError("Invalid Email or Password!");
+    }
+    if (response.message) {
+      setError("Invalid Email or Password!");
     }
     navigate("/protected");
   };
@@ -23,7 +26,7 @@ const Login: React.FC = () => {
     <div className={classes.div}>
       <h1 className={classes.h1}>Login</h1>
       <form onSubmit={handleSubmit} className={classes.form}>
-        {invalidInput}
+        {error}
         <div>
           <label>Email:</label>
           <input
