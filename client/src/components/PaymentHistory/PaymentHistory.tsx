@@ -12,10 +12,11 @@ export default function PaymentHistory() {
   const [listOfPayment, setListOfPayment] = useState<paymentType[]>([]);
   useEffect(() => {
     async function fetchListOfPayment() {
-      const resData = await sendData("payment-history", null, false);
-      setListOfPayment(() => {
-        return resData;
-      });
+      const payload = null;
+      const resData = await sendData("payment-history", payload, false);
+      if (Array.isArray(resData)) {
+        setListOfPayment(resData);
+      }
     }
     fetchListOfPayment();
   }, []);

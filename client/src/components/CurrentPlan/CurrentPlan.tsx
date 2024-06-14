@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { sendData } from '../../helper/util';
 import classes from './CurrentPlan.module.css';
+
 interface plan{
   name:string;
   description:string;
@@ -11,16 +12,21 @@ export default function CurrentPlan() {
   useEffect(() => {
     async function fetchListOfPayment() {
       const resData = await sendData("payment-history", null, false);
-      setCurrentPlan(resData);
+      if (Object.apply(resData)) {
+        setCurrentPlan(resData);
+      }
     }
     fetchListOfPayment();
   }, []);
   return (
     <div className={classes.div}>
-      <h1>{!currentPlan && <p>No plan purchased yet!</p>}</h1>
+      <h1 className={classes.h1}>Current Plan Details</h1>
+      <div className={classes.content}>
+      <h2>{!currentPlan && <p className={classes.noPlan}>No plan purchased yet!</p>}</h2>
       <h1>{currentPlan && currentPlan.name}</h1>
       <p>{currentPlan && currentPlan.description}</p>
       <p>{currentPlan && `Duration of the plan is ${currentPlan.duration}`}</p>
+      </div>
     </div>
   )
 }

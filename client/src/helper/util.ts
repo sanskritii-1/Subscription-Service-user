@@ -3,7 +3,7 @@ import { json } from "react-router-dom";
 
 export async function sendData(
   path: string,
-  payload: object|null,
+  payload: object | null,
   authBool: boolean
 ) {
   let requestMethod: string = "GET";
@@ -13,12 +13,12 @@ export async function sendData(
   const token = localStorage.getItem("token");
   let headers = {
     "Content-Type": "application/json",
-    "Authorization": "",
+    Authorization: "",
   };
   if (token) {
     headers = {
       "Content-Type": "application/json",
-      "Authorization": token,
+      Authorization: token,
     };
   }
   const response = await fetch(`http://localhost:5000/api/${path}`, {
@@ -38,7 +38,10 @@ export async function sendData(
       localStorage.setItem("token", resData.token);
     } else {
       // toast.error("Authentication failed!");
-      throw json({ message: resData.message|| "Authentication failed!" }, { status: 500 });
+      throw json(
+        { message: resData.message || "Authentication failed!" },
+        { status: 500 }
+      );
     }
   } else {
     return resData;
