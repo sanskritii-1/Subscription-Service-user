@@ -20,11 +20,7 @@ const ImageCard: React.FC<ImageCardProps> = ({ id, title, description, url }) =>
     // await sendData('access-resource', )
     try {
       
-      const response = await axios.post('http://localhost:5000/api/access-resource',{imageId: id}, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-          }
-          });
+      const response = await sendData('POST', 'access-resource', true, {imageId: id});
         setIsClicked(true);
       } catch (error) {
         console.error('Error fetching image:', error);

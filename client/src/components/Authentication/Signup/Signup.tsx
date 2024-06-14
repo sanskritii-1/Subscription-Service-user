@@ -18,7 +18,7 @@ const Signup: React.FC = () => {
       return;
     }
     try {
-      await sendData("POST", "register", true, { email: email, name:name, password: password });
+      await sendData("POST", "register", false, { email: email, name:name, password: password });
       navigate("/login");
       
     } catch (err) {
