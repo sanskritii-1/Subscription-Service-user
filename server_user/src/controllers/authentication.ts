@@ -19,7 +19,7 @@ export const register = async (req: Request, res: Response):Promise<Response> =>
         // saving user data in user table if it doesn't exist
         const foundUser = await User.findOne({email: data.email});
         if(foundUser){
-            return res.status(409).json({msg: "User already registered"});
+            return res.status(409).json({error: "User already registered"});
         }
 
         const newUser = new User(data);
@@ -47,7 +47,7 @@ export const login = async (req: Request, res:Response):Promise<Response> => {
         // joi validation
         const {error} = loginValidationSchema.validate(req.body);
         if (error) {
-            return res.status(400).json({ message: error.details[0].message });
+            return res.status(400).json({ error: error.details[0].message });
         }
 
         const{email,password} = req.body;
@@ -56,7 +56,7 @@ export const login = async (req: Request, res:Response):Promise<Response> => {
         const user = await User.findOne({ email });
         if (!user || !(await user.comparePassword(password))){
             return res.status(400).json({
-                message: "Incorrect email or password",
+                error: "Incorrect email or password",
                 success: false
             });
         }

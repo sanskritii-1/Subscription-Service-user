@@ -20,7 +20,7 @@ const Resources: React.FC = () => {
         setImages(response); 
       } catch (error) {
         console.error('Error fetching images:', error);
-        // window.alert('Error fetching resources')
+        window.alert(error)
         navigate('/login')
       }
     };

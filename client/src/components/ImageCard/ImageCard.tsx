@@ -24,7 +24,7 @@ const ImageCard: React.FC<ImageCardProps> = ({ id, title, description, url }) =>
         setIsClicked(true);
       } catch (error) {
         console.error('Error fetching image:', error);
-        window.alert('error fetching resource')
+        window.alert(error)
       }
   };
 
