@@ -66,7 +66,7 @@ const Signup: React.FC = () => {
           />
         </div>
         <div>
-          <label>Name:</label>
+          <label>Username:</label>
           <input
             type="text"
             value={name}

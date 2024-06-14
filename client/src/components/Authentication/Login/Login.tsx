@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import classes from "../Authentication.module.css";
 import { sendData } from "../../../helper/util";
 
@@ -46,6 +46,7 @@ const Login: React.FC = () => {
           />
         </div>
         <button type="submit">Login</button>
+        <Link to='/register' className={classes.link}>Don't have an account? Create one!</Link>
       </form>
     </div>
   );
