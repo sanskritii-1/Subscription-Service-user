@@ -17,8 +17,14 @@ const Signup: React.FC = () => {
       console.log("error");
       return;
     }
-    sendData("register", { email: email, name:name, password: password }, true);
-    navigate("/login");
+    try {
+      await sendData("POST", "register", { email: email, name:name, password: password }, true);
+      navigate("/login");
+      
+    } catch (err) {
+      console.log(err);
+      window.alert('Error registering');
+    }
   };
 
   const closeToastHandler = () => {
