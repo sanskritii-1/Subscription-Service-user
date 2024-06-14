@@ -17,7 +17,14 @@
 
 .div {
   text-align: center;
-  background-image: url("https://img.freepik.com/free-vector/gradient-minimalist-background_23-2149976737.jpg?t=st=1718122382~exp=1718125982~hmac=af97d3e4f2583ec4f2c4a24140d87dcc699d1d343b59eb09467cd57340b1b735&w=996");
+  /* background-image: url("https://img.freepik.com/free-vector/gradient-minimalist-background_23-2149976755.jpg?t=st=1718278731~exp=1718282331~hmac=ca214d36dae4f9664552035d3b0d8ddac473a8c69ac309803de278cd334a0dcc&w=996");
+  background-image: url("https://media.istockphoto.com/id/1354549036/photo/dark-purple-background.webp?b=1&s=170667a&w=0&k=20&c=wWkY1njwgpHL0A5H39l1MWG5urM2UrOxHLAQaxZKFuA="); */
+  /* background-image: url("https://img.freepik.com/premium-photo/abstract-background-beautiful-close-up-image-ai-generated_859483-146835.jpg"); */
+  /* background-image: url("https://img.freepik.com/free-vector/dark-wavy-colors-background_23-2148403785.jpg"); */
+  background-image: url("https://images.saymedia-content.com/.image/t_share/MTkyOTkyMzE2OTQ3MDQ3NjQ1/website-background-templates.png");
+  /* background: linear-gradient(to right, #4b2b6a, #8b4d95); */
+  /* background: linear-gradient(to right, #a074c7, #caa9dd); */
+  /* background: linear-gradient(to right, #814d9c, #b688c8); */
   background-repeat: no-repeat;
   background-size: cover;
   /* background-color: #eae6eb; */
@@ -42,3 +49,4 @@
   display: flex;
   justify-content: space-between;
 }
+
