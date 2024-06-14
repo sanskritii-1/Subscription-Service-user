@@ -45,30 +45,28 @@ import { toast } from "react-toastify";
 export async function sendData(
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
   path: string,
-  payload: object,
-  authBool: boolean
+  authBool: boolean,
+  payload?: object,
 ) {
   
   try {
     const token  = localStorage.getItem('token');
-    let headers={
+    let headers:HeadersInit={
       "Content-Type": "application/json",
-      "Authorization":''
     }
     if(token && authBool){
-      headers={
-        "Content-Type": "application/json",
-        "Authorization": token
-      }
+      headers['Authorization'] = `Bearer ${token}`;
     }
     
     const response = await fetch(`http://localhost:5000/api/${path}`, {
       method: method,
       headers: headers,
-      body: JSON.stringify(payload),
+      body: payload ? JSON.stringify(payload) : undefined,
     });
 
+    console.log('response received util: ', response)
     const data = await response.json();
+    console.log('data received util: ', data)
 
     if (!response.ok) {
       throw new Error(data.msg || 'An error occurred');
@@ -81,16 +79,4 @@ export async function sendData(
     console.log(err);
     throw err;
   }
-  // if (response.status === 422 || response.status === 401) {
-  //   return response;
-  // }
-  // if (!response.ok) {
-  //   throw json({ message: "Could not authenticate user" }, { status: 500 });
-  // }
-  // const resData = await response.json();
-  // if (resData.token) {
-  //   localStorage.setItem("token", resData.token);
-  // } else {
-  //   toast.error('Authentication failed!');
-  // }
 }
