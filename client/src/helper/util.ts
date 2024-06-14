@@ -69,7 +69,7 @@ export async function sendData(
     console.log('data received util: ', data)
 
     if (!response.ok) {
-      throw new Error(data.msg || 'An error occurred');
+      throw new Error(data.error || 'An error occurred');
     }
 
     return data;

@@ -23,7 +23,7 @@ const Signup: React.FC = () => {
       
     } catch (err) {
       console.log(err);
-      window.alert('Error registering');
+      window.alert(err);
     }
   };
 

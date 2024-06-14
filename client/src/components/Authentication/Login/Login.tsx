@@ -24,7 +24,7 @@ const Login: React.FC = () => {
     } 
     catch (err) {
       console.log(err);
-      window.alert('Error loggin in');
+      window.alert(err);
     }
     // if (response) {
     //   invalidInput = <p>Invalid Email or Password!</p>;
