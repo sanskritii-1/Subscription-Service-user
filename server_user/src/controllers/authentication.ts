@@ -27,13 +27,14 @@ export const register = async (req: Request, res: Response):Promise<Response> =>
 
 
         // generating access token
-        const payload:JwtPayload = {
-            id: userData.id,
-        }
+        // const payload:JwtPayload = {
+        //     id: userData.id,
+        // }
         
-        const accessToken = generateAccessToken(payload);
+        // const accessToken = generateAccessToken(payload);
 
-        return res.status(200).json({token: accessToken});
+        // return res.status(200).json({token: accessToken});
+        return res.status(201).json({msg: "User created"});
     } 
     catch (err) {
         console.log(err);
