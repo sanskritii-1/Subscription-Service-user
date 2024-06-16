@@ -9,7 +9,7 @@ const SubscriptionPage: React.FC = () => {
   return (
     <div className='Subscription_Page'>
       <Header/>
-      <Banner/>
+      {/* <Banner/> */}
       <Subscription/>
       <Footer/>
     </div>
