@@ -3,9 +3,9 @@
   padding: 1rem 5rem;
   width: 40vw;
   margin: 2rem auto;
-  background-color: #4717ac;
+  background-color: #1d181f2b;
   border-radius: 1rem;
-  box-shadow: 7px 7px 17px #850d99;
+  box-shadow: 7px 7px 17px #313131;
 }
 
 .h1 {
@@ -14,11 +14,11 @@
 }
 
 .div {
-  background-image: url("https://img.freepik.com/free-vector/gradient-minimalist-background_23-2149976737.jpg?t=st=1718122382~exp=1718125982~hmac=af97d3e4f2583ec4f2c4a24140d87dcc699d1d343b59eb09467cd57340b1b735&w=996");
+  background-image: url("./authBg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   /* background-color: #eae6eb; */
-  height: 99vh;
+  height: 98vh;
   /* padding: 2vh; */
   margin: -2vh 0vh;
   font-family: "Mukta", sans-serif;
@@ -40,7 +40,7 @@
   font-size: 1.5rem;
   padding: 0.5rem;
   border-radius: 4px;
-  background-color: #d5c5ff;
+  background-color: #d5c5ff70;
   border: none;
   border-bottom: 2px solid #494844;
   border-bottom-right-radius: 0;
@@ -100,4 +100,11 @@
   color: transparent;
   background-color: transparent;
   border-color: transparent;
+}
+
+.link{
+  text-decoration: none;
+  padding: 0vh 0vh 0vh 17vw;
+  color: white;
+  font-size: 1.1rem;
 }

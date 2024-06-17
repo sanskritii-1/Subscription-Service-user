@@ -6,6 +6,8 @@ import { sendData } from "../../../helper/util";
 const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const [error, setError] = useState("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [name, setName] = useState<string>("");
   const navigate = useNavigate();
@@ -17,7 +19,17 @@ const Signup: React.FC = () => {
       console.log("error");
       return;
     }
-    sendData("register", { email: email, name:name, password: password }, true);
+    const response = await sendData(
+      "register",
+      { email: email, name: name, password: password },
+      true
+    );
+    if (response) {
+      setError("Invalid Email or Password!");
+    }
+    if (response.message) {
+      setError("Invalid Email or Password!");
+    }
     navigate("/protected");
   };
 
@@ -43,6 +55,7 @@ const Signup: React.FC = () => {
       </div>
       <h2 className={classes.h1}>Signup</h2>
       <form onSubmit={handleSubmit} className={classes.form}>
+        {error}
         <div>
           <label>Email:</label>
           <input
@@ -53,7 +66,7 @@ const Signup: React.FC = () => {
           />
         </div>
         <div>
-          <label>Name:</label>
+          <label>Username:</label>
           <input
             type="text"
             value={name}
