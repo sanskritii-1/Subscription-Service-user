@@ -1,5 +1,5 @@
 import React from 'react';
-import { RouterProvider, createBrowserRouter, Outlet, useLocation } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';

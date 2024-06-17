@@ -2,6 +2,7 @@ import mongoose,{Document} from "mongoose";
 
 interface IPlan extends Document{
     name: string,
+    features: string
     resources: number,
     price: number,
     duration: number,
@@ -23,7 +24,11 @@ const planSchema = new mongoose.Schema<IPlan>({
     duration: {
         type: Number,
         required: true,
-    }
+    },
+    features: {
+        type: String,
+        required: true,
+    },
 },{
     timestamps: true,
 })

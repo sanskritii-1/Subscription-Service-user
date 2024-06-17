@@ -5,7 +5,7 @@
 }
 
 .show-subscriptions {
-    color: white;
+    color: rgb(250, 244, 244);
     margin: 40px
 }
 
@@ -54,3 +54,7 @@
     height: 100%;
     object-fit: cover;
 }
+
+p {
+    color: rgb(236, 241, 236);
+  }

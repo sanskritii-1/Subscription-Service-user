@@ -1,8 +1,8 @@
-import { allPlans } from "../controllers/plans";
-import express from "express";
+import { Router } from 'express';
+import { getPlans } from '../controllers/plans';
 
-const router = express.Router();
+const router = Router();
 
-router.get('/subscription-plans', allPlans);
+router.get('/manage-subscription', getPlans);
 
 export default router;

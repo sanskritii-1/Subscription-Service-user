@@ -3,14 +3,10 @@ import './Header.css';
 import { GrSearch } from "react-icons/gr";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
-import Logo from './Logo.png';
 
 const Header: React.FC = () => {
   return (
     <div className="header">
-      <div className="logo-container">
-      <img src={Logo} alt="Logo" className="logo" />
-      </div>
       <div className="search">
       <input type="text" placeholder="search subscriptions here..." />
       <GrSearch className="search-icon" />
