@@ -12,7 +12,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = { email: email, password: password };
-    const response = await sendData("login", data, true);
+    const response = await sendData('POST',"login", true,data );
     if (response) {
       setError("Invalid Email or Password!");
     }

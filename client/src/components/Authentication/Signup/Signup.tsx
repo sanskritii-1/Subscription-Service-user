@@ -20,9 +20,10 @@ const Signup: React.FC = () => {
       return;
     }
     const response = await sendData(
+      'POST',
       "register",
-      { email: email, name: name, password: password },
-      true
+      true,
+      { email: email, name: name, password: password }
     );
     if (response) {
       setError("Invalid Email or Password!");
