@@ -19,18 +19,14 @@ const Signup: React.FC = () => {
       console.log("error");
       return;
     }
-    const response = await sendData(
-      "register",
-      { email: email, name: name, password: password },
-      true
-    );
-    if (response) {
-      setError("Invalid Email or Password!");
+    try {
+      await sendData("POST", "register", false, { email: email, name:name, password: password });
+      navigate("/login");
+      
+    } catch (err) {
+      console.log(err);
+      window.alert(err);
     }
-    if (response.message) {
-      setError("Invalid Email or Password!");
-    }
-    navigate("/protected");
   };
 
   const closeToastHandler = () => {

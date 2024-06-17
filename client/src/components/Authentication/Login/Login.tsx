@@ -11,15 +11,24 @@ const Login: React.FC = () => {
   const [error, setError] = useState("");
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = { email: email, password: password };
-    const response = await sendData("login", data, true);
-    if (response) {
-      setError("Invalid Email or Password!");
+    try {
+      const data = { email: email, password: password };
+      const response = await sendData('POST', 'login', false, data);
+      if(response.token){
+        localStorage.setItem('token', response.token);
+      }
+      else{
+        throw new Error('Authentication failed');
+      }
+      navigate("/protected");
+    } 
+    catch (err) {
+      console.log(err);
+      window.alert(err);
     }
-    if (response.message) {
-      setError("Invalid Email or Password!");
-    }
-    navigate("/protected");
+    // if (response) {
+    //   invalidInput = <p>Invalid Email or Password!</p>;
+    // }
   };
 
   return (
