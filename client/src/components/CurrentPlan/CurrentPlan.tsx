@@ -10,7 +10,7 @@ export default function CurrentPlan() {
   const [currentPlan, setCurrentPlan] = useState<plan>();
   useEffect(() => {
     async function fetchListOfPayment() {
-      const resData = await sendData("payment-history", null, false);
+      const resData = await sendData("GET","payment-history", false);
       setCurrentPlan(resData);
     }
     fetchListOfPayment();

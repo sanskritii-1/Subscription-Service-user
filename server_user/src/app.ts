@@ -28,8 +28,9 @@ app.get('/protected', authMiddleware, (req: Request, res: Response) => {
 
 import User from './models/user';
 import UserResource from './models/userResources';
-app.post('/saveUserResources', async (req: Request, res: Response) => {
-    const { email, reso } = req.body;
+import PaymentHistory from './models/PaymentHistory';
+app.post('/savePayment', async (req: Request, res: Response) => {
+    const { email, price, description } = req.body;
 
     try {
         // Find the user by email
@@ -39,9 +40,10 @@ app.post('/saveUserResources', async (req: Request, res: Response) => {
         }
 
         // Create user resource entry
-        const userResource = new UserResource({
+        const userResource = new PaymentHistory({
             userId: user._id,
-            leftResources: reso // Example value for leftResources
+            amount: price, // Example value for leftResources
+            description: description
         });
 
         // Save user resource
