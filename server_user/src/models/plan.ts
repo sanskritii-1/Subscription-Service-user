@@ -12,6 +12,7 @@ const planSchema = new mongoose.Schema<IPlan>({
     name:{
         type:String,
         required: true,
+        unique: true,
     },
     resources: {
         type: Number,
@@ -27,7 +28,7 @@ const planSchema = new mongoose.Schema<IPlan>({
     },
     features: {
         type: String,
-        required: true,
+        // required: true,
     },
 },{
     timestamps: true,

@@ -3,6 +3,6 @@ import { getPlans } from '../controllers/plans';
 
 const router = Router();
 
-router.get('/manage-subscription', getPlans);
+router.get('/subscription-plans', getPlans);
 
 export default router;
