@@ -1,6 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap");
 .button {
   font: inherit;
-  background-color: #192c91;
+  background-color: #9c27b0;
   border: 1px solid #9c27b0;
   color: #ffffff;
   padding: 0.5rem 1.5rem;
@@ -10,16 +11,19 @@
 }
 
 .button:hover {
-  background-color: #111e69;
+  background-color: #761e86;
   border-color: #ac31c1;
 }
 
 .div {
   text-align: center;
-  background-image: url("https://img.freepik.com/free-vector/halftone-background-with-circles_23-2148907689.jpg?t=st=1718035102~exp=1718035702~hmac=9afde2cd0af69e894979a52ff018a7cf82616ff5bb9faf7ef366bac373fec1a3");
+  background-image: url("https://img.freepik.com/free-vector/gradient-minimalist-background_23-2149976755.jpg?t=st=1718278731~exp=1718282331~hmac=ca214d36dae4f9664552035d3b0d8ddac473a8c69ac309803de278cd334a0dcc&w=996");
   background-repeat: no-repeat;
   background-size: cover;
   /* background-color: #eae6eb; */
+  font-family: "Mukta", sans-serif;
+  font-weight: 500;
+  font-style: normal;
   height: 70vh;
   padding: 15vh 36vw;
   color: white;

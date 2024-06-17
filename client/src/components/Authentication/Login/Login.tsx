@@ -1,35 +1,41 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import classes from "../Authentication.module.css";
 import { sendData } from "../../../helper/util";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<any>();
   const navigate = useNavigate();
 
-  let invalidInput = <p></p>;
+  const [error, setError] = useState("");
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = { email: email, password: password };
     try {
-      const response = await sendData("login", data, true);
-      if (response) {
-        invalidInput = <p>Invalid Email or Password!</p>;
+      const data = { email: email, password: password };
+      const response = await sendData('POST', 'login', false, data);
+      if(response.token){
+        localStorage.setItem('token', response.token);
       }
-    } catch (error) {
-      setError(error);
+      else{
+        throw new Error('Authentication failed');
+      }
+      navigate("/protected");
+    } 
+    catch (err) {
+      console.log(err);
+      window.alert(err);
     }
-    navigate("/subscriptions");
+    // if (response) {
+    //   invalidInput = <p>Invalid Email or Password!</p>;
+    // }
   };
 
   return (
     <div className={classes.div}>
       <h1 className={classes.h1}>Login</h1>
       <form onSubmit={handleSubmit} className={classes.form}>
-        {invalidInput}
-        <p className={classes.error}>{error && error}</p>
+        {error}
         <div>
           <label>Email:</label>
           <input
@@ -49,6 +55,7 @@ const Login: React.FC = () => {
           />
         </div>
         <button type="submit">Login</button>
+        <Link to='/register' className={classes.link}>Don't have an account? Create one!</Link>
       </form>
     </div>
   );
