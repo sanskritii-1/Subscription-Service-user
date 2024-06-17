@@ -20,7 +20,7 @@ const Login: React.FC = () => {
       else{
         throw new Error('Authentication failed');
       }
-      navigate("/protected");
+      navigate("/resources");
     } 
     catch (err) {
       console.log(err);

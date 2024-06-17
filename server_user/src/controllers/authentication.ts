@@ -1,4 +1,4 @@
-import User from "../models/user";
+import User, { IUser } from "../models/user";
 import { Request, Response } from "express";
 import { registerValidationSchema, loginValidationSchema } from "../validations/userValidation";
 import { generateAccessToken } from "../middleware/auth";
@@ -17,23 +17,24 @@ export const register = async (req: Request, res: Response):Promise<Response> =>
         const data = req.body;
 
         // saving user data in user table if it doesn't exist
-        const foundUser = await User.findOne({email: data.email});
+        const foundUser = await User.findOne<IUser>({email: data.email});
         if(foundUser){
             return res.status(409).json({error: "User already registered"});
         }
 
         const newUser = new User(data);
-        const userData = await newUser.save();
+        const userData: IUser = await newUser.save();
 
 
         // generating access token
-        const payload:JwtPayload = {
-            id: userData.id,
-        }
+        // const payload:JwtPayload = {
+        //     id: userData.id,
+        // }
         
-        const accessToken = generateAccessToken(payload);
+        // const accessToken = generateAccessToken(payload);
 
-        return res.status(200).json({token: accessToken});
+        // return res.status(200).json({token: accessToken});
+        return res.status(201).json({msg: "User created"});
     } 
     catch (err) {
         console.log(err);
@@ -53,7 +54,7 @@ export const login = async (req: Request, res:Response):Promise<Response> => {
         const{email,password} = req.body;
 
         // checking if user exists
-        const user = await User.findOne({ email });
+        const user = await User.findOne<IUser>({ email });
         if (!user || !(await user.comparePassword(password))){
             return res.status(400).json({
                 error: "Incorrect email or password",

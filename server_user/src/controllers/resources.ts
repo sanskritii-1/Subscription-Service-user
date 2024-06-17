@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
-import Resource from "../models/resources";
+import Resource, { IResource } from "../models/resources";
 import {images} from "../data/images";
-import UserResource from "../models/userResources";
+import UserResource, { IUserResources } from "../models/userResources";
 
 interface CustomRequest extends Request{
     id?:string | JwtPayload;
@@ -13,7 +13,7 @@ export const getResources = async (req: CustomRequest, res: Response):Promise<Re
         // await Resource.insertMany(images);
         if(!req.id) return res.status(401).json({error: "Unauthorised access to resources: Token not found"});
         
-        const resources = await Resource.find();
+        const resources = await Resource.find<IResource>();
         return res.status(200).json(resources);
     } 
     catch (err) {
@@ -32,7 +32,7 @@ export const accessResource = async (req: CustomRequest, res: Response):Promise<
 
         const userId = <JwtPayload>req.id;
         
-        const foundUser = await UserResource.findOne({userId: userId.id});
+        const foundUser = await UserResource.findOne<IUserResources>({userId: userId.id});
         console.log("founduser in resources: ", foundUser)
 
         if(!foundUser) return res.status(500).json({error: "User resource record not found"});

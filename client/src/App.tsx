@@ -8,6 +8,7 @@ import TestPage from "./pages/Test";
 import PaymentHistoryPage from "./pages/PaymentHistoryPage";
 import CurrentPlanPage from "./pages/CurrentPlanPage";
 import SubscriptionPage from "./pages/Subscription_Page";
+import ResourcePage from "./pages/Resources";
 
 function App() {
   const routers = createBrowserRouter([
@@ -34,6 +35,10 @@ function App() {
     {
       path: "/subscriptions",
       element: <SubscriptionPage />,
+    },
+    {
+      path: "/resources",
+      element: <ResourcePage />,
     },
     {
       path: "/protected",
