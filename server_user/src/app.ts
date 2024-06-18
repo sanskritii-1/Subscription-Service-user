@@ -6,7 +6,10 @@ import paymentHistoryRoutes from './routes/paymentHistoryRoutes';
 import resourceRoute from './routes/resources';
 import planRoute from './routes/plans'
 import { authMiddleware } from './middleware/auth';
-
+import User from './models/user';
+import UserResource from './models/userResources';
+import PaymentHistory from './models/PaymentHistory';
+import subscriptionRoutes from './routes/subscription';
 // Create an Express application
 const app: Express = express();
 
@@ -28,9 +31,7 @@ app.get('/protected', authMiddleware, (req: Request, res: Response) => {
   res.send('Hello, from protected route');
 });
 
-import User from './models/user';
-import UserResource from './models/userResources';
-import PaymentHistory from './models/PaymentHistory';
+app.use('/api', subscriptionRoutes);
 app.post('/savePayment', async (req: Request, res: Response) => {
     const { email, price, description } = req.body;
 

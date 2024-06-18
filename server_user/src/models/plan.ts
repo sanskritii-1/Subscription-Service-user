@@ -1,6 +1,6 @@
 import mongoose,{Document} from "mongoose";
 
-interface IPlan extends Document{
+export interface IPlan extends Document{
     name: string,
     features: string
     resources: number,
