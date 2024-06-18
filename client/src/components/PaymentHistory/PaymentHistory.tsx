@@ -2,23 +2,27 @@ import React, { useState, useEffect } from "react";
 import { sendData } from "../../helper/util";
 import classes from "./PaymentHistory.module.css";
 
-interface paymentType {
-  userId: string;
-  amount: number;
-  date: string;
-  description: string;
-}
+import { useNavigate } from "react-router-dom";
+
 export default function PaymentHistory() {
-  const [listOfPayment, setListOfPayment] = useState<paymentType[]>([]);
+  const [listOfPayment, setListOfPayment] = useState<any[]>([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function fetchListOfPayment() {
-      const resData = await sendData("GET", "payment-history", true);
-      setListOfPayment(() => {
-        return resData;
-      });
+      try {
+        // const response = await sendData('GET', 'get-resources', true);
+        const resData = await sendData("GET", "payment-history", true);
+        setListOfPayment(() => {
+          return resData;
+        });
+      } catch (error) {
+        alert(error);
+        navigate("/login");
+      }
     }
     fetchListOfPayment();
-  }, []);
+  });
   return (
     <div className={classes.div}>
       <h1 className={classes.h1}>Payment History</h1>

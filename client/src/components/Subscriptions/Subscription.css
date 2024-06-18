@@ -1,60 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap");
 .subscription-banner {
-    width: 100%;
-    height: auto;
-    padding: 0.1px;
+  width: 100%;
+  height: auto;
+  padding: 0.1px;
 }
 
 .show-subscriptions {
-    color: rgb(250, 244, 244);
-    margin: 40px
+  color: rgb(250, 244, 244);
+  margin: 40px;
 }
 
 .BannerText {
-    text-align: center;
-    font-size: 24px;
-    margin: 20px 0;
-    font-weight: bold;
-    color: #fff;
+  text-align: center;
+  font-size: 24px;
+  margin: 20px 0;
+  font-weight: bold;
+  color: #fff;
+  font-family: "Mukta", sans-serif;
+  font-weight: 500;
+  font-style: normal;
 }
 
 .subscription-slideshow {
-    position: relative;
-    overflow: hidden;
-    margin-top: 15px;
-    height: auto;
+  position: relative;
+  overflow: hidden;
+  margin-top: 15px;
+  height: auto;
 }
 
 .slideshow-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-60%);
-    background-color: rgb(190, 162, 162);
-    border: 30;
-    border-radius: 70%;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 45;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-60%);
+  background-color: rgb(190, 162, 162);
+  border: 30;
+  border-radius: 70%;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 45;
 }
 
 .slideshow-button:first-child {
-    left: 0;
+  left: 0;
 }
 
 .slideshow-button:last-child {
-    right: 0;
+  right: 0;
 }
 
 .slideshow-images {
-    display: flex;
-    transition: transform 0.2s ease;
+  display: flex;
+  transition: transform 0.2s ease;
 }
 
 .slideshow-image img {
-    width: 95%;
-    height: 100%;
-    object-fit: cover;
+  width: 95%;
+  height: 100%;
+  object-fit: cover;
 }
 
 p {
-    color: rgb(236, 241, 236);
-  }
+  color: rgb(236, 241, 236);
+}
+.subscribe-button {
+  font: inherit;
+  background-color: #9c27b0;
+  border: 1px solid #9c27b0;
+  color: #ffffff;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.subscribe-button:hover {
+  background-color: #761e86;
+  border-color: #ac31c1;
+}
