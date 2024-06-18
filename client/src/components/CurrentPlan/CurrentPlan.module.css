@@ -1,11 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap");
 
 .div {
-  background-image: url("https://img.freepik.com/free-vector/gradient-minimalist-background_23-2149976755.jpg?t=st=1718278731~exp=1718282331~hmac=ca214d36dae4f9664552035d3b0d8ddac473a8c69ac309803de278cd334a0dcc&w=996");
-  background-repeat: repeat-y;
+  background-image: url("https://cdn.pixabay.com/photo/2022/09/21/17/02/blue-background-7470781_1280.jpg");
+  background-repeat: no-repeat;
   background-size: cover;
   font-family: "Mukta", sans-serif;
   font-weight: 500;
   font-style: normal;
   min-height: 94vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.planContainer {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 1.2em;
+}
+p{
+  margin-bottom: 10px;
 }

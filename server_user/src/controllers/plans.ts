@@ -1,12 +1,52 @@
 import { Request, Response } from "express";
-import Plan from "../models/plan";
+import Plan, { IPlan } from "../models/plan";
+import Subscription,{ ISubscription } from "../models/subscription";
+import { JwtPayload } from "jsonwebtoken";
 
+interface CustomRequest extends Request {
+  id?: string | JwtPayload;
+}
+
+// Fetch all plans
 export const getPlans = async (req: Request, res: Response) => {
-    try {
-      const plans = await Plan.find();
-      if(plans.length == 0) return res.status(404).json({error: "No subscription plans found"});
-      res.status(200).json(plans);
-    } catch (error) {
-      res.status(500).json({ error: 'Server error' });
+  try {
+    const plans = await Plan.find();
+    if (plans.length === 0) return res.status(404).json({ error: "No subscription plans found" });
+    res.status(200).json(plans);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+// Fetch current plan for a user
+export const getCurrentPlan = async (req: CustomRequest, res: Response) => {
+  try {
+    console.log("hi",req.id);
+    const userId = (req.id as JwtPayload).id as string;
+    console.log(userId);
+    const subscription = await Subscription.findOne({ userId });
+
+    if (!subscription) {
+      return res.status(404).json({message: 'No current plan found for the user'});
     }
-  };
+
+    const planId = subscription.planId as unknown as string;;
+    const currentPlan = await Plan.findById(planId) as IPlan;
+
+    // Calculate remaining days
+    const currentDate = new Date();
+    const remainingDuration = Math.max(0, Math.ceil((subscription.endDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)));
+
+    const currentPlanDetails = {
+      planName: currentPlan.name,
+      duration: currentPlan.duration,
+      purchaseDate: subscription.startDate,
+      remainingDuration
+    };
+
+    return res.status(200).json(currentPlanDetails);
+  } catch (error) {
+    //console.error('Error fetching plan details:', error);
+    res.status(500).json({ message: 'Server error',error });
+  }
+};

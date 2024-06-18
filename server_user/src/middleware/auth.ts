@@ -16,6 +16,7 @@ interface CustomRequest extends Request{
 
 // authorization for accessing a website
 export const authMiddleware = (req: CustomRequest, res:Response, next: NextFunction) => {
+    // console.log("hiii");
     // checking for access token in authorization Bearer
     const authHeader = req.headers['authorization'];
     const token = authHeader?.split(' ')[1];
