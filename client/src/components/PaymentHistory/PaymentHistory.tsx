@@ -2,14 +2,12 @@ import React, { useState, useEffect } from "react";
 import { sendData } from "../../helper/util";
 import classes from "./PaymentHistory.module.css";
 
-interface paymentType {
-  userId: string;
-  amount: number;
-  date: string;
-  description: string;
-}
+import { useNavigate } from "react-router-dom";
+
 export default function PaymentHistory() {
-  const [listOfPayment, setListOfPayment] = useState<paymentType[]>([]);
+  const [listOfPayment, setListOfPayment] = useState<any[]>([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function fetchListOfPayment() {
       const resData = await sendData('GET',"payment-history", true);
@@ -18,7 +16,7 @@ export default function PaymentHistory() {
       }
     }
     fetchListOfPayment();
-  }, []);
+  },[]);
   return (
     <div className={classes.div}>
       <h1 className={classes.h1}>Payment History</h1>
@@ -30,8 +28,9 @@ export default function PaymentHistory() {
           listOfPayment.map((payment) => {
             return (
               <li className={classes.payment}>
-                <h2>{payment.amount}</h2>
+                <h2>₹{payment.amount}</h2>
                 Payment was done on {payment.date}
+                {/* Payment was done on {payment.date.getDate()}-{payment.date.getMonth()+1}-{payment.date.getYear()+1} */}
                 {/* <h2 className={classes.paymentDesc}>{payment}</h2> */}
               </li>
             );

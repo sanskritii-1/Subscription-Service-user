@@ -8,6 +8,17 @@
   font-weight: 500;
   font-style: normal;
   min-height: 94vh;
+  text-align: center;
+}
+
+.planContainer {
+  list-style: none;
+  background-color: #673ab7;
+  width: 50vw;
+  margin: 0vh 25vw;
+  padding: 2vh 6vh; 
+  border-radius: 1rem;
+  box-shadow: 6px 6px 16px #330f39;
 }
 
 .h1 {

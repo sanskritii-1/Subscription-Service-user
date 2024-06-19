@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { sendData } from '../../helper/util';
 import classes from './CurrentPlan.module.css';
+import { useNavigate } from 'react-router-dom';
 
 interface plan{
   name:string;
@@ -8,7 +9,9 @@ interface plan{
   duration: Number;
 }
 export default function CurrentPlan() {
-  const [currentPlan, setCurrentPlan] = useState<plan>();
+  const [currentPlan, setCurrentPlan] = useState<any>();
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function fetchListOfPayment() {
       const resData = await sendData('GET',"payment-history", true);
@@ -17,7 +20,7 @@ export default function CurrentPlan() {
       }
     }
     fetchListOfPayment();
-  }, []);
+  },[]);
   return (
     <div className={classes.div}>
       <h1 className={classes.h1}>Current Plan Details</h1>
@@ -28,5 +31,5 @@ export default function CurrentPlan() {
       <p>{currentPlan && `Duration of the plan is ${currentPlan.duration}`}</p>
       </div>
     </div>
-  )
+  );
 }
