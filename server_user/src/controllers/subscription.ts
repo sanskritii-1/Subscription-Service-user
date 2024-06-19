@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Joi from 'joi';
-import Subscription from '../models/subscription';
+import Subscription from '../models/transaction';
 import Plan from '../models/plan';
 import User from '../models/user';
 import { JwtPayload } from 'jsonwebtoken';

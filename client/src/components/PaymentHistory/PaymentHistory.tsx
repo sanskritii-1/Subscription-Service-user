@@ -10,9 +10,14 @@ export default function PaymentHistory() {
 
   useEffect(() => {
     async function fetchListOfPayment() {
-      const resData = await sendData('GET',"payment-history", true);
-      if (Array.isArray(resData)) {
-        setListOfPayment(resData);
+      try {
+        const resData = await sendData('GET',"payment-history", true);
+        if (Array.isArray(resData)) {
+          setListOfPayment(resData);
+        }
+      } catch (err) {
+        console.log(err);
+        window.alert(err);
       }
     }
     fetchListOfPayment();
