@@ -4,26 +4,23 @@ import Subscription from '../models/transaction';
 import Plan from '../models/plan';
 import User from '../models/user';
 import { JwtPayload } from 'jsonwebtoken';
-import { ObjectId } from 'mongoose';
 import UserResource from '../models/userResources';
 
 const subscribeSchema = Joi.object({
-    // userId: Joi.string().required(),
     planId: Joi.string().required(),
 });
 
-interface CustomRequest extends Request{
-    id?:string | JwtPayload;
+interface CustomRequest extends Request {
+    id?: string | JwtPayload;
 }
 
-const addUserResource = async (userId: string, resource:number) => {
-    
-    const user = new UserResource({
+const addUserResource = async (userId: string, resource: number) => {
+    const userResource = new UserResource({
         userId: userId,
         leftResources: resource,
-    })
+    });
 
-    await user.save();
+    await userResource.save();
 }
 
 export const subscribe = async (req: CustomRequest, res: Response): Promise<Response> => {
@@ -34,7 +31,7 @@ export const subscribe = async (req: CustomRequest, res: Response): Promise<Resp
         }
 
         const { planId } = req.body;
-        const payloadData = <JwtPayload>req.id;
+        const payloadData = req.id as JwtPayload;
         const userId = payloadData.id;
 
         const user = await User.findById(userId);
@@ -51,8 +48,13 @@ export const subscribe = async (req: CustomRequest, res: Response): Promise<Resp
         await addUserResource(userId, plan.resources);
 
         const startDate = new Date();
-        const endDate = new Date();
-        endDate.setDate(startDate.getDate() + plan.duration);
+        const endDate = new Date(startDate);
+
+        
+        endDate.setMonth(endDate.getMonth() + plan.duration);
+
+       
+        endDate.setDate(Math.min(startDate.getDate(), new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0).getDate()));
 
         const newSubscription = new Subscription({
             userId: userId,
