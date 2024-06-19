@@ -5,7 +5,7 @@ import authenticationRoute from './routes/authentication';
 import paymentHistoryRoutes from './routes/paymentHistoryRoutes';
 import resourceRoute from './routes/resources';
 import planRoute from './routes/plans'
-import { authMiddleware } from './middleware/auth';
+import subscriptionRoutes from './routes/subscription';
 import { ErrorMiddleware } from './middleware/error';
 
 // Create an Express application
@@ -18,16 +18,18 @@ app.use('/api', authenticationRoute);
 app.use('/api', paymentHistoryRoutes); // Include payment history routes
 app.use('/api', resourceRoute);
 app.use('/api', planRoute);
+app.use('/api', subscriptionRoutes);
 app.use(ErrorMiddleware);
 
 connectDB();
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello, TypeScript + Node.js + Express!');
+    res.send('Hello, TypeScript + Node.js + Express!');
 });
 
+import { authMiddleware } from './middleware/auth';
 app.get('/protected', authMiddleware, (req: Request, res: Response) => {
-  res.send('Hello, from protected route');
+    res.send('Hello, from protected route');
 });
 
 import User from './models/user';
@@ -35,7 +37,7 @@ import UserResource from './models/userResources';
 import PaymentHistory from './models/PaymentHistory';
 app.post('/savePayment', async (req: Request, res: Response) => {
     const { email, price, description } = req.body;
-
+    
     try {
         // Find the user by email
         const user = await User.findOne({ email });

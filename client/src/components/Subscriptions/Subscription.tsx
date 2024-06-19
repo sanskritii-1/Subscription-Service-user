@@ -23,12 +23,16 @@ const Subscriptions: React.FC = () => {
 
     fetchSubscriptions();
   }, []);
-  const subcribeHandler = async () => {
+
+  const subcribeHandler = async (planId: string) => {
     try {
       const resData = await sendData("POST", "/subscribe", true, {
-        subscriptions,
+        planId: planId,
       });
-    } catch (error) {
+
+      navigate('/resources');
+    } 
+    catch (error) {
       alert(error);
       navigate("/login");
     }
@@ -44,7 +48,7 @@ const Subscriptions: React.FC = () => {
           <p>Duration: {subscription.duration} months</p>
           {/* <p>Features: {subscription.features}</p> */}
           <br />
-          <button onClick={subcribeHandler} className="subscribe-button">
+          <button onClick={() => subcribeHandler(subscription._id)}  className="subscribe-button">
             Subscribe
           </button>
         </div>
