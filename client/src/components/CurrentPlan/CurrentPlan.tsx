@@ -22,6 +22,7 @@ export default function CurrentPlan() {
 
   return (
     <div className={classes.div}>
+      <h1 className={classes.h1}>Current Plan Details</h1>
       {(
         <div className={classes.planContainer}>
           <h1 style={{color:"red"}}>{!currentPlan?.planName && <p>You have a free plan</p>}</h1>
