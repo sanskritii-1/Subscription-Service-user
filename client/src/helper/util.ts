@@ -16,7 +16,7 @@ export async function sendData(
       headers['Authorization'] = `Bearer ${token}`;
     }
     
-    const response = await fetch(`http://localhost:5001/api/${path}`, {
+    const response = await fetch(`http://localhost:7001/api/${path}`, {
       method: method,
       headers: headers,
       body: payload ? JSON.stringify(payload) : undefined,
