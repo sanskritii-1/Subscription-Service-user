@@ -1,17 +1,20 @@
 import User, { IUser } from "../models/user";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { registerValidationSchema, loginValidationSchema } from "../validations/userValidation";
 import { generateAccessToken } from "../middleware/auth";
 import { JwtPayload } from "jsonwebtoken";
+import { CustomError } from "../middleware/error";
 
 
-export const register = async (req: Request, res: Response):Promise<Response> => {
+export const register = async (req: Request, res: Response, next: NextFunction):Promise<Response|void> => {
     try {
         // joi validation
         const {error} = registerValidationSchema.validate(req.body);
         
         if(error){
-            return res.status(400).json({error: error.details[0].message});
+            const err:CustomError = new Error(error.details[0].message);
+            err.status = 400;
+            throw err;
         }
         
         const data = req.body;
@@ -19,36 +22,30 @@ export const register = async (req: Request, res: Response):Promise<Response> =>
         // saving user data in user table if it doesn't exist
         const foundUser = await User.findOne<IUser>({email: data.email});
         if(foundUser){
-            return res.status(409).json({error: "User already registered"});
+            const err:CustomError = new Error("User already registered");
+            err.status = 409;
+            throw err;
         }
 
         const newUser = new User(data);
         const userData: IUser = await newUser.save();
 
-
-        // generating access token
-        // const payload:JwtPayload = {
-        //     id: userData.id,
-        // }
-        
-        // const accessToken = generateAccessToken(payload);
-
-        // return res.status(200).json({token: accessToken});
         return res.status(201).json({msg: "User created"});
     } 
     catch (err) {
-        console.log(err);
-        return res.status(500).json({error: "Internal Server Error"});
+        next(err)
     }
 }
 
 
-export const login = async (req: Request, res:Response):Promise<Response> => {
+export const login = async (req: Request, res:Response, next:NextFunction):Promise<Response|void> => {
     try{
         // joi validation
         const {error} = loginValidationSchema.validate(req.body);
         if (error) {
-            return res.status(400).json({ error: error.details[0].message });
+            const err:CustomError = new Error(error.details[0].message);
+            err.status = 400;
+            throw err;
         }
 
         const{email,password} = req.body;
@@ -56,10 +53,9 @@ export const login = async (req: Request, res:Response):Promise<Response> => {
         // checking if user exists
         const user = await User.findOne<IUser>({ email });
         if (!user || !(await user.comparePassword(password))){
-            return res.status(400).json({
-                error: "Incorrect email or password",
-                success: false
-            });
+            const err:CustomError = new Error("Incorrect email or password");
+            err.status = 400;
+            throw err;
         }
 
         // generating token
@@ -72,8 +68,7 @@ export const login = async (req: Request, res:Response):Promise<Response> => {
         return res.status(200).json({token: accessToken});
     } 
     catch (error) {
-        console.log(error);
-        return res.status(500).json({error: "Internal Server Error"});
+        next(error);
     }
 
 }
