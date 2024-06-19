@@ -6,6 +6,7 @@ import paymentHistoryRoutes from './routes/paymentHistoryRoutes';
 import resourceRoute from './routes/resources';
 import planRoute from './routes/plans'
 import { authMiddleware } from './middleware/auth';
+import { ErrorMiddleware } from './middleware/error';
 
 // Create an Express application
 const app: Express = express();
@@ -17,6 +18,7 @@ app.use('/api', authenticationRoute);
 app.use('/api', paymentHistoryRoutes); // Include payment history routes
 app.use('/api', resourceRoute);
 app.use('/api', planRoute);
+app.use(ErrorMiddleware);
 
 connectDB();
 
@@ -57,6 +59,33 @@ app.post('/savePayment', async (req: Request, res: Response) => {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+app.post('/saveUserResources', async (req: Request, res: Response) => {
+    const { email, reso } = req.body;
+
+    try {
+        // Find the user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Create user resource entry
+        const userResource = new UserResource({
+            userId: user._id,
+            leftResources: reso // Example value for leftResources
+        });
+
+        // Save user resource
+        await userResource.save();
+
+        return res.status(200).json({ message: 'User resources saved successfully' });
+    } catch (error) {
+        console.error('Error saving user resources:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 
 
 export default app;

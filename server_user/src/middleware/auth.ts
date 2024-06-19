@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { getAcessTokenSecret } from "../utils";
 import User, { IUser } from "../models/user";
+import { CustomError } from "./error";
 
 declare module "jsonwebtoken" {
     export interface JwtPayload {
@@ -16,33 +17,25 @@ interface CustomRequest extends Request{
 
 // authorization for accessing a website
 export const authMiddleware = (req: CustomRequest, res:Response, next: NextFunction) => {
-    // checking for access token in authorization Bearer
-    const authHeader = req.headers['authorization'];
-    const token = authHeader?.split(' ')[1];
-    if(!token){
-        return res.status(401).json({error: "Token not found"})
-    }
-
-    // checking validity of access token and adding payload (user info) to req
+    
     try {
-        const token = req.header('Authorization')?.replace('Bearer ', '');
-
-        if (!token) {
-            return res.status(401).json({ error: "Unauthorized" });
+        // checking for access token in authorization Bearer
+        const authHeader = req.headers['authorization'];
+        const token = authHeader?.split(' ')[1];
+        if(!token){
+            const err:CustomError = new Error("Token not found: Unauthorised access");
+            err.status = 401;
+            throw err;
         }
-
+        
+        // checking validity of access token and adding payload (user info) to req
         const accessSecret = getAcessTokenSecret();
         const payloadData = <JwtPayload>jwt.verify(token, accessSecret);
         req.id = payloadData;
         console.log("payloadData: ", payloadData);
         next();
     } catch (err) {
-        console.error(err);
-        if (err instanceof jwt.JsonWebTokenError) {
-            res.status(403).json({ error: "Invalid token" });
-        } else {
-            res.status(500).json({ error: "Server error" });
-        }
+        next(err);
     }
 };
 

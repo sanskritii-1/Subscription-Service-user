@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import ImageCard from '../ImageCard/ImageCard';
+import ImageCard from './ImageCard';
 import axios from 'axios'; 
 import styles from './Resources.module.css';
 import { useNavigate } from 'react-router-dom';
@@ -31,11 +31,11 @@ const Resources: React.FC = () => {
     <div className={styles.container}>
       {images.map((image, index) => (
         <ImageCard 
-          key={index} 
+          key={image._id} 
           id = {image._id}
           title={image.title} 
           description={image.description} 
-          url={image.url} 
+          url={image.blur_url} 
         />
       ))}
     </div>
