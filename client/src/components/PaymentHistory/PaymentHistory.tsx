@@ -34,8 +34,8 @@ export default function PaymentHistory() {
           listOfPayment.map((payment) => {
             return (
               <li className={classes.payment}>
-                <h2>{payment.amount}</h2>
-                Payment was done on {payment.date}
+                <h2>₹{payment.amount}</h2>
+                Payment was done on {payment.date.getDate()}-{payment.date.getMonth()+1}-{payment.date.getYear()+1}
                 {/* <h2 className={classes.paymentDesc}>{payment}</h2> */}
               </li>
             );
