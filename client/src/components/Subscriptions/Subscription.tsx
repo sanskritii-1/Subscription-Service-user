@@ -10,7 +10,7 @@ const Subscriptions: React.FC = () => {
     const fetchSubscriptions = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/subscription-plans"
+          "http://localhost:5001/api/subscription-plans"
         );
         const data = await response.json();
         if (Array.isArray(data)) {

@@ -1,6 +1,6 @@
-import mongoose,{Document} from "mongoose";
+import mongoose, { Document } from "mongoose";
 
-export interface IPlan extends Document{
+export interface IPlan extends Document {
     name: string,
     features: string
     resources: number,
@@ -9,9 +9,10 @@ export interface IPlan extends Document{
 }
 
 const planSchema = new mongoose.Schema<IPlan>({
-    name:{
-        type:String,
+    name: {
+        type: String,
         required: true,
+        default: "free",
         unique: true,
     },
     resources: {
@@ -30,7 +31,7 @@ const planSchema = new mongoose.Schema<IPlan>({
         type: String,
         // required: true,
     },
-},{
+}, {
     timestamps: true,
 })
 

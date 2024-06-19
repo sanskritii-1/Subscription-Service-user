@@ -1,35 +1,35 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { sendData } from '../../helper/util';
 import classes from './CurrentPlan.module.css';
-import { useNavigate } from 'react-router-dom';
 
-interface plan{
-  name:string;
-  description:string;
-  duration: Number;
+interface Plan {
+  planName: string;
+  purchaseDate: string;
+  duration: number;
+  remainingDuration: string
 }
+
 export default function CurrentPlan() {
-  const [currentPlan, setCurrentPlan] = useState<any>();
-  const navigate = useNavigate();
+  const [currentPlan, setCurrentPlan] = useState<Plan | null>(null);
 
   useEffect(() => {
-    async function fetchListOfPayment() {
-      const resData = await sendData('GET',"payment-history", true);
-      if (resData) {
-        setCurrentPlan(resData);
-      }
+    async function fetchCurrentPlan() {
+      const resData = await sendData("GET", "current-plan-details", true);
+      setCurrentPlan(resData);
     }
-    fetchListOfPayment();
-  },[]);
+    fetchCurrentPlan();
+  }, []);
+
   return (
     <div className={classes.div}>
-      <h1 className={classes.h1}>Current Plan Details</h1>
-      <div className={classes.content}>
-      <h2>{!currentPlan && <p className={classes.noPlan}>No plan purchased yet!</p>}</h2>
-      <h1>{currentPlan && currentPlan.name}</h1>
-      <p>{currentPlan && currentPlan.description}</p>
-      <p>{currentPlan && `Duration of the plan is ${currentPlan.duration}`}</p>
-      </div>
+      {(
+        <div className={classes.planContainer}>
+          <h1 style={{color:"red"}}>{!currentPlan?.planName && <p>You have a free plan</p>}</h1>
+          <p>Purchase Date: {currentPlan && currentPlan.purchaseDate}</p>
+          <p>Duration: {currentPlan && currentPlan.duration}</p>
+          <p>Remaining duration: {currentPlan && currentPlan.remainingDuration}</p>
+        </div>
+      )}
     </div>
   );
 }
