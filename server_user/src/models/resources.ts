@@ -4,6 +4,7 @@ export interface IResource extends Document{
     title: string,
     description: string,
     url: string,
+    blur_url: string,
 }
 
 const resourceSchema = new mongoose.Schema<IResource>({
@@ -15,6 +16,11 @@ const resourceSchema = new mongoose.Schema<IResource>({
         type: String,
     },
     url: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    blur_url: {
         type: String,
         required: true,
         unique: true,

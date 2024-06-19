@@ -13,7 +13,7 @@ export const getResources = async (req: CustomRequest, res: Response):Promise<Re
         // await Resource.insertMany(images);
         if(!req.id) return res.status(401).json({error: "Unauthorised access to resources: Token not found"});
         
-        const resources = await Resource.find<IResource>();
+        const resources = await Resource.find<IResource>({}, 'title description blur_url');
         return res.status(200).json(resources);
     } 
     catch (err) {
@@ -42,7 +42,11 @@ export const accessResource = async (req: CustomRequest, res: Response):Promise<
         }
 
         await UserResource.updateOne({userId: userId.id}, {$inc: {leftResources:-1}});
-        return res.status(200).json({msg: "Successfully accessed resource"});
+
+        const image_details = await Resource.findOne<IResource>({_id:req.body.imageId});
+        if(!image_details) return res.status(404).json({error:"Resource not found"});
+
+        return res.status(200).json({url: image_details.url});
     } 
     catch (err) {
         console.log(err);

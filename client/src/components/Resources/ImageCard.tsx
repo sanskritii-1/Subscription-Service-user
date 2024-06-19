@@ -12,16 +12,15 @@ interface ImageCardProps {
 
 const ImageCard: React.FC<ImageCardProps> = ({ id, title, description, url }) => {
   const [isClicked, setIsClicked] = useState(false);
-
-  const token = localStorage.getItem('token');
+  const [img_url, setUrl] = useState(url);
 
   const handleClick = async () => {
     console.log('clicked');
-    // await sendData('access-resource', )
     try {
       
       const response = await sendData('POST', 'access-resource', true, {imageId: id});
         setIsClicked(true);
+        setUrl(response.url);
       } catch (error) {
         console.error('Error fetching image:', error);
         window.alert(error)
@@ -35,7 +34,7 @@ const ImageCard: React.FC<ImageCardProps> = ({ id, title, description, url }) =>
     style={{ pointerEvents: isClicked ? 'none' : 'auto' }}
     >
       <h2 className={styles.title}>{title}</h2>
-      <img className={`${styles.image} ${isClicked ? styles.imageClicked : styles.imageBlur}`} src={url} alt={title} />
+      <img className={`${styles.image}`} src={img_url} alt={title} />
       <p className={styles.description}>{description}</p>
     </div>
   );
