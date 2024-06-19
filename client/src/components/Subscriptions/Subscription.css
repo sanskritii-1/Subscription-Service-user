@@ -1,79 +1,98 @@
-@import url("https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap");
-.subscription-banner {
-  width: 100%;
-  height: auto;
-  padding: 0.1px;
+body {
+  font-family: 'Arial', sans-serif;
 }
 
-.show-subscriptions {
-  color: rgb(250, 244, 244);
-  margin: 40px;
-}
-
-.BannerText {
+.subscriptions-container {
+  padding: 20px;
+  background: transparent; /* Make background transparent */
+  color: #faf6f6;
   text-align: center;
-  font-size: 24px;
-  margin: 20px 0;
-  font-weight: bold;
-  color: #fff;
-  font-family: "Mukta", sans-serif;
-  font-weight: 500;
-  font-style: normal;
+  overflow: hidden; 
 }
 
-.subscription-slideshow {
-  position: relative;
-  overflow: hidden;
-  margin-top: 15px;
-  height: auto;
-}
-
-.slideshow-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-60%);
-  background-color: rgb(190, 162, 162);
-  border: 30;
-  border-radius: 70%;
-  padding: 10px;
-  cursor: pointer;
-  z-index: 45;
-}
-
-.slideshow-button:first-child {
-  left: 0;
-}
-
-.slideshow-button:last-child {
-  right: 0;
-}
-
-.slideshow-images {
+.cards {
   display: flex;
-  transition: transform 0.2s ease;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 
-.slideshow-image img {
-  width: 95%;
-  height: 100%;
-  object-fit: cover;
+.card {
+  background-color: #1c1b1b;
+  border: 1px solid #0a0a0a;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 40px;
+  flex: 0 1 calc(33.333% - 20px); /* Three cards per row */
+  box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-p {
-  color: rgb(236, 241, 236);
+.card-header {
+  background-color: #0070f3;
+  color: white;
+  padding: 10px;
+  border-radius: 8px 8px 0 0;
+  text-align: center;
 }
-.subscribe-button {
-  font: inherit;
-  background-color: #9c27b0;
-  border: 1px solid #9c27b0;
-  color: #ffffff;
-  padding: 0.5rem 1.5rem;
-  border-radius: 4px;
+
+.card-price {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.card-body {
+  text-align: left;
+  padding: 10px;
+}
+
+.card-detail {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.card-detail i {
+  margin-right: 8px;
+  color: #0070f3;
+}
+
+.card-features {
+  list-style-type: none;
+  padding: 0;
+  margin: 15px 0 0 0;
+}
+
+.card-features li {
+  padding: 5px 0;
+}
+
+.card-button {
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
   cursor: pointer;
-  text-decoration: none;
+  font-size: 16px;
+  margin-top: 10px;
 }
 
-.subscribe-button:hover {
-  background-color: #761e86;
-  border-color: #ac31c1;
+.card-button:hover {
+  background-color: #005bb5;
 }
+
+@media (max-width: 768px) {
+  .card {
+    flex: 0 1 calc(50% - 20px); /* Two cards per row on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    flex: 0 1 100%; /* One card per row on very small screens */
+  }
+}
+
