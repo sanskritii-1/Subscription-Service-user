@@ -50,11 +50,11 @@ export async function sendData(
 ) {
   
   try {
+    const token  = localStorage.getItem('token');
     let headers:HeadersInit={
       "Content-Type": "application/json",
     }
-    if(authBool){
-      const token  = localStorage.getItem('token');
+    if(token && authBool){
       headers['Authorization'] = `Bearer ${token}`;
     }
     
