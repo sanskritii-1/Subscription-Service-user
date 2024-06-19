@@ -4,6 +4,8 @@ import Subscription from '../models/subscription';
 import Plan from '../models/plan';
 import User from '../models/user';
 import { JwtPayload } from 'jsonwebtoken';
+import { ObjectId } from 'mongoose';
+import UserResource from '../models/userResources';
 
 const subscribeSchema = Joi.object({
     // userId: Joi.string().required(),
@@ -12,7 +14,17 @@ const subscribeSchema = Joi.object({
 
 interface CustomRequest extends Request{
     id?:string | JwtPayload;
-  }
+}
+
+const addUserResource = async (userId: string, resource:number) => {
+    
+    const user = new UserResource({
+        userId: userId,
+        leftResources: resource,
+    })
+
+    await user.save();
+}
 
 export const subscribe = async (req: CustomRequest, res: Response): Promise<Response> => {
     try {
@@ -35,6 +47,8 @@ export const subscribe = async (req: CustomRequest, res: Response): Promise<Resp
         if (!plan) {
             return res.status(404).json({ error: 'Plan not found' });
         }
+
+        await addUserResource(userId, plan.resources);
 
         const startDate = new Date();
         const endDate = new Date();
