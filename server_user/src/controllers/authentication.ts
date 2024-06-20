@@ -1,6 +1,6 @@
 import User, { IUser } from "../models/user";
 import { NextFunction, Request, Response } from "express";
-import { registerValidationSchema, loginValidationSchema } from "../validations/userValidation";
+import { registerValidationSchema, loginValidationSchema } from "../validations/schemas";
 import { generateAccessToken } from "../middleware/auth";
 import { JwtPayload } from "jsonwebtoken";
 import { CustomError } from "../middleware/error";
@@ -9,13 +9,13 @@ import { CustomError } from "../middleware/error";
 export const register = async (req: Request, res: Response, next: NextFunction):Promise<Response|void> => {
     try {
         // joi validation
-        const {error} = registerValidationSchema.validate(req.body);
+        // const {error} = registerValidationSchema.validate(req.body);
         
-        if(error){
-            const err:CustomError = new Error(error.details[0].message);
-            err.status = 400;
-            throw err;
-        }
+        // if(error){
+        //     const err:CustomError = new Error(error.details[0].message);
+        //     err.status = 400;
+        //     throw err;
+        // }
         
         const data = req.body;
 
