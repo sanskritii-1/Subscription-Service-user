@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { sendData } from '../../helper/util';
+import { useSendData } from '../../helper/util';
+// import { sendData } from '../../helper/util';
 import classes from './CurrentPlan.module.css';
+import { useNavigate } from 'react-router-dom';
 
 interface Plan {
   planName: string;
@@ -10,12 +12,20 @@ interface Plan {
 }
 
 export default function CurrentPlan() {
+  const navigate = useNavigate();
   const [currentPlan, setCurrentPlan] = useState<Plan | null>(null);
+  const sendData = useSendData();
 
   useEffect(() => {
     async function fetchCurrentPlan() {
-      const resData = await sendData("GET", "current-plan-details", true);
-      setCurrentPlan(resData);
+      try {
+        const resData = await sendData("GET", "current-plan-details", true);
+        setCurrentPlan(resData);
+      } 
+      catch (err) {
+        console.log(err);
+        window.alert(err);
+      }
     }
     fetchCurrentPlan();
   }, []);

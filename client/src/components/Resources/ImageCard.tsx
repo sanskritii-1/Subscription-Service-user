@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ImageCard.module.css';
-import { sendData } from '../../helper/util';
+import { useSendData } from '../../helper/util';
+// import { sendData } from '../../helper/util';
 import axios from "axios";
 
 interface ImageCardProps {
@@ -13,6 +14,7 @@ interface ImageCardProps {
 const ImageCard: React.FC<ImageCardProps> = ({ id, title, description, url }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [img_url, setUrl] = useState(url);
+  const sendData = useSendData();
 
   const handleClick = async () => {
     console.log('clicked');

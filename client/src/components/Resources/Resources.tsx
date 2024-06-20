@@ -3,11 +3,13 @@ import ImageCard from './ImageCard';
 import axios from 'axios'; 
 import styles from './Resources.module.css';
 import { useNavigate } from 'react-router-dom';
-import { sendData } from '../../helper/util';
+import { useSendData } from '../../helper/util';
+// import { sendData } from '../../helper/util';
 
 const Resources: React.FC = () => {
   const [images, setImages] = useState<any[]>([]);
   const navigate = useNavigate();
+  const sendData = useSendData();
 
   
   useEffect(() => {
@@ -21,7 +23,6 @@ const Resources: React.FC = () => {
       } catch (error) {
         console.error('Error fetching images:', error);
         window.alert(error)
-        navigate('/login')
       }
     };
     fetchImages();

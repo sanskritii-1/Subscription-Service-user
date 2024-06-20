@@ -8,5 +8,5 @@ export const ErrorMiddleware = (err: CustomError, req: Request, res: Response, n
     console.log(err.stack);
     const status = err.status || 500;
     const msg = err.message || "Internal Server Error";
-    res.status(status).json({error: msg});
+    res.status(status).json({code: err.status,error: msg});
 }

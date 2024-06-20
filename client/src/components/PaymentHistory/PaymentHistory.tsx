@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { sendData } from "../../helper/util";
+import { useSendData } from "../../helper/util";
+// import { sendData } from "../../helper/util";
 import classes from "./PaymentHistory.module.css";
 
 import { useNavigate } from "react-router-dom";
@@ -7,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 export default function PaymentHistory() {
   const [listOfPayment, setListOfPayment] = useState<any[]>([]);
   const navigate = useNavigate();
+  const sendData = useSendData();
 
   useEffect(() => {
     async function fetchListOfPayment() {

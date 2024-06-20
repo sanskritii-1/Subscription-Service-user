@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './Subscription.css';
-import { sendData } from '../../helper/util';
+import { useSendData } from '../../helper/util';
+// import { sendData } from '../../helper/util';
 import { useNavigate } from 'react-router-dom';
 
 const Subscriptions: React.FC = () => {
   const navigate = useNavigate();
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
+  const sendData = useSendData();
 
   useEffect(() => {
     const fetchSubscriptions = async () => {

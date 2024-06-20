@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "../Authentication.module.css";
-import { sendData } from "../../../helper/util";
+import { useSendData } from "../../../helper/util";
+// import { sendData } from "../../../helper/util";
 
 const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -12,6 +13,8 @@ const Signup: React.FC = () => {
   const [name, setName] = useState<string>("");
   const navigate = useNavigate();
   const [toastContent, settoastContent] = useState("");
+  const sendData = useSendData();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password !== confirmPassword) {

@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import classes from "../Authentication.module.css";
-import { sendData } from "../../../helper/util";
+import { useSendData } from "../../../helper/util";
+// import { sendData } from "../../../helper/util";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
+  const sendData = useSendData();
 
   const [error, setError] = useState("");
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
