@@ -54,7 +54,11 @@ const Subscriptions: React.FC = () => {
               </div>
               <div className="card-detail">
                 <i className="fas fa-database"></i>
-                <span>{subscription.resources} Resource Access</span>
+                <span>
+                  {subscription.resources === -1
+                    ? "Unlimited Resource Access"
+                    : `${subscription.resources} Resource Access`}
+                </span>
               </div>
               <div className="card-detail">
                 <i className="fas fa-list"></i>

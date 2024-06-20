@@ -27,7 +27,7 @@ export function useSendData() {
       console.log('response received util: ', response)
       const data = await response.json();
       console.log('data received util: ', data)
-      if (data.code === 401 || data.code === 403) {
+      if (data.code === 401) {
         console.log('in 401 in util')
         // window.location.replace('/login');
         // return;
