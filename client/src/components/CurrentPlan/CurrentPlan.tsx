@@ -8,7 +8,8 @@ interface Plan {
   planName: string;
   purchaseDate: string;
   duration: number;
-  remainingDuration: string
+  remainingResources: number;
+  remainingDuration: string;
 }
 
 export default function CurrentPlan() {
@@ -39,6 +40,7 @@ export default function CurrentPlan() {
           <h1 style={{color:"black"}}>{currentPlan && currentPlan.planName} Plan</h1>
           <p>Purchase Date: {currentPlan && currentPlan.purchaseDate}</p>
           <p>Duration: {currentPlan && currentPlan.duration} Months</p>
+          <p>Remaining resources: {currentPlan && currentPlan.remainingResources}</p>
           <p>Remaining duration: {currentPlan && currentPlan.remainingDuration} Days</p>
         </div>
       )}

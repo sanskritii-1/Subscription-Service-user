@@ -3,6 +3,7 @@ import Plan, { IPlan } from "../models/plan";
 import { CustomError } from "../middleware/error";
 import Subscription, { ISubscription } from "../models/transaction";
 import { JwtPayload } from "jsonwebtoken";
+import UserResource, { IUserResources } from "../models/userResources";
 
 interface CustomRequest extends Request {
   id?: string | JwtPayload;
@@ -37,6 +38,7 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response) => {
 
     const planId = subscription.planId as unknown as string;;
     const currentPlan = await Plan.findById(planId) as IPlan;
+    const userResource = await UserResource.findOne<IUserResources>({userId: userId})
 
     const purchaseDate = new Date(subscription.startDate).toLocaleDateString();
     // Calculate remaining days
@@ -47,6 +49,7 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response) => {
       planName: currentPlan.name,
       duration: currentPlan.duration,
       purchaseDate: purchaseDate,
+      remainingResources: userResource?.leftResources,
       remainingDuration
     };
 
