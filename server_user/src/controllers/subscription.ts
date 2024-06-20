@@ -15,12 +15,7 @@ interface CustomRequest extends Request {
 }
 
 const addUserResource = async (userId: string, resource: number) => {
-    const userResource = new UserResource({
-        userId: userId,
-        leftResources: resource,
-    });
-
-    await userResource.save();
+    await UserResource.findOneAndUpdate({userId: userId}, {$inc:{leftResources: resource}}, {upsert: true})
 }
 
 export const subscribe = async (req: CustomRequest, res: Response): Promise<Response> => {
