@@ -17,3 +17,13 @@ export const loginValidationSchema = Joi.object({
 export const accessResourceValidationSchema = Joi.object({
     imageId: Joi.string().regex(/^[0-9a-fA-F]{24}$}/).required(),
 })
+
+
+export const subscribeValidationSchema = Joi.object({
+    planId: Joi.string().regex(/^[0-9a-fA-F]{24}$}/).required(),
+});
+
+export const unsubscribeValidationSchema = Joi.object({
+    planName: Joi.string().required(),
+    leftResources: Joi.number().required(),
+})

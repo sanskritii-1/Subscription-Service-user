@@ -7,9 +7,6 @@ import { JwtPayload } from 'jsonwebtoken';
 import UserResource, { IUserResources } from '../models/userResources';
 import { CustomError } from '../middleware/error';
 
-const subscribeSchema = Joi.object({
-    planId: Joi.string().required(),
-});
 
 interface CustomRequest extends Request {
     id?: string | JwtPayload;
@@ -30,13 +27,6 @@ const addUserResource = async (userId: string, resource: number) => {
 
 export const subscribe = async (req: CustomRequest, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
-        const { error } = subscribeSchema.validate(req.body);
-        if (error) {
-            return next({status: 400, message: error.details[0].message});
-
-            // return res.status(400).json({ error: error.details[0].message });
-        }
-
         const { planId } = req.body;
         const payloadData = req.id as JwtPayload;
         const userId = payloadData.id;
@@ -45,11 +35,11 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
         const plan = await Plan.findById(planId);
 
         if (!user) {
-            return next({status: 404, message: "User not found"});
+            return next({ status: 404, message: "User not found" });
         }
 
         if (!plan) {
-            return next({status: 404, message: "Plan not found"});
+            return next({ status: 404, message: "Plan not found" });
         }
 
         await addUserResource(userId, plan.resources);
@@ -79,28 +69,28 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
 };
 
 
-export const unsubscribe = async (req: CustomRequest, res: Response, next: NextFunction):Promise<Response | void> => {
+export const unsubscribe = async (req: CustomRequest, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
         const planName = req.body.planName;
         const leftResources = req.body.leftResources;
         const payloadData = <JwtPayload>req.id;
-    
+
         const plan = await Plan.findOne<IPlan>({ name: planName });
-    
+
         // if (!plan) {
         //     const err: CustomError = new Error("Your plan is not found");
         //     err.status = 404;
         //     throw err;
         // }
 
-        if(plan?.price === 0){
-            return next({status: 400, message: "Cannot unsubscribe to a free plan"});
+        if (plan?.price === 0) {
+            return next({ status: 400, message: "Cannot unsubscribe to a free plan" });
         }
 
-        const freePlan = await Plan.findOne<IPlan>({price:0});
+        const freePlan = await Plan.findOne<IPlan>({ price: 0 });
 
-        if(!freePlan){
-            return next({status: 500, message: "No free plan found"})
+        if (!freePlan) {
+            return next({ status: 500, message: "No free plan found" })
         }
 
         const startDate = new Date();
@@ -117,12 +107,12 @@ export const unsubscribe = async (req: CustomRequest, res: Response, next: NextF
         await unsub.save();
 
 
-        if(leftResources > freePlan.resources){
-            await UserResource.updateOne<IUserResources>({userId: payloadData.id}, {$set:{leftResources: freePlan.resources}});
+        if (leftResources > freePlan.resources) {
+            await UserResource.updateOne<IUserResources>({ userId: payloadData.id }, { $set: { leftResources: freePlan.resources } });
         }
 
-        return res.status(200).json({message: "Successfully unsubscribed"})
-    } 
+        return res.status(200).json({ message: "Successfully unsubscribed" })
+    }
     catch (err) {
         next(err);
     }
