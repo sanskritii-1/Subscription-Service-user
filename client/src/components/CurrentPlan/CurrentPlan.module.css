@@ -12,10 +12,12 @@
 }
 
 .planContainer {
+  margin-top: 500px;
   list-style: none;
   background-color: #77157c;
-  width: 50vw;
-  margin: 0vh 25vw;
+  width: 30vw;
+  height: 15vw;
+  margin: 0vh 35vw;
   padding: 2vh 6vh; 
   border-radius: 1rem;
   box-shadow: 6px 6px 16px #330f39;
@@ -36,15 +38,14 @@
   padding: 2vh 6vh;
   border-radius: 1rem;
   box-shadow: 6px 6px 16px #330f39;
-  color: white;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #fff;
 }
 
 .planContainer {
+  margin-top: 100px;
   /* background-color: rgba(0, 0, 0, 0.7);  */
   padding: 20px;
   border-radius: 10px;

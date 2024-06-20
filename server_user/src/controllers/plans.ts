@@ -38,6 +38,7 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response) => {
     const planId = subscription.planId as unknown as string;;
     const currentPlan = await Plan.findById(planId) as IPlan;
 
+    const purchaseDate = new Date(subscription.startDate).toLocaleDateString();
     // Calculate remaining days
     const currentDate = new Date();
     const remainingDuration = Math.max(0, Math.ceil((subscription.endDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)));
@@ -45,7 +46,7 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response) => {
     const currentPlanDetails = {
       planName: currentPlan.name,
       duration: currentPlan.duration,
-      purchaseDate: subscription.startDate,
+      purchaseDate: purchaseDate,
       remainingDuration
     };
 

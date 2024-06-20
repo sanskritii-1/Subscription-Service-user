@@ -35,11 +35,11 @@ export default function CurrentPlan() {
       <h1 className={classes.h1}>Current Plan Details</h1>
       {(
         <div className={classes.planContainer}>
-          <h1 style={{color:"red"}}>{!currentPlan?.planName && <p>You have a free plan</p>}</h1>
-          <p>{currentPlan && currentPlan.planName} Plan</p>
+          <h1 style={{color:"white"}}>{!currentPlan?.planName && <p>Free Plan</p>}</h1>
+          <h1 style={{color:"black"}}>{currentPlan && currentPlan.planName} Plan</h1>
           <p>Purchase Date: {currentPlan && currentPlan.purchaseDate}</p>
-          <p>Duration: {currentPlan && currentPlan.duration}</p>
-          <p>Remaining duration: {currentPlan && currentPlan.remainingDuration}</p>
+          <p>Duration: {currentPlan && currentPlan.duration} Months</p>
+          <p>Remaining duration: {currentPlan && currentPlan.remainingDuration} Days</p>
         </div>
       )}
     </div>

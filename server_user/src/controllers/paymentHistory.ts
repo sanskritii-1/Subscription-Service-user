@@ -21,11 +21,11 @@ export const getPaymentHistory = async (req: CustomRequest, res: Response, next:
     // } 
     const response = [];
     for (const ele of paymentHistory){
-      const plan = await Plan.findOne<IPlan>({_id: ele.planId})
+      const plan = await Plan.findOne<IPlan>({_id: ele.planId});
       response.push({
         amount: plan?.price,
         name: plan?.name,
-        date: ele.startDate,
+        date: new Date(ele.startDate).toLocaleDateString(),
       })
     }
     res.status(200).json(response);
