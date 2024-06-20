@@ -34,7 +34,7 @@ export function useSendData() {
         return navigate('/login');
       }
       if (!response.ok) {
-        throw new Error(data.error || 'An error occurred');
+        throw new Error(data.message || 'An error occurred');
       }
 
       return data;

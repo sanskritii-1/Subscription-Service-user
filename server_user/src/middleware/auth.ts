@@ -23,9 +23,7 @@ export const authMiddleware = (req: CustomRequest, res:Response, next: NextFunct
         const authHeader = req.headers['authorization'];
         const token = authHeader?.split(' ')[1];
         if(!token){
-            const err:CustomError = new Error("Token not found: Unauthorised access");
-            err.status = 401;
-            throw err;
+            return next({status:401, message: "Token not found: Unauthorised access"})
         }
         
         // checking validity of access token and adding payload (user info) to req
