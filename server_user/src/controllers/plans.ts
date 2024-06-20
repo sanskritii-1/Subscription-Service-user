@@ -29,7 +29,7 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response) => {
     console.log("hi", req.id);
     const userId = (req.id as JwtPayload).id as string;
     console.log(userId);
-    const subscription = await Subscription.findOne({ userId });
+    const subscription = await Subscription.findOne({ userId }).sort({startDate:-1});
 
     if (!subscription) {
       return res.status(404).json({ message: 'No current plan found for the user' });

@@ -62,7 +62,7 @@ const Signup: React.FC = () => {
           />
         </div>
         <div>
-          <label>Username:</label>
+          <label>Name:</label>
           <input
             type="text"
             value={name}

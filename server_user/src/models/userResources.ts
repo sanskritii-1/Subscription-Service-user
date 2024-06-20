@@ -3,7 +3,7 @@ import { IUser } from "./user";
 
 export interface IUserResources extends Document{
     userId: mongoose.Types.ObjectId | IUser,
-    leftResources: Number,
+    leftResources: number,
 }
 
 const userResourceSchema = new mongoose.Schema<IUserResources>({

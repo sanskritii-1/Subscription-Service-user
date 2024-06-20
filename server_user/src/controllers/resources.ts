@@ -49,8 +49,9 @@ export const accessResource = async (req: CustomRequest, res: Response, next:Nex
             throw err;
             // return res.status(403).json({error: "Cannot access anymore resources"});
         }
-
-        await UserResource.updateOne({userId: userId.id}, {$inc: {leftResources:-1}});
+        if(foundUser.leftResources > 0){
+            await UserResource.updateOne({userId: userId.id}, {$inc: {leftResources:-1}});
+        }
 
         const image_details = await Resource.findOne<IResource>({_id:req.body.imageId});
         if(!image_details) return res.status(404).json({error:"Resource not found"});
