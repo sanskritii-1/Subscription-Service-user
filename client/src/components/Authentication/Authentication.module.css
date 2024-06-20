@@ -67,6 +67,7 @@
 .flex {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .h1 {
@@ -103,8 +104,8 @@
 }
 
 .link{
-  text-decoration: none;
-  padding: 0vh 0vh 0vh 17vw;
-  color: white;
+  /* text-decoration: none; */
+  /* padding: 0vh 0vh 0vh 17vw; */
+  /* color: white; */
   font-size: 1.1rem;
 }

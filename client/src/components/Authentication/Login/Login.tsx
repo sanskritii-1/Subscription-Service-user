@@ -15,16 +15,14 @@ const Login: React.FC = () => {
     e.preventDefault();
     try {
       const data = { email: email, password: password };
-      const response = await sendData('POST', 'login', false, data);
-      if(response.token){
-        localStorage.setItem('token', response.token);
-      }
-      else{
-        throw new Error('Authentication failed');
+      const response = await sendData("POST", "login", false, data);
+      if (response.token) {
+        localStorage.setItem("token", response.token);
+      } else {
+        throw new Error("Authentication failed");
       }
       navigate("/subscriptions");
-    } 
-    catch (err) {
+    } catch (err) {
       console.log(err);
       window.alert(err);
     }
@@ -56,8 +54,16 @@ const Login: React.FC = () => {
             minLength={8}
           />
         </div>
-        <button type="submit">Login</button>
-        <Link to='/register' className={classes.link}>Don't have an account? Create one!</Link>
+        <div className={classes.flex}>
+          <div>
+            <button type="submit">Login</button>
+          </div>
+          <div>
+            <Link to="/register" className={classes.link}>
+              Don't have an account? Create one!
+            </Link>
+          </div>
+        </div>
       </form>
     </div>
   );
