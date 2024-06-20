@@ -9,13 +9,11 @@ interface CustomRequest extends Request {
   id?: string | JwtPayload;
 }
 
-export const getPlans = async (req: Request, res: Response, next: NextFunction) => {
+export const getPlans = async (req: Request, res: Response, next: NextFunction):Promise<Response|void> => {
   try {
     const plans = await Plan.find();
     if (plans.length == 0) {
-      const err: CustomError = new Error("No subscription plans found");
-      err.status = 500;
-      throw err;
+      return next({status: 500, message: "No subscription plans found"})
     }
     res.status(200).json(plans);
   }
@@ -25,7 +23,7 @@ export const getPlans = async (req: Request, res: Response, next: NextFunction) 
 };
 
 // Fetch current plan for a user
-export const getCurrentPlan = async (req: CustomRequest, res: Response) => {
+export const getCurrentPlan = async (req: CustomRequest, res: Response, next: NextFunction): Promise<Response|void> => {
   try {
     console.log("hi", req.id);
     const userId = (req.id as JwtPayload).id as string;
@@ -33,7 +31,7 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response) => {
     const subscription = await Subscription.findOne({ userId }).sort({startDate:-1});
 
     if (!subscription) {
-      return res.status(404).json({ message: 'No current plan found for the user' });
+      return next({status: 404, message: 'No current plan found for the user'})
     }
 
     const planId = subscription.planId as unknown as string;;
@@ -54,8 +52,9 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response) => {
     };
 
     return res.status(200).json(currentPlanDetails);
-  } catch (error) {
+  } 
+  catch (error) {
     //console.error('Error fetching plan details:', error);
-    res.status(500).json({ message: 'Server error', error });
+    next(error);
   }
 };

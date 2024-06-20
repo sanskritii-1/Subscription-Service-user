@@ -9,15 +9,14 @@ interface CustomRequest extends Request{
     id?:string | JwtPayload;
 }
 
-export const getResources = async (req: CustomRequest, res: Response):Promise<Response> => {
+export const getResources = async (req: CustomRequest, res: Response, next: NextFunction):Promise<Response|void> => {
     try {
         // await Resource.insertMany(images);        
         const resources = await Resource.find<IResource>({}, 'title description blur_url');
         return res.status(200).json(resources);
     } 
     catch (err) {
-        console.log(err);
-        return res.status(500).json({error: "Internal Server Error"});
+        next(err);
     }
 
 }
@@ -32,30 +31,26 @@ export const accessResource = async (req: CustomRequest, res: Response, next:Nex
         console.log("founduser in resources: ", foundUser)
 
         if(!foundUser){
-            const err:CustomError = new Error("Subscription record not found");
-            err.status = 500;
-            throw err;
-            // return res.status(500).json({error: "Subscription record not found"});
+            return next({status: 500, message: "Transaction record not found. Subscribe to a plan"})
         } 
 
         if(foundUser.leftResources === 0){
-            const err:CustomError = new Error("Cannot access anymore resources");
-            err.status = 403;
-            throw err;
-            // return res.status(403).json({error: "Cannot access anymore resources"});
+            return next({status: 403, message: "Cannot access anymore resources"})
         }
+
         if(foundUser.leftResources > 0){
             await UserResource.updateOne({userId: userId.id}, {$inc: {leftResources:-1}});
         }
 
         const image_details = await Resource.findOne<IResource>({_id:req.body.imageId});
-        if(!image_details) return res.status(404).json({error:"Resource not found"});
+
+        if(!image_details){
+            return next({status:404, message: "Resource not found"})
+        } 
 
         return res.status(200).json({url: image_details.url});
     } 
     catch (err) {
-        // console.log(err);
-        // return res.status(500).json({error: "Internal Server Error"});
         next(err);
     }
 }

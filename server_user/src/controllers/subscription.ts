@@ -45,18 +45,11 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
         const plan = await Plan.findById(planId);
 
         if (!user) {
-            // const err:CustomError = new Error("User not found");
-            // err.status = 404;
             return next({status: 404, message: "User not found"});
-            // return res.status(404).json({ error: 'User not found' });
         }
 
         if (!plan) {
-            // const err:CustomError = new Error("Plan not found");
-            // err.status = 404;
             return next({status: 404, message: "Plan not found"});
-            // throw err;
-            // return res.status(404).json({ error: 'Plan not found' });
         }
 
         await addUserResource(userId, plan.resources);
@@ -81,8 +74,6 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
 
         return res.status(201).json({ message: 'Subscription created successfully' });
     } catch (err) {
-        // console.error(err);
-        // return res.status(500).json({ error: 'Internal Server Error' });
         next(err);
     }
 };
@@ -90,11 +81,11 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
 
 export const unsubscribe = async (req: CustomRequest, res: Response, next: NextFunction):Promise<Response | void> => {
     try {
-        const planId = req.body.planId;
+        const planName = req.body.planName;
         const leftResources = req.body.leftResources;
         const payloadData = <JwtPayload>req.id;
     
-        const plan = await Plan.findOne<IPlan>({ _id: planId });
+        const plan = await Plan.findOne<IPlan>({ name: planName });
     
         // if (!plan) {
         //     const err: CustomError = new Error("Your plan is not found");
@@ -103,8 +94,6 @@ export const unsubscribe = async (req: CustomRequest, res: Response, next: NextF
         // }
 
         if(plan?.price === 0){
-            // const err:CustomError = new Error("Cannot unsubscribe to a free plan");
-            // err.status = 400;
             return next({status: 400, message: "Cannot unsubscribe to a free plan"});
         }
 
@@ -113,7 +102,21 @@ export const unsubscribe = async (req: CustomRequest, res: Response, next: NextF
         if(!freePlan){
             return next({status: 500, message: "No free plan found"})
         }
-        
+
+        const startDate = new Date();
+        const endDate = new Date(startDate);
+        endDate.setMonth(endDate.getMonth() + freePlan.duration);
+        endDate.setDate(Math.min(startDate.getDate(), new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0).getDate()));
+
+        const unsub = new Subscription({
+            userId: payloadData.id,
+            planId: freePlan._id,
+            startDate: startDate,
+            endDate: endDate,
+        })
+        await unsub.save();
+
+
         if(leftResources > freePlan.resources){
             await UserResource.updateOne<IUserResources>({userId: payloadData.id}, {$set:{leftResources: freePlan.resources}});
         }

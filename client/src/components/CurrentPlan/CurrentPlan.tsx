@@ -31,9 +31,9 @@ export default function CurrentPlan() {
     fetchCurrentPlan();
   }, []);
 
-  const unsubscribeHandler = async () =>{
+  const unsubscribeHandler = async (planName:string="", leftResources:number=0) =>{
     try {
-      const resData = await sendData("POST", "unsubscribe", true);
+      const resData = await sendData("POST", "unsubscribe", true, {planName: planName, leftResources: leftResources});
     } 
     catch (err) {
       console.log(err);
@@ -52,7 +52,7 @@ export default function CurrentPlan() {
           <p>Duration: {currentPlan && currentPlan.duration} Months</p>
           <p>Remaining resources: {currentPlan && currentPlan.remainingResources}</p>
           <p>Remaining duration: {currentPlan && currentPlan.remainingDuration} Days</p>
-          <button onClick={unsubscribeHandler}>Unsubscribe</button>
+          <button onClick={()=>unsubscribeHandler(currentPlan?.planName, currentPlan?.remainingResources)}>Unsubscribe</button>
         </div>
       )}
     </div>
