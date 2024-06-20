@@ -35,6 +35,8 @@
   box-shadow: 6px 6px 16px #330f39;
   margin: 1vw;
   border-radius: 1rem;
+  padding: 15px;
+  /* text-align: center; */
 }
 
 .paymentDesc {
