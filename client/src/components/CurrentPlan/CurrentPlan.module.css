@@ -16,7 +16,7 @@
   list-style: none;
   background-color: #77157c;
   width: 30vw;
-  height: 15vw;
+  /* height: 15vw; */
   margin: 0vh 35vw;
   padding: 2vh 6vh; 
   border-radius: 1rem;
@@ -56,4 +56,14 @@
 } 
 p{
   margin-bottom: 10px;
+}
+
+.planContainer button{
+  font: inherit;
+  background-color: #9c27b0;
+  border: 1px solid #9c27b0;
+  color: #ffffff;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
 }

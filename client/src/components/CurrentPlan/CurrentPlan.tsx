@@ -30,6 +30,16 @@ export default function CurrentPlan() {
     fetchCurrentPlan();
   }, []);
 
+  const unsubscribeHandler = async () =>{
+    try {
+      const resData = await sendData("POST", "unsubscribe", true);
+    } 
+    catch (err) {
+      console.log(err);
+      window.alert(err);
+    }
+  }
+
   return (
     <div className={classes.div}>
       <h1 className={classes.h1}>Current Plan Details</h1>
@@ -40,6 +50,7 @@ export default function CurrentPlan() {
           <p>Purchase Date: {currentPlan && currentPlan.purchaseDate}</p>
           <p>Duration: {currentPlan && currentPlan.duration} Months</p>
           <p>Remaining duration: {currentPlan && currentPlan.remainingDuration} Days</p>
+          <button onClick={unsubscribeHandler}>Unsubscribe</button>
         </div>
       )}
     </div>
