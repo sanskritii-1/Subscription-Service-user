@@ -17,12 +17,12 @@ const Resources: React.FC = () => {
     const fetchImages = async () => {
       try {
         
-        const response = await sendData('GET', 'get-resources', true);
+        const data = await sendData('GET', 'get-resources', true);
+        const response=data.resources;
         console.log('data received resources', response)
         setImages(response); 
       } catch (error) {
         console.error('Error fetching images:', error);
-        window.alert(error)
       }
     };
     fetchImages();

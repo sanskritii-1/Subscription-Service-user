@@ -12,7 +12,10 @@ const Subscriptions: React.FC = () => {
   useEffect(() => {
     const fetchSubscriptions = async () => {
       try {
-        const data = await sendData('GET', 'subscription-plans', false);
+        
+        const res = await sendData('GET', 'subscription-plans', false);
+        const data=res.plans;
+        console.log(data);
         if (Array.isArray(data)) {
           setSubscriptions(data);
         }

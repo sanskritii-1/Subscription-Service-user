@@ -3,6 +3,7 @@ import Plan, { IPlan } from "../models/plan";
 import { CustomError } from "../middleware/error";
 import Subscription, { ISubscription } from "../models/transaction";
 import { JwtPayload } from "jsonwebtoken";
+import {success,error} from "../utils/response"
 
 interface CustomRequest extends Request {
   id?: string | JwtPayload;
@@ -16,7 +17,8 @@ export const getPlans = async (req: Request, res: Response, next: NextFunction) 
       err.status = 500;
       throw err;
     }
-    res.status(200).json(plans);
+    return res.status(200).json(success(200, {plans}));
+    // res.status(200).json(plans);
   }
   catch (error) {
     next(error);
@@ -32,7 +34,7 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response) => {
     const subscription = await Subscription.findOne({ userId }).sort({startDate:-1});
 
     if (!subscription) {
-      return res.status(404).json({ message: 'No current plan found for the user' });
+      return res.status(404).json({ error: 'No current plan found for the user' });
     }
 
     const planId = subscription.planId as unknown as string;;
@@ -49,10 +51,11 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response) => {
       purchaseDate: purchaseDate,
       remainingDuration
     };
-
-    return res.status(200).json(currentPlanDetails);
+    
+    return res.status(200).json(success(200, {currentPlanDetails}));
+    
   } catch (error) {
     //console.error('Error fetching plan details:', error);
-    res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ error: 'Server error'});
   }
 };

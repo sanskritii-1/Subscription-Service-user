@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import classes from "../Authentication.module.css";
 import { useSendData } from "../../../helper/util";
 // import { sendData } from "../../../helper/util";
+import toast from 'react-hot-toast';
 
 const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -18,7 +19,7 @@ const Signup: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      settoastContent("Passwords do not match!");
+      toast.error("Passwords do not match!");
       console.log("error");
       return;
     }
@@ -28,7 +29,6 @@ const Signup: React.FC = () => {
       
     } catch (err) {
       console.log(err);
-      window.alert(err);
     }
   };
 

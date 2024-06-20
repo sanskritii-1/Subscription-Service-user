@@ -17,14 +17,14 @@ export default function CurrentPlan() {
   const sendData = useSendData();
 
   useEffect(() => {
-    async function fetchCurrentPlan() {
+    async function fetchCurrentPlan(){
       try {
         const resData = await sendData("GET", "current-plan-details", true);
-        setCurrentPlan(resData);
+        const response=resData.currentPlanDetails;
+        setCurrentPlan(response);
       } 
       catch (err) {
         console.log(err);
-        window.alert(err);
       }
     }
     fetchCurrentPlan();

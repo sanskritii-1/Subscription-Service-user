@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar/Navbar";
 const ResourcePage: React.FC = () => {
   return (
     <div>
-      <Navbar/>
+     <Navbar/>
      <Resources/>
     </div>
   );

@@ -5,6 +5,7 @@ import Plan from '../models/plan';
 import User from '../models/user';
 import { JwtPayload } from 'jsonwebtoken';
 import UserResource from '../models/userResources';
+import {success,error} from "../utils/response"
 
 const subscribeSchema = Joi.object({
     planId: Joi.string().required(),
@@ -69,9 +70,8 @@ export const subscribe = async (req: CustomRequest, res: Response): Promise<Resp
 
         await newSubscription.save();
 
-        return res.status(201).json({ message: 'Subscription created successfully' });
+        return res.status(201).json(success(201, { message: 'Subscription purchased successfully' }));
     } catch (err) {
-        console.error(err);
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 };

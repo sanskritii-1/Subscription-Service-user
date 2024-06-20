@@ -4,6 +4,7 @@ import Resource, { IResource } from "../models/resources";
 import {images} from "../data/images";
 import UserResource, { IUserResources } from "../models/userResources";
 import { CustomError } from "../middleware/error";
+import {success,error} from "../utils/response"
 
 interface CustomRequest extends Request{
     id?:string | JwtPayload;
@@ -11,11 +12,10 @@ interface CustomRequest extends Request{
 
 export const getResources = async (req: CustomRequest, res: Response):Promise<Response> => {
     try {
-        // await Resource.insertMany(images);
-        // if(!req.id) return res.status(401).json({error: "Unauthorised access to resources: Token not found"});
+        //await Resource.insertMany(images);
         
         const resources = await Resource.find<IResource>({}, 'title description blur_url');
-        return res.status(200).json(resources);
+        return res.status(200).json(success(200, {resources}));
     } 
     catch (err) {
         console.log(err);
@@ -26,11 +26,8 @@ export const getResources = async (req: CustomRequest, res: Response):Promise<Re
 
 export const accessResource = async (req: CustomRequest, res: Response, next:NextFunction):Promise<Response|void> => {
     try {
-        console.log('payload for resource access: ', req.id);
-        // if(!req.id){
-        //     return res.status(401).json({error: "Unauthorised access to resources: Token not found"});
-        // }
-
+        console.log('payload for resource access: ', req.id);  
+       
         const userId = <JwtPayload>req.id;
         
         const foundUser = await UserResource.findOne<IUserResources>({userId: userId.id});
@@ -56,7 +53,9 @@ export const accessResource = async (req: CustomRequest, res: Response, next:Nex
         const image_details = await Resource.findOne<IResource>({_id:req.body.imageId});
         if(!image_details) return res.status(404).json({error:"Resource not found"});
 
-        return res.status(200).json({url: image_details.url});
+        return res.status(200).json(success(200,{url: image_details.url}));
+
+        //return res.status(200).json({url: image_details.url});
     } 
     catch (err) {
         // console.log(err);

@@ -1,14 +1,15 @@
 import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
 
 export function useSendData() {
   const navigate = useNavigate();
+
   async function sendData(
     method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     path: string,
     authBool: boolean,
     payload?: object,
   ) {
-
     try {
       const token = localStorage.getItem('token');
       let headers: HeadersInit = {
@@ -24,25 +25,23 @@ export function useSendData() {
         body: payload ? JSON.stringify(payload) : undefined,
       });
 
-      console.log('response received util: ', response)
       const data = await response.json();
-      console.log('data received util: ', data)
-      if (data.code === 401) {
-        console.log('in 401 in util')
-        // window.location.replace('/login');
-        // return;
-        return navigate('/login');
-      }
+      console.log('data received util: ', data);
+
       if (!response.ok) {
+        toast.error(data.error || 'An error occurred');
         throw new Error(data.error || 'An error occurred');
       }
 
-      return data;
+      if (data.status === 'ok'&& data.result.message) {
+        toast.success(data.result.message || 'Operation successful');
+      }
 
-    }
-    catch (err) {
-      console.log(err);
-      throw err;
+      return data.result;
+
+    } catch (err: any) { 
+      console.error(err); 
+      throw err; 
     }
   }
   return sendData;

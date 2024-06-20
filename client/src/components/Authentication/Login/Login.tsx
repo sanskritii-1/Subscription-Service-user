@@ -16,6 +16,7 @@ const Login: React.FC = () => {
     try {
       const data = { email: email, password: password };
       const response = await sendData('POST', 'login', false, data);
+
       if(response.token){
         localStorage.setItem('token', response.token);
       }
@@ -26,7 +27,6 @@ const Login: React.FC = () => {
     } 
     catch (err) {
       console.log(err);
-      window.alert(err);
     }
     // if (response) {
     //   invalidInput = <p>Invalid Email or Password!</p>;

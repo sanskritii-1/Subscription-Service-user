@@ -4,6 +4,7 @@ import { JwtPayload } from 'jsonwebtoken';
 import { CustomError } from '../middleware/error';
 import Subscription, {ISubscription} from '../models/transaction';
 import Plan, { IPlan } from '../models/plan';
+import {success,error} from "../utils/response"
 
 interface CustomRequest extends Request{
   id?:string | JwtPayload;
@@ -14,11 +15,7 @@ export const getPaymentHistory = async (req: CustomRequest, res: Response, next:
 
   try {
     const paymentHistory = await Subscription.find<ISubscription>({ userId: userId.id });
-    // if(paymentHistory.length===0){
-    //   const err:CustomError = new Error("No payment records found");
-    //   err.status = 404;
-    //   throw err;
-    // } 
+  
     const response = [];
     for (const ele of paymentHistory){
       const plan = await Plan.findOne<IPlan>({_id: ele.planId});
@@ -28,7 +25,8 @@ export const getPaymentHistory = async (req: CustomRequest, res: Response, next:
         date: new Date(ele.startDate).toLocaleDateString(),
       })
     }
-    res.status(200).json(response);
+    return res.status(200).json(success(200,{response}));
+    
   } 
   catch (error) {
     next(error);
