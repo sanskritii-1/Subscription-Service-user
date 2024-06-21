@@ -14,18 +14,22 @@ const planSchema = new mongoose.Schema<IPlan>({
         required: true,
         default: "free",
         unique: true,
+        trim: true,
     },
     resources: {
         type: Number,
         required: true,
+        trim: true,
     },
     price: {
         type: Number,
         required: true,
+        trim: true,
     },
     duration: {
         type: Number,
         required: true,
+        trim: true,
     },
     features: {
         type: String,

@@ -1,8 +1,10 @@
 import Joi from "joi";
 
 export const registerValidationSchema = Joi.object({
-    name: Joi.string().min(3).max(30).required(),
     email: Joi.string().email().required(),
+    name: Joi.string().min(3).max(30).pattern(/^[a-zA-Z]+$/).required().messages({
+        'string.pattern.base': 'Name should only contain letters and spaces',
+    }),
     password: Joi.string().min(8).required(),
     // repeat_password: Joi.ref('password'),
 });

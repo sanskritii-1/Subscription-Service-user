@@ -20,7 +20,7 @@ const Header: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate('/login');
-    toast.success("succesfull logout");
+    toast.success("successful logout");
   };
 
   return (

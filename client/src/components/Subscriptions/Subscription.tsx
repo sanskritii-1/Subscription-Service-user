@@ -36,7 +36,8 @@ const Subscriptions: React.FC = () => {
       navigate('/resources');
     } 
     catch (error) {
-      alert(error);
+      console.log(error);
+      // alert(error);
       // navigate("/login");
     }
   };

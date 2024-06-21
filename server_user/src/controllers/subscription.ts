@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import Joi from 'joi';
-import Subscription from '../models/transaction';
+import Subscription, { ISubscription } from '../models/transaction';
 import Plan, { IPlan } from '../models/plan';
 import User, { IUser } from '../models/user';
 import { JwtPayload } from 'jsonwebtoken';
@@ -43,7 +43,14 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
             return next({ status: 404, message: "Plan not found" });
         }
 
-        await addUserResource(userId, plan.resources);
+        const prevTransact = await Subscription.findOne<ISubscription>({userId: userId}).sort({startDate:-1});
+        if(plan.price!==0 || !prevTransact || prevTransact.endDate < new Date()){
+            await addUserResource(userId, plan.resources);
+        }
+        else{
+            return next({status: 409, message:"Already subscribed to another plan. Consider unsubscribing"})
+        }
+
 
         const startDate = new Date();
         const endDate = new Date(startDate);

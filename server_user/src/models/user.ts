@@ -2,24 +2,24 @@ import mongoose, {CallbackError, Document} from "mongoose";
 import bcrypt from "bcryptjs";
 
 export interface IUser extends Document{
-    name: string,
     email: string,
+    name: string,
     password: string,
     comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 const userSchema = new mongoose.Schema<IUser>({
-    name:{
-        type: String,
-        required: true,
-        trim: true,
-    },
     email: {
         type: String,
         required: true,
         unique: true,
         trim: true,
         lowercase: true,
+    },
+    name:{
+        type: String,
+        required: true,
+        trim: true,
     },
     password: {
         type: String,
