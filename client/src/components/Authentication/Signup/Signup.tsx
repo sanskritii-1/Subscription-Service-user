@@ -13,7 +13,7 @@ const Signup: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [name, setName] = useState<string>("");
   const navigate = useNavigate();
-  const [toastContent, settoastContent] = useState("");
+  // const [toastContent, settoastContent] = useState("");
   const sendData = useSendData();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -32,13 +32,13 @@ const Signup: React.FC = () => {
     }
   };
 
-  const closeToastHandler = () => {
-    settoastContent("");
-  };
+  // const closeToastHandler = () => {
+  //   settoastContent("");
+  // };
 
   return (
-    <div className={classes.div}>
-      <div className={toastContent !== "" ? classes.toast : undefined}>
+    <div className={classes.div} style={{height:'98vh'}}>
+      {/* <div className={toastContent !== "" ? classes.toast : undefined}>
         <div>
           <p className={classes.toastContent}>{toastContent}</p>
         </div>
@@ -51,7 +51,7 @@ const Signup: React.FC = () => {
             X
           </button>
         </div>
-      </div>
+      </div> */}
       <h2 className={classes.h1}>Signup</h2>
       <form onSubmit={handleSubmit} className={classes.form}>
         {error}
