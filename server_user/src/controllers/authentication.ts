@@ -44,6 +44,7 @@ export const login = async (req: Request, res:Response, next:NextFunction):Promi
 
         const payload:JwtPayload={
             id: user.id.toString(),
+            email: email,
         };
 
         const accessToken:string = generateAccessToken(payload);
