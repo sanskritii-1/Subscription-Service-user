@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import Joi from 'joi';
 import Subscription from '../models/transaction';
 import Plan, { IPlan } from '../models/plan';
-import User from '../models/user';
+import User, { IUser } from '../models/user';
 import { JwtPayload } from 'jsonwebtoken';
 import UserResource, { IUserResources } from '../models/userResources';
 import { CustomError } from '../middleware/error';
@@ -31,8 +31,8 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
         const payloadData = req.id as JwtPayload;
         const userId = payloadData.id;
 
-        const user = await User.findById(userId);
-        const plan = await Plan.findById(planId);
+        const user = await User.findById<IUser>(userId);
+        const plan = await Plan.findById<IPlan>(planId);
 
         if (!user) {
             return next({ status: 404, message: "User not found" });

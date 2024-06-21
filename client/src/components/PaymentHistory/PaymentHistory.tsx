@@ -32,9 +32,9 @@ export default function PaymentHistory() {
           <p className={classes.noPayments}>No payments yet.</p>
         )}
         {listOfPayment.length !== 0 &&
-          listOfPayment.map((payment) => {
+          listOfPayment.map((payment,index) => {
             return (
-              <li className={classes.payment}>
+              <li className={classes.payment} key={index}>
                 <h2>${payment.amount}</h2>
                 <p>{payment.name} Plan</p>
                 <p>Payment was done on {payment.date}</p>

@@ -4,6 +4,7 @@ import { CustomError } from "../middleware/error";
 import Subscription, { ISubscription } from "../models/transaction";
 import { JwtPayload } from "jsonwebtoken";
 import UserResource, { IUserResources } from "../models/userResources";
+import { allPlans } from "../data/plans";
 
 interface CustomRequest extends Request {
   id?: string | JwtPayload;
@@ -11,6 +12,7 @@ interface CustomRequest extends Request {
 
 export const getPlans = async (req: Request, res: Response, next: NextFunction):Promise<Response|void> => {
   try {
+    // await Plan.insertMany(allPlans);
     const plans = await Plan.find();
     if (plans.length == 0) {
       return next({status: 500, message: "No subscription plans found"})
