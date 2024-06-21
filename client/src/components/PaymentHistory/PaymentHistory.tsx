@@ -30,7 +30,7 @@ export default function PaymentHistory() {
       <h1 className={classes.h1}>Payment History</h1>
       <ul className={classes.ul}>
         {listOfPayment.length === 0 && (
-          <p className={classes.noPayments}>No payments yet.</p>
+          <p className={classes.noPayments}>No transactions yet.</p>
         )}
         {listOfPayment.length !== 0 &&
           listOfPayment.map((payment,index) => {

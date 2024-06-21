@@ -24,9 +24,11 @@
   font-weight: 500;
   font-style: normal;
   text-align: center;
-  color: black;
   color: white;
   font-size: 1.5rem;
+  background-color: #77157c;
+  border-radius: 1rem;
+  padding: 30px
 }
 
 .payment {
