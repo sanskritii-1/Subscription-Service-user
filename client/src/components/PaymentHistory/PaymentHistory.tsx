@@ -14,12 +14,13 @@ export default function PaymentHistory() {
     async function fetchListOfPayment() {
       try {
         const resData = await sendData('GET',"payment-history", true);
-        if (Array.isArray(resData)) {
-          setListOfPayment(resData);
+        const res=resData.response;
+
+        if (Array.isArray(res)) {
+          setListOfPayment(res);
         }
       } catch (err) {
         console.log(err);
-        window.alert(err);
       }
     }
     fetchListOfPayment();

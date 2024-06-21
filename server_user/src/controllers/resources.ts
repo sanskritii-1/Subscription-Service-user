@@ -4,6 +4,7 @@ import Resource, { IResource } from "../models/resources";
 import {images} from "../data/images";
 import UserResource, { IUserResources } from "../models/userResources";
 import { CustomError } from "../middleware/error";
+import {success,error} from "../utils/response"
 
 interface CustomRequest extends Request{
     id?:string | JwtPayload;
@@ -13,7 +14,7 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
     try {
         // await Resource.insertMany(images);        
         const resources = await Resource.find<IResource>({}, 'title description blur_url');
-        return res.status(200).json(resources);
+        return res.status(200).json(success(200, {resources}));
     } 
     catch (err) {
         next(err);
@@ -48,7 +49,8 @@ export const accessResource = async (req: CustomRequest, res: Response, next:Nex
             return next({status:404, message: "Resource not found"})
         } 
 
-        return res.status(200).json({url: image_details.url});
+        return res.status(200).json(success(200,{url: image_details.url}));
+
     } 
     catch (err) {
         next(err);

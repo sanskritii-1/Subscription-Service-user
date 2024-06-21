@@ -5,6 +5,7 @@ import Subscription, { ISubscription } from "../models/transaction";
 import { JwtPayload } from "jsonwebtoken";
 import UserResource, { IUserResources } from "../models/userResources";
 import { allPlans } from "../data/plans";
+import {success,error} from "../utils/response"
 
 interface CustomRequest extends Request {
   id?: string | JwtPayload;
@@ -17,7 +18,8 @@ export const getPlans = async (req: Request, res: Response, next: NextFunction):
     if (plans.length == 0) {
       return next({status: 500, message: "No subscription plans found"})
     }
-    res.status(200).json(plans);
+    return res.status(200).json(success(200, {plans}));
+    // res.status(200).json(plans);
   }
   catch (error) {
     next(error);
@@ -33,7 +35,7 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response, next: Ne
     const subscription = await Subscription.findOne({ userId }).sort({startDate:-1});
 
     if (!subscription) {
-      return next({status: 404, message: 'No current plan found for the user'})
+      return next({status: 404, message: 'Subscribe to a plan'})
     }
 
     const planId = subscription.planId as unknown as string;;
@@ -53,10 +55,10 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response, next: Ne
       remainingDuration
     };
 
-    return res.status(200).json(currentPlanDetails);
+    return res.status(200).json(success(200, {currentPlanDetails}));
   } 
   catch (error) {
     //console.error('Error fetching plan details:', error);
-    next(error);
-  }
+    next(error);    
+  } 
 };

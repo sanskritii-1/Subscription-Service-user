@@ -15,29 +15,31 @@ interface Plan {
 export default function CurrentPlan() {
   const navigate = useNavigate();
   const [currentPlan, setCurrentPlan] = useState<Plan | null>(null);
+  // const [shouldFetchPlan, setShouldFetchPlan] = useState<boolean>(false);
   const sendData = useSendData();
 
-  useEffect(() => {
-    async function fetchCurrentPlan() {
-      try {
-        const resData = await sendData("GET", "current-plan-details", true);
-        setCurrentPlan(resData);
-      } 
-      catch (err) {
-        console.log(err);
-        window.alert(err);
-      }
+  async function fetchCurrentPlan() {
+    try {
+      const resData = await sendData("GET", "current-plan-details", true);
+      const response = resData.currentPlanDetails;
+      setCurrentPlan(response);
     }
+    catch (err) {
+      console.log(err);
+    }
+  }
+  useEffect(() => {
     fetchCurrentPlan();
   }, []);
 
-  const unsubscribeHandler = async (planName:string="", leftResources:number=0) =>{
+  const unsubscribeHandler = async (planName: string = "", leftResources: number = 0) => {
     try {
-      const resData = await sendData("POST", "unsubscribe", true, {planName: planName, leftResources: leftResources});
-    } 
+      const resData = await sendData("POST", "unsubscribe", true, { planName: planName, leftResources: leftResources });
+      await fetchCurrentPlan();
+    }
     catch (err) {
       console.log(err);
-      window.alert(err);
+      // window.alert(err);
     }
   }
 
@@ -46,14 +48,18 @@ export default function CurrentPlan() {
       <h1 className={classes.h1}>Current Plan Details</h1>
       {(
         <div className={classes.planContainer}>
-          <h1 style={{color:"white"}}>{!currentPlan?.planName && <p>Free Plan</p>}</h1>
-          <h1 style={{color:"black"}}>{currentPlan && currentPlan.planName} Plan</h1>
-          <p>Purchase Date: {currentPlan && currentPlan.purchaseDate}</p>
-          <p>Duration: {currentPlan && currentPlan.duration} Months</p>
-          <p>Remaining resources: {currentPlan && currentPlan.remainingResources}</p>
-          <p>Remaining duration: {currentPlan && currentPlan.remainingDuration} Days</p>
-          <button onClick={()=>unsubscribeHandler(currentPlan?.planName, currentPlan?.remainingResources)}>Unsubscribe</button>
-        </div>
+          {!currentPlan ? (
+            <h1 style={{ color: "white" }}>Not Subscribed to any Plan</h1>
+          ) : (
+            <>
+              <h1 style={{ color: "black" }}>{currentPlan.planName} Plan</h1>
+              <p>Purchase Date: {currentPlan.purchaseDate}</p>
+              <p>Duration: {currentPlan.duration} Months</p>
+              <p>Remaining resources: {currentPlan.remainingResources==-1 ? "Unlimited": currentPlan.remainingResources}</p>
+              <p>Remaining duration: {currentPlan.remainingDuration} Days</p>
+              <button onClick={() => unsubscribeHandler(currentPlan.planName, currentPlan.remainingResources)}>Unsubscribe</button>
+            </>
+          )}</div>
       )}
     </div>
   );

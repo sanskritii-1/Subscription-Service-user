@@ -6,6 +6,7 @@ import User, { IUser } from '../models/user';
 import { JwtPayload } from 'jsonwebtoken';
 import UserResource, { IUserResources } from '../models/userResources';
 import { CustomError } from '../middleware/error';
+import {success,error} from "../utils/response"
 
 
 interface CustomRequest extends Request {
@@ -62,7 +63,7 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
 
         await newSubscription.save();
 
-        return res.status(201).json({ message: 'Subscription created successfully' });
+        return res.status(201).json(success(201, { message: 'Subscription purchased successfully' }));
     } catch (err) {
         next(err);
     }
@@ -107,11 +108,11 @@ export const unsubscribe = async (req: CustomRequest, res: Response, next: NextF
         await unsub.save();
 
 
-        if (leftResources > freePlan.resources) {
+        if (leftResources > freePlan.resources || leftResources===-1) {
             await UserResource.updateOne<IUserResources>({ userId: payloadData.id }, { $set: { leftResources: freePlan.resources } });
         }
 
-        return res.status(200).json({ message: "Successfully unsubscribed" })
+        return res.status(201).json(success(201, { message: 'Successfully unsubscribed' }));
     }
     catch (err) {
         next(err);

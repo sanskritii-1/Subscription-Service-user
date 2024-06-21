@@ -21,11 +21,12 @@ const ImageCard: React.FC<ImageCardProps> = ({ id, title, description, url }) =>
     try {
       
       const response = await sendData('POST', 'access-resource', true, {imageId: id});
+      const data=response.url;
+      console.log(data);
         setIsClicked(true);
-        setUrl(response.url);
+        setUrl(data);
       } catch (error) {
         console.error('Error fetching image:', error);
-        window.alert(error)
       }
   };
 

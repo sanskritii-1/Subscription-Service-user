@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { getAcessTokenSecret } from "../utils";
 import User, { IUser } from "../models/user";
-import { CustomError } from "./error";
+import { CustomError } from "../middleware/error";
 
 declare module "jsonwebtoken" {
     export interface JwtPayload {
