@@ -54,6 +54,7 @@ const Subscriptions: React.FC = () => {
       <h2 className='subscriptions-header'>Available Subscriptions :</h2>
       <br></br>
       <div className='cards'>
+
         {filteredSubscriptions.length === 0 ? subscriptions.map((subscription) => (
           <div key={subscription._id} className='card'>
             <div className="card-header">
@@ -80,7 +81,9 @@ const Subscriptions: React.FC = () => {
             </div>
             <button className="card-button" onClick={() => subscribeHandler(subscription._id)} >Subscribe now</button>
           </div>
-        )) : filteredSubscriptions.map((subscription) => (
+        )) 
+        
+        : filteredSubscriptions.map((subscription) => (
           <div key={subscription._id} className='card'>
             <div className="card-header">
               <h3>{subscription.name}</h3>

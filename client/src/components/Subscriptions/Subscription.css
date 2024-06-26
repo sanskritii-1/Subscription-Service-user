@@ -98,3 +98,13 @@ body {
     flex: 0 1 100%; /* One card per row on very small screens */
   }
 }
+
+.Subscription_Page {
+  background-image: url("https://images.saymedia-content.com/.image/t_share/MTkyOTkyMzE2OTQ3MDQ3NjQ1/website-background-templates.png");
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  background-position: center; 
+  min-height: 100vh; 
+  display: flex;
+  flex-direction: column;
+}

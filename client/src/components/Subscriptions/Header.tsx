@@ -24,6 +24,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate('/login');
+    
     toast.success("successful logout");
   };
 
