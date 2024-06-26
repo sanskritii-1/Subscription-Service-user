@@ -15,7 +15,7 @@ const Subscriptions: React.FC = () => {
         
         const res = await sendData('GET', 'subscription-plans', false);
         const data=res.plans;
-        console.log(data);
+        // console.log(data);
         if (Array.isArray(data)) {
           setSubscriptions(data);
         }

@@ -29,9 +29,9 @@ export const getPlans = async (req: Request, res: Response, next: NextFunction):
 // Fetch current plan for a user
 export const getCurrentPlan = async (req: CustomRequest, res: Response, next: NextFunction): Promise<Response|void> => {
   try {
-    console.log("hi", req.id);
+    // console.log("hi", req.id);
     const userId = (req.id as JwtPayload).id as string;
-    console.log(userId);
+    // console.log(userId);
     const subscription = await Subscription.findOne({ userId }).sort({startDate:-1});
 
     if (!subscription) {

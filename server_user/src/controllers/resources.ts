@@ -24,12 +24,12 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
 
 export const accessResource = async (req: CustomRequest, res: Response, next:NextFunction):Promise<Response|void> => {
     try {
-        console.log('payload for resource access: ', req.id);
+        // console.log('payload for resource access: ', req.id);
 
         const userId = <JwtPayload>req.id;
         
         const foundUser = await UserResource.findOne<IUserResources>({userId: userId.id});
-        console.log("founduser in resources: ", foundUser)
+        // console.log("founduser in resources: ", foundUser)
 
         if(!foundUser){
             return next({status: 500, message: "Transaction record not found. Subscribe to a plan"})

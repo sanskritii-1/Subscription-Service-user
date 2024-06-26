@@ -30,7 +30,7 @@ export const authMiddleware = (req: CustomRequest, res:Response, next: NextFunct
         const accessSecret = getAcessTokenSecret();
         const payloadData = <JwtPayload>jwt.verify(token, accessSecret);
         req.id = payloadData;
-        console.log("payloadData: ", payloadData);
+        // console.log("payloadData: ", payloadData);
         next();
     } catch (err) {
         next(err);

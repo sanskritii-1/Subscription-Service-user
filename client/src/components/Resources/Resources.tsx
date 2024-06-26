@@ -19,7 +19,7 @@ const Resources: React.FC = () => {
         
         const data = await sendData('GET', 'get-resources', true);
         const response=data.resources;
-        console.log('data received resources', response)
+        // console.log('data received resources', response)
         setImages(response); 
       } catch (error) {
         console.error('Error fetching images:', error);

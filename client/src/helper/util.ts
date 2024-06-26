@@ -26,7 +26,7 @@ export function useSendData() {
       });
 
       const data = await response.json();
-      console.log('data received util: ', data);
+      // console.log('data received util: ', data);
 
       if(data.code===401){
         toast.error('Unathorised Access')

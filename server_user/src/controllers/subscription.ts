@@ -44,11 +44,12 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
         }
 
         const prevTransact = await Subscription.findOne<ISubscription>({userId: userId}).sort({startDate:-1});
-        if(plan.price!==0 || !prevTransact || prevTransact.endDate < new Date()){
+        
+        if(plan.price!==0 || !prevTransact || new Date(prevTransact.endDate) < new Date()){
             await addUserResource(userId, plan.resources);
         }
         else{
-            return next({status: 409, message:"Already subscribed to another plan. Consider unsubscribing"})
+            return next({status: 409, message:"Already subscribed to another plan.\nConsider unsubscribing"})
         }
 
 
@@ -56,10 +57,10 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
         const endDate = new Date(startDate);
 
 
-        endDate.setMonth(endDate.getMonth() + plan.duration);
+        // endDate.setMonth(endDate.getMonth() + plan.duration);
+        endDate.setTime(endDate.getTime() + ((plan.duration)*30*24*60*60*1000));
 
-
-        endDate.setDate(Math.min(startDate.getDate(), new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0).getDate()));
+        endDate.setDate(Math.min(endDate.getDate(), new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0).getDate()));
 
         const newSubscription = new Subscription({
             userId: userId,
