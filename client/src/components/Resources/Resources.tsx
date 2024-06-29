@@ -18,7 +18,7 @@ const Resources: React.FC = () => {
       try {
         
         const data = await sendData('GET', 'get-resources', true);
-        const response=data.resources;
+        const response=data.detailedResources;
         // console.log('data received resources', response)
         setImages(response); 
       } catch (error) {

@@ -33,5 +33,60 @@ app.get('/protected', authMiddleware, (req: Request, res: Response) => {
 });
 
 
+import Resource from './models/resources';
+import ResourceGrp, { IResourceGrp } from './models/resourceGrp';
+import Plan, { IPlan } from './models/plan';
+import mongoose from 'mongoose';
+app.post('/add-random-resourceGrp', async (req: Request, res: Response) => {
+    try {
+        // Fetch three random resource IDs
+        const resources = await Resource.aggregate([{ $sample: { size: 3 } }]);
+        if (resources.length < 3) {
+            return res.status(400).send('Not enough resources available');
+        }
+
+        // const resources = Resource.find();
+
+        // Generate random access numbers and create the resources array
+        const resourceAccessArray = resources.map(resource => ({
+            rId: resource._id,
+            access: Math.floor(Math.random() * 10) + 1 // Random access number between 1 and 100
+        }));
+
+        // Insert the new record into the ResourceGrp table
+        const newResourceGrp = new ResourceGrp({ resources: resourceAccessArray });
+        await newResourceGrp.save();
+
+        res.status(201).send(newResourceGrp);
+    } catch (error) {
+        console.error('Error adding random resourceGrp:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.post('/add-grp-to-starter', async (req: Request, res: Response) => {
+    try {
+        // Fetch the most recently created ResourceGrp
+        const newResourceGrp = await ResourceGrp.findOne<IResourceGrp>().sort({ createdAt: -1 });
+        if (!newResourceGrp) {
+            return res.status(404).send('ResourceGrp not found');
+        }
+
+        // Find the Plan with the name "Starter"
+        const plan = await Plan.findOne<IPlan>({ name: 'Pro' });
+        if (!plan) {
+            return res.status(404).send('Plan with name "Starter" not found');
+        }
+
+        // Update the Plan with the new ResourceGrp ID
+        plan.grpId = newResourceGrp._id as mongoose.Types.ObjectId;
+        await plan.save();
+
+        res.status(200).send(plan);
+    } catch (error) {
+        console.error('Error updating plan with new ResourceGrp:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 export default app;

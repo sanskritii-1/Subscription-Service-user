@@ -7,17 +7,21 @@ import { JwtPayload } from 'jsonwebtoken';
 import UserResource, { IUserResources } from '../models/userResources';
 import { CustomError } from '../middleware/error';
 import {success,error} from "../utils/response"
+import mongoose from 'mongoose';
+import ResourceGrp, { IResourceGrp } from '../models/resourceGrp';
 
 
 interface CustomRequest extends Request {
     id?: string | JwtPayload;
 }
 
-const addUserResource = async (userId: string, resource: number) => {
+const addUserResource = async (userId: string, grpId: mongoose.Types.ObjectId | IResourceGrp) => {
     try {
+        const grp = await ResourceGrp.findOne({_id: grpId})
+
         await UserResource.findOneAndUpdate(
             { userId: userId },
-            { $set: { leftResources: resource } },
+            { $set: { leftResources: grp?.resources } },
             { upsert: true }
         )
     }
@@ -46,7 +50,7 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
         const prevTransact = await Subscription.findOne<ISubscription>({userId: userId}).sort({startDate:-1});
         
         if(plan.price!==0 || !prevTransact || new Date(prevTransact.endDate) < new Date()){
-            await addUserResource(userId, plan.resources);
+            await addUserResource(userId, plan.grpId);
         }
         else{
             return next({status: 409, message:"Already subscribed to another plan.\nConsider unsubscribing"})
@@ -116,9 +120,10 @@ export const unsubscribe = async (req: CustomRequest, res: Response, next: NextF
         await unsub.save();
 
 
-        if (leftResources > freePlan.resources || leftResources===-1) {
-            await UserResource.updateOne<IUserResources>({ userId: payloadData.id }, { $set: { leftResources: freePlan.resources } });
-        }
+        // if (leftResources > freePlan.resources || leftResources===-1) {
+        //     await UserResource.updateOne<IUserResources>({ userId: payloadData.id }, { $set: { leftResources: freePlan.resources } });
+        // }
+        addUserResource(payloadData.id, freePlan.grpId);
 
         return res.status(201).json(success(201, { message: 'Successfully unsubscribed' }));
     }

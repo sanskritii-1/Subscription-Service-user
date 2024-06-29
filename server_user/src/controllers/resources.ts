@@ -5,6 +5,8 @@ import {images} from "../data/images";
 import UserResource, { IUserResources } from "../models/userResources";
 import { CustomError } from "../middleware/error";
 import {success,error} from "../utils/response"
+import Plan from "../models/plan";
+import Subscription from "../models/transaction";
 
 interface CustomRequest extends Request{
     id?:string | JwtPayload;
@@ -13,8 +15,30 @@ interface CustomRequest extends Request{
 export const getResources = async (req: CustomRequest, res: Response, next: NextFunction):Promise<Response|void> => {
     try {
         // await Resource.insertMany(images);        
-        const resources = await Resource.find<IResource>({}, 'title description blur_url');
-        return res.status(200).json(success(200, {resources}));
+        // const resources = await Resource.find<IResource>({}, 'title description blur_url');
+        const userId = (req.id as JwtPayload).id as string;
+        const subscription = await Subscription.findOne({ userId }).sort({startDate:-1});
+        const planId = subscription?.planId;
+        
+        const plan = await Plan.findById(planId).populate({
+            path: 'grpId',
+            populate: {
+                path: 'resources.rId', // Populate the rId in resources
+                model: 'Resource' // Reference to the Resource model
+            }
+        }).exec();
+
+        if (!plan) throw new Error('Plan not found');
+
+        const detailedResources = (plan.grpId as any).resources.map((resource: any) => ({
+            _id: resource.rId._id,
+            title: resource.rId.title,
+            description: resource.rId.description,
+            blur_url: resource.rId.blur_url,
+            // access: resource.access
+        }));
+
+        return res.status(200).json(success(200, {detailedResources}));
     } 
     catch (err) {
         next(err);
@@ -35,12 +59,18 @@ export const accessResource = async (req: CustomRequest, res: Response, next:Nex
             return next({status: 500, message: "Transaction record not found. Subscribe to a plan"})
         } 
 
-        if(foundUser.leftResources === 0){
+        const resource = foundUser.leftResources.find(resource => resource.rId.equals(req.body.imageId));
+
+        if(!resource){
+            return next({status: 404, message: "Image not in subscribed plan"})
+        }
+
+        if(resource.access === 0){
             return next({status: 403, message: "Cannot access anymore resources"})
         }
 
-        if(foundUser.leftResources > 0){
-            await UserResource.updateOne({userId: userId.id}, {$inc: {leftResources:-1}});
+        if(resource.access > 0){
+            await UserResource.updateOne({userId: userId.id, "leftResources.rId": req.body.imageId}, {$inc: {"leftResources.$.access":-1}});
         }
 
         const image_details = await Resource.findOne<IResource>({_id:req.body.imageId});
