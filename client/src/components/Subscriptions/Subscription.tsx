@@ -28,16 +28,20 @@ const Subscriptions: React.FC = () => {
     fetchSubscriptions();
   }, []);
 
-  const subscribeHandler = async (planId: string) => {
+  const paymentHandler = async (planId: string) => {
     try {
-      const resData = await sendData("POST", "/subscribe", true, {
-        planId: planId,
-      });
+      const selectedSubscription = subscriptions.find(sub => sub._id === planId);
 
-      navigate('/resources');
-    } 
-    catch (error) {
-      console.log(error);
+      if (!selectedSubscription) {
+        throw new Error('Selected subscription plan not found');
+      }
+
+      navigate('/PaymentGateway', {
+        state: { amount: selectedSubscription.price, planId }
+      });
+    } catch (error) {
+      console.error('Error subscribing to plan:', error);
+      toast.error('Failed to subscribe. Please try again.');
     }
   };
 
@@ -79,7 +83,7 @@ const Subscriptions: React.FC = () => {
               </div>
               <p className="card-price">${subscription.price} USD</p>
             </div>
-            <button className="card-button" onClick={() => subscribeHandler(subscription._id)} >Subscribe now</button>
+            <button className="card-button" onClick={() => paymentHandler(subscription._id)} >Subscribe now</button>
           </div>
         )) 
         
@@ -107,7 +111,7 @@ const Subscriptions: React.FC = () => {
               </div>
               <p className="card-price">${subscription.price} USD</p>
             </div>
-            <button className="card-button" onClick={() => subscribeHandler(subscription._id)} >Subscribe now</button>
+            <button className="card-button" onClick={() => paymentHandler(subscription._id)} >Subscribe now</button>
           </div>
         ))}
       </div>
