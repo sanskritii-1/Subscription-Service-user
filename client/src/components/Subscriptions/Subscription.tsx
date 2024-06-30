@@ -44,10 +44,10 @@ const Subscriptions: React.FC = () => {
         body: JSON.stringify({ amount: selectedSubscription.price }),
       });
   
-      const { clientSecret } = await response.json();
+      //const { clientSecret } = await response.json();
 
       navigate('/PaymentGateway', {
-        state: { amount: selectedSubscription.price, planId, clientSecret }
+        state: { amount: selectedSubscription.price, planId, /*clientSecret*/ }
       });
     } catch (error) {
       console.error('Error subscribing to plan:', error);
