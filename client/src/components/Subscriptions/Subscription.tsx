@@ -36,8 +36,18 @@ const Subscriptions: React.FC = () => {
         throw new Error('Selected subscription plan not found');
       }
 
+      const response = await fetch('/create-payment-intent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ amount: selectedSubscription.price }),
+      });
+  
+      const { clientSecret } = await response.json();
+
       navigate('/PaymentGateway', {
-        state: { amount: selectedSubscription.price, planId }
+        state: { amount: selectedSubscription.price, planId, clientSecret }
       });
     } catch (error) {
       console.error('Error subscribing to plan:', error);

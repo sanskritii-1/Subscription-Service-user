@@ -7,10 +7,11 @@ const PaymentPage: React.FC = () => {
   const { state } = location;
   const amount = state ? state.amount : 0;
   const planId = state ? state.planId : '';
+  const clientSecret = state ? state.clientSecret : '';
 
   return (
     <div>
-      <Payment isOpen={true} onClose={() => {}} amount={amount} planId={planId} />
+      <Payment isOpen={true} onClose={() => {}} amount={amount} planId={planId} clientSecret={clientSecret} />
     </div>
   );
 };

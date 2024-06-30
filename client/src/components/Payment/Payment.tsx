@@ -11,11 +11,12 @@ interface PaymentProps {
   onClose: () => void;
   amount: number;
   planId: string;
+  clientSecret: string;
 }
 
 const stripePromise = loadStripe('pk_test_51POayCP5gAI9NfaCKsSV5Ql5SR0HEiYyBfF8HdeHugcGeBAR268O8JGMmMfG1lCaVSLwzDtQoNUU2Ee1CmW6PDa500qXCzyVvw');
 
-const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId}) => {
+const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, clientSecret}) => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
@@ -48,36 +49,22 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId})
       return;
     }
 
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: cardElement,
+    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: cardElement,
+      },
     });
 
     if (error) {
       console.error(error);
       alert("Payment error: " + error.message);
+    }  else if (paymentIntent && paymentIntent.status === 'succeeded') {
+      await subscribeHandler(planId);
+      onClose();
+      alert('Payment successful!');
     } else {
-      const { id } = paymentMethod;
-      const response = await fetch('/api/xyz', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount,
-          id,
-        }),
-      });
-
-      if (response.ok) {
-        await subscribeHandler(planId);
-        onClose();
-        alert("Payment successful!");
-      } else {
-        console.error('Payment failed');
-        alert("Payment failed. Please try again.");
-        
-      }
+      console.error('Payment failed');
+      alert('Payment failed. Please try again.');
     }
   };
 
@@ -99,25 +86,9 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId})
 };
 
 const Payment: React.FC<PaymentProps> = (props) => (
-  <Elements stripe={stripePromise}>
+  <Elements stripe={stripePromise} options={{ clientSecret: props.clientSecret }}>
     <PaymentForm {...props} />
   </Elements>
 );
 
 export default Payment;
-
-
-
-
-//const subscribeHandler = async (planId: string) => {
-//  try {
-//    const resData = await sendData("POST", "/subscribe", true, {
-//      planId: planId,
-//    });
-//
-//    navigate('/resources');
-//  } 
-//  catch (error) {
-//    console.log(error);
-//  }
-//};
