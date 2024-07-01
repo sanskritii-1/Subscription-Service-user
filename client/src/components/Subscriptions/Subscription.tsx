@@ -3,12 +3,14 @@ import Header from './Header';
 import './Subscription.css';
 import { useSendData } from '../../helper/util';
 import { useNavigate } from 'react-router-dom';
+import { useSendData2 } from '../../helper/util2';
 import toast from 'react-hot-toast';
 
 const Subscriptions: React.FC = () => {
   const navigate = useNavigate();
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
   const sendData = useSendData();
+  const sendData2 = useSendData2();
   const [filteredSubscriptions, setFilteredSubscriptions] = useState<any[]>([]);
 
   useEffect(() => {
@@ -28,23 +30,25 @@ const Subscriptions: React.FC = () => {
     fetchSubscriptions();
   }, []);
 
+
   const paymentHandler = async (planId: string) => {
     try {
       const selectedSubscription = subscriptions.find(sub => sub._id === planId);
+      if (!selectedSubscription) {
+        throw new Error('Selected subscription not found');
+      }
   
-      const response = await sendData("POST", "/create-payment-intent", false, {
+      const response = await sendData2("POST", "create-payment-intent", false, {
         amount: selectedSubscription.price,
       });
   
-      if (!response || !response.ok) {
-        throw new Error('Failed to fetch payment intent');
-      }
+      console.log('Payment Intent response:', response);
   
-      const { clientSecret } = await response.json();
-  
-      if (!clientSecret) {
+      if (!response || !response.clientSecret) {
         throw new Error('Client secret not received');
       }
+  
+      const { clientSecret } = response;
   
       navigate('/PaymentGateway', {
         state: { amount: selectedSubscription.price, planId, clientSecret }
@@ -54,6 +58,7 @@ const Subscriptions: React.FC = () => {
       toast.error('Failed to subscribe. Please try again.');
     }
   };
+  
   
 
   const handleSearch = (query: string) => {
