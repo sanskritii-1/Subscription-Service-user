@@ -16,7 +16,7 @@ const Subscriptions: React.FC = () => {
       try {
         const res = await sendData('GET', 'subscription-plans', false);
         const data = res.plans;
-        console.log(data);
+        console.log('Fetched subscriptions:', data);
         if (Array.isArray(data)) {
           setSubscriptions(data);
         }
@@ -31,29 +31,30 @@ const Subscriptions: React.FC = () => {
   const paymentHandler = async (planId: string) => {
     try {
       const selectedSubscription = subscriptions.find(sub => sub._id === planId);
-
-      if (!selectedSubscription) {
-        throw new Error('Selected subscription plan not found');
-      }
-
-      const response = await fetch('/create-payment-intent', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ amount: selectedSubscription.price }),
+  
+      const response = await sendData("POST", "/create-payment-intent", false, {
+        amount: selectedSubscription.price,
       });
   
-      //const { clientSecret } = await response.json();
-
+      if (!response || !response.ok) {
+        throw new Error('Failed to fetch payment intent');
+      }
+  
+      const { clientSecret } = await response.json();
+  
+      if (!clientSecret) {
+        throw new Error('Client secret not received');
+      }
+  
       navigate('/PaymentGateway', {
-        state: { amount: selectedSubscription.price, planId, /*clientSecret*/ }
+        state: { amount: selectedSubscription.price, planId, clientSecret }
       });
     } catch (error) {
       console.error('Error subscribing to plan:', error);
       toast.error('Failed to subscribe. Please try again.');
     }
   };
+  
 
   const handleSearch = (query: string) => {
     const filtered = subscriptions.filter(subscription =>

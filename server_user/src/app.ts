@@ -1,5 +1,6 @@
 import express, { Request, Response, Express } from 'express';
 import cors from 'cors';
+import bodyParser from 'body-parser';
 import connectDB from './config/dbConfig';
 import authenticationRoute from './routes/authentication';
 import paymentHistoryRoutes from './routes/paymentHistoryRoutes';
@@ -7,6 +8,7 @@ import resourceRoute from './routes/resources';
 import planRoute from './routes/plans'
 import subscriptionRoutes from './routes/subscription';
 import { ErrorMiddleware } from './middleware/error';
+import stripeRoutes from './routes/stripe';
 
 // Create an Express application
 const app: Express = express();
@@ -19,6 +21,7 @@ app.use('/api', paymentHistoryRoutes); // Include payment history routes
 app.use('/api', resourceRoute);
 app.use('/api', planRoute);
 app.use('/api', subscriptionRoutes);
+app.use('/api', stripeRoutes);
 app.use(ErrorMiddleware);
 
 connectDB();

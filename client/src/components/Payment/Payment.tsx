@@ -21,6 +21,7 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, 
   const elements = useElements();
   const navigate = useNavigate();
   const sendData = useSendData();
+  
 
   const subscribeHandler = async (planId: string) => {
     try {
@@ -32,7 +33,7 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, 
     } 
     catch (error) {
       console.error('Error subscribing to plan:', error);
-      toast.error('Failed to subscribe. Please try again.');
+      toast.error('Failed subscribe. Please try again.');
     }
   };
 
@@ -40,6 +41,11 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, 
     event.preventDefault();
 
     if (!stripe || !elements) {
+      return;
+    }
+
+    if (!clientSecret) {
+      toast.error('Client secret is missing');
       return;
     }
 
