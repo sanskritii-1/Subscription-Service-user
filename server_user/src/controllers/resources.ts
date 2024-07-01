@@ -23,8 +23,8 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
         const plan = await Plan.findById(planId).populate({
             path: 'grpId',
             populate: {
-                path: 'resources.rId', // Populate the rId in resources
-                model: 'Resource' // Reference to the Resource model
+                path: 'resources.rId', 
+                model: 'Resource' 
             }
         }).exec();
 

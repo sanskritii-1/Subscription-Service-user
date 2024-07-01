@@ -6,6 +6,7 @@ import { JwtPayload } from "jsonwebtoken";
 import UserResource, { IUserResources } from "../models/userResources";
 import { allPlans } from "../data/plans";
 import {success,error} from "../utils/response"
+import mongoose from "mongoose";
 
 interface CustomRequest extends Request {
   id?: string | JwtPayload;
@@ -40,7 +41,26 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response, next: Ne
 
     const planId = subscription.planId as unknown as string;;
     const currentPlan = await Plan.findById(planId) as IPlan;
-    const userResource = await UserResource.findOne<IUserResources>({userId: userId})
+    // const userResource = await UserResource.findOne<IUserResources>({userId: userId})
+    const remainingResources = await UserResource.aggregate([
+      { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+      { $unwind: '$leftResources' },
+      {
+          $lookup: {
+              from: 'resources',
+              localField: 'leftResources.rId',
+              foreignField: '_id',
+              as: 'resourceDetails'
+          }
+      },
+      { $unwind: '$resourceDetails' },
+      {
+          $project: {
+              title: '$resourceDetails.title',
+              access: '$leftResources.access'
+          }
+      }
+  ]);
 
     const purchaseDate = new Date(subscription.startDate).toLocaleDateString();
     // Calculate remaining days
@@ -51,7 +71,7 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response, next: Ne
       planName: currentPlan.name,
       duration: currentPlan.duration,
       purchaseDate: purchaseDate,
-      remainingResources: userResource?.leftResources,
+      remainingResources,
       remainingDuration
     };
 
