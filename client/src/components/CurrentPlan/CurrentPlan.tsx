@@ -59,12 +59,14 @@ export default function CurrentPlan() {
               <h1 style={{ color: "black" }}>{currentPlan.planName} Plan</h1>
               <p>Purchase Date: {currentPlan.purchaseDate}</p>
               <p>Duration: {currentPlan.duration} Months</p>
-              <p>Remaining resources: </p>
-              {currentPlan.remainingResources.map((resource, index) => (
-                <p key={index}>
-                {resource.access === -1 ? `${resource.title}: Unlimited` : `${resource.title}: ${resource.access}`}
-                </p>
-              ))}
+              <p>Remaining Access: </p>
+              <div>
+                {currentPlan.remainingResources.map((resource, index) => (
+                  <p key={index}>
+                  {resource.access === -1 ? `${resource.title}: Unlimited` : `${resource.title}: ${resource.access}`}
+                  </p>
+                ))}
+              </div>
               <p>Remaining duration: {currentPlan.remainingDuration} Days</p>
               <button onClick={() => unsubscribeHandler(currentPlan.planName)}>Unsubscribe</button>
             </>

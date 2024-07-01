@@ -27,5 +27,4 @@ export const subscribeValidationSchema = Joi.object({
 
 export const unsubscribeValidationSchema = Joi.object({
     planName: Joi.string().required(),
-    leftResources: Joi.number().required(),
 })

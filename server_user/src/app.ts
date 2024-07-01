@@ -40,7 +40,7 @@ import mongoose from 'mongoose';
 app.post('/add-random-resourceGrp', async (req: Request, res: Response) => {
     try {
         // Fetch three random resource IDs
-        const resources = await Resource.aggregate([{ $sample: { size: 3 } }]);
+        const resources = await Resource.aggregate([{ $sample: { size: 7 } }]);
         if (resources.length < 3) {
             return res.status(400).send('Not enough resources available');
         }

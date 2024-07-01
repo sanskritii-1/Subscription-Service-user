@@ -85,7 +85,7 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
 export const unsubscribe = async (req: CustomRequest, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
         const planName = req.body.planName;
-        const leftResources = req.body.leftResources;
+        // const leftResources = req.body.leftResources;
         const payloadData = <JwtPayload>req.id;
 
         const plan = await Plan.findOne<IPlan>({ name: planName });
