@@ -1,7 +1,26 @@
 .container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 20px;
-  }
-  
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+  /* background-color: #bcc6cc; */
+}
+
+.inGrp {
+  border-bottom: 2px dashed rgb(156, 153, 153);
+  padding-bottom: 70px;
+}
+
+.outGrp{
+  /* padding-top: 50px; */
+}
+
+.heading{
+  font-family: "Playwrite IT Moderna", cursive;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  margin-top: 30px;
+}

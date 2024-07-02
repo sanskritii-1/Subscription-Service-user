@@ -17,8 +17,13 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
         // await Resource.insertMany(images);        
         // const resources = await Resource.find<IResource>({}, 'title description blur_url');
         const userId = (req.id as JwtPayload).id as string;
+        const allResources = await Resource.find<IResource>({}, 'title description blur_url');
         const subscription = await Subscription.findOne({ userId }).sort({startDate:-1});
-        const planId = subscription?.planId;
+        if(!subscription){
+            return next({status:400, message: "Subscribe to a plan"})
+        }
+
+        const planId = subscription.planId;
         
         const plan = await Plan.findById(planId).populate({
             path: 'grpId',
@@ -28,17 +33,29 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
             }
         }).exec();
 
-        if (!plan) throw new Error('Plan not found');
+        if (!plan){
+            return next({status:500, message: "Plan not found"})
+        }
 
-        const detailedResources = (plan.grpId as any).resources.map((resource: any) => ({
+        const resourcesAccessible = (plan.grpId as any).resources.map((resource: any) => ({
             _id: resource.rId._id,
             title: resource.rId.title,
             description: resource.rId.description,
             blur_url: resource.rId.blur_url,
             // access: resource.access
         }));
-
-        return res.status(200).json(success(200, {detailedResources}));
+        
+        const grpResourceIds = new Set((plan.grpId as any).resources.map((resource: any) => resource.rId._id.toString()));
+        
+        const resourcesInaccessible = allResources
+            .filter((resource:any) => !grpResourceIds.has(resource._id.toString()))
+            .map((resource:any) => ({
+                _id: resource._id,
+                title: resource.title,
+                description: resource.description,
+                blur_url: resource.blur_url,
+            }));
+        return res.status(200).json(success(200, {resourcesAccessible, resourcesInaccessible}));
     } 
     catch (err) {
         next(err);
@@ -62,7 +79,7 @@ export const accessResource = async (req: CustomRequest, res: Response, next:Nex
         const resource = foundUser.leftResources.find(resource => resource.rId.equals(req.body.imageId));
 
         if(!resource){
-            return next({status: 404, message: "Image not in subscribed plan"})
+            return next({status: 400, message: "Image not in subscribed plan. \nSubscribe to a higher tier"})
         }
 
         if(resource.access === 0){
@@ -77,7 +94,7 @@ export const accessResource = async (req: CustomRequest, res: Response, next:Nex
 
         if(!image_details){
             return next({status:404, message: "Resource not found"})
-        } 
+        }
 
         return res.status(200).json(success(200,{url: image_details.url}));
 
