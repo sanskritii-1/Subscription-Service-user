@@ -44,7 +44,7 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
             blur_url: resource.rId.blur_url,
             // access: resource.access
         }));
-        
+
         const grpResourceIds = new Set((plan.grpId as any).resources.map((resource: any) => resource.rId._id.toString()));
         
         const resourcesInaccessible = allResources
@@ -79,7 +79,7 @@ export const accessResource = async (req: CustomRequest, res: Response, next:Nex
         const resource = foundUser.leftResources.find(resource => resource.rId.equals(req.body.imageId));
 
         if(!resource){
-            return next({status: 400, message: "Image not in subscribed plan. \nSubscribe to a higher tier"})
+            return next({status: 400, message: "Subscribe to a higher tier"})
         }
 
         if(resource.access === 0){
