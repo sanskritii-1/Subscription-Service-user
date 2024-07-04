@@ -9,7 +9,6 @@ import PaymentHistoryPage from "./pages/PaymentHistoryPage";
 import CurrentPlanPage from "./pages/CurrentPlanPage";
 import SubscriptionPage from "./pages/Subscription_Page";
 import ResourcePage from "./pages/Resources";
-import PaymentPage from "./pages/PaymentPage";
 
 function App() {
   const routers = createBrowserRouter([
@@ -36,10 +35,6 @@ function App() {
     {
       path: "/subscriptions",
       element: <SubscriptionPage />,
-    },
-    {
-      path: "/PaymentGateway",
-      element: <PaymentPage />,
     },
     {
       path: "/resources",

@@ -5,9 +5,11 @@ import { useSendData } from '../../helper/util';
 import { useNavigate } from 'react-router-dom';
 import { useSendData2 } from '../../helper/util2';
 import toast from 'react-hot-toast';
+import Payment from '../Payment/Payment'
 
 const Subscriptions: React.FC = () => {
-  const navigate = useNavigate();
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [paymentDetails, setPaymentDetails] = useState({ amount: 0, planId: '', clientSecret: '' });
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
   const sendData = useSendData();
   const sendData2 = useSendData2();
@@ -34,6 +36,7 @@ const Subscriptions: React.FC = () => {
   const paymentHandler = async (planId: string) => {
     try {
       const selectedSubscription = subscriptions.find(sub => sub._id === planId);
+
       if (!selectedSubscription) {
         throw new Error('Selected subscription not found');
       }
@@ -51,9 +54,9 @@ const Subscriptions: React.FC = () => {
   
       const { clientSecret } = response;
   
-      navigate('/PaymentGateway', {
-        state: { amount: selectedSubscription.price, planId, clientSecret }
-      });
+      setPaymentDetails({ amount: selectedSubscription.price, planId, clientSecret });
+      setModalOpen(true); 
+
     } catch (error) {
       console.error('Error subscribing to plan:', error);
       toast.error('Failed to subscribe. Please try again.');
@@ -132,6 +135,17 @@ const Subscriptions: React.FC = () => {
           </div>
         ))}
       </div>
+
+      {isModalOpen && (
+        <Payment
+          isOpen={isModalOpen}
+          onClose={() => setModalOpen(false)}
+          amount={paymentDetails.amount}
+          planId={paymentDetails.planId}
+          clientSecret={paymentDetails.clientSecret}
+        />
+      )}
+      
     </div>
   );
 };
