@@ -3,7 +3,6 @@ import { JwtPayload } from "jsonwebtoken";
 import Resource, { IResource } from "../models/resources";
 import {images} from "../data/images";
 import UserResource, { IUserResources } from "../models/userResources";
-import { CustomError } from "../middleware/error";
 import {success,error} from "../utils/response"
 import Plan from "../models/plan";
 import Subscription from "../models/transaction";

@@ -1,9 +1,7 @@
 import User, { IUser } from "../models/user";
 import { NextFunction, Request, Response } from "express";
-import { registerValidationSchema, loginValidationSchema } from "../validations/schemas";
 import { generateAccessToken } from "../middleware/auth";
 import { JwtPayload } from "jsonwebtoken";
-import { CustomError } from "../middleware/error";
 import {success,error} from "../utils/response"
 
 
@@ -29,12 +27,6 @@ export const register = async (req: Request, res: Response, next: NextFunction):
 
 export const login = async (req: Request, res:Response, next:NextFunction):Promise<Response|void> => {
     try{
-        // joi validation
-        const {error} = loginValidationSchema.validate(req.body);
-        if (error) {
-            return next({status: 400, message: error.details[0].message})
-        }
-
         const{email,password} = req.body;
 
         const user = await User.findOne<IUser>({ email });

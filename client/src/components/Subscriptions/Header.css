@@ -24,9 +24,8 @@
 
 .search input {
   padding: 8px;
-  /* background-color: #eaeaea; */
-  /* border: 5px solid #7e7777; */
-  border-radius: 5px;
+  /* border-radius: 5px; */
+  border:none;
   text-align: center;
   width: 100%;
   box-sizing: border-box;
