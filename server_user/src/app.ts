@@ -37,58 +37,60 @@ app.get('/protected', authMiddleware, (req: Request, res: Response) => {
 });
 
 
-// import Stripe from 'stripe';
-// import Transaction from './models/transaction';
-// const stripe = new Stripe('sk_test_51POayCP5gAI9NfaClujHfCfssJYtu7fQ30mlnZ29Bk2HfoiusIDHCDsJCBATmkMFUHoOgwEMhTWVwSCBvWozdqDn00tnni3x0Z', {
-//     apiVersion: '2024-06-20'
-//   });
-// const endpointSecret = "whsec_Y4595A8DxTiDgZZK0zU9YOnBcZETmJly";
-// // const endpointSecret = "whsec_21d875ae490f8ae9c364210a271a1190d0ad18a2f901b9fdedc0a65fc49c9d02";
+import Resource from './models/resources';
+import ResourceGrp, { IResourceGrp } from './models/resourceGrp';
+import Plan, { IPlan } from './models/plan';
+import mongoose from 'mongoose';
+app.post('/add-random-resourceGrp', async (req: Request, res: Response) => {
+    try {
+        // Fetch three random resource IDs
+        const resources = await Resource.aggregate([{ $sample: { size: 7 } }]);
+        if (resources.length < 3) {
+            return res.status(400).send('Not enough resources available');
+        }
 
-// app.post('/webhook', async(req: Request, res: Response, next: NextFunction) => {
-//     console.log('reached webhook')
-//   const sig = req.headers['stripe-signature'];
-//     console.log("sig: ", sig);
-//   if(!sig ){
-//     console.log('no sig error')
-//     return next({status:400, message: "webhook error: invalid signature"})
-//   }
-  
-//   let event;
+        // const resources = Resource.find();
 
-//   try {
-//     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-//   } catch (err:any) {
-//     console.log("in webhook catch", err.message)
-//     res.status(400).send(`Webhook Error: ${err.message}`);
-//     return;
-//   }
+        // Generate random access numbers and create the resources array
+        const resourceAccessArray = resources.map(resource => ({
+            rId: resource._id,
+            access: Math.floor(Math.random() * 10) + 1 // Random access number between 1 and 100
+        }));
 
-//   let paymentIntent = event.data.object as Stripe.PaymentIntent;
-//   let status;
-//   // Handle the event
-//   switch (event.type) {
-//     case 'payment_intent.succeeded':
-//       // const paymentIntent = event.data.object;
-//       status = paymentIntent.status;
-//       console.log('in webhook', event.type);
-//       // Then define and call a function to handle the event payment_intent.amount_capturable_updated
-//       break;
-//       case 'payment_intent.payment_failed':
-//         console.log('in webhook', event.type);
-//       status = paymentIntent.status;
-//       // const paymentIntentCanceled = event.data.object;
-//       // Then define and call a function to handle the event payment_intent.canceled
-//       break;
-    
-//     default:
-//       console.log(`Unhandled event type ${event.type}`);
-//   }
+        // Insert the new record into the ResourceGrp table
+        const newResourceGrp = new ResourceGrp({ resources: resourceAccessArray });
+        await newResourceGrp.save();
 
-//   await Transaction.findOneAndUpdate({paymentIntentId: paymentIntent.id}, {status: status})
+        res.status(201).send(newResourceGrp);
+    } catch (error) {
+        console.error('Error adding random resourceGrp:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
-//   // Return a 200 response to acknowledge receipt of the event
-//   res.send();
-// })
+app.post('/add-grp-to-starter', async (req: Request, res: Response) => {
+    try {
+        // Fetch the most recently created ResourceGrp
+        const newResourceGrp = await ResourceGrp.findOne<IResourceGrp>().sort({ createdAt: -1 });
+        if (!newResourceGrp) {
+            return res.status(404).send('ResourceGrp not found');
+        }
+
+        // Find the Plan with the name "Starter"
+        const plan = await Plan.findOne<IPlan>({ name: 'Pro' });
+        if (!plan) {
+            return res.status(404).send('Plan with name "Starter" not found');
+        }
+
+        // Update the Plan with the new ResourceGrp ID
+        plan.grpId = newResourceGrp._id as mongoose.Types.ObjectId;
+        await plan.save();
+
+        res.status(200).send(plan);
+    } catch (error) {
+        console.error('Error updating plan with new ResourceGrp:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 export default app;

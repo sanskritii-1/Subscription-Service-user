@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { getAcessTokenSecret } from "../utils";
-import User, { IUser } from "../models/user";
-import { CustomError } from "../middleware/error";
 
 declare module "jsonwebtoken" {
     export interface JwtPayload {
@@ -30,7 +28,7 @@ export const authMiddleware = (req: CustomRequest, res:Response, next: NextFunct
         const accessSecret = getAcessTokenSecret();
         const payloadData = <JwtPayload>jwt.verify(token, accessSecret);
         req.id = payloadData;
-        console.log("payloadData in auth middleware: ", payloadData);
+        // console.log("payloadData in auth middleware: ", payloadData);
         next();
     } catch (err) {
         next(err);

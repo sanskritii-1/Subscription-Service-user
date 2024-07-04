@@ -8,6 +8,7 @@ import { useSendData } from '../../helper/util';
 
 const Resources: React.FC = () => {
   const [images, setImages] = useState<any[]>([]);
+  const [inaccessible, setInaccessible] = useState<any[]>([]);
   const navigate = useNavigate();
   const sendData = useSendData();
 
@@ -18,9 +19,10 @@ const Resources: React.FC = () => {
       try {
         
         const data = await sendData('GET', 'get-resources', true);
-        const response=data.resources;
-        console.log('data received resources', response)
-        setImages(response); 
+        const response=data;
+        // console.log('data received resources', response)
+        setImages(response.resourcesAccessible); 
+        setInaccessible(response.resourcesInaccessible);
       } catch (error) {
         console.error('Error fetching images:', error);
       }
@@ -29,7 +31,8 @@ const Resources: React.FC = () => {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <>
+    <div className={`${styles.container} ${styles.inGrp}`}>
       {images.map((image, index) => (
         <ImageCard 
           key={image._id} 
@@ -40,6 +43,19 @@ const Resources: React.FC = () => {
         />
       ))}
     </div>
+    <h1 className={styles.heading}>Inaccessible Resources</h1>
+    <div className={`${styles.container} ${styles.outGrp}`}>
+      {inaccessible.map((image, index) => (
+        <ImageCard 
+        key={image._id} 
+        id = {image._id}
+        title={image.title} 
+        description={image.description} 
+        url={image.blur_url} 
+        />
+      ))}
+    </div>
+      </>
   );
 };
 
