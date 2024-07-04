@@ -16,24 +16,22 @@ interface PaymentProps {
 
 const stripePromise = loadStripe('pk_test_51POayCP5gAI9NfaCKsSV5Ql5SR0HEiYyBfF8HdeHugcGeBAR268O8JGMmMfG1lCaVSLwzDtQoNUU2Ee1CmW6PDa500qXCzyVvw');
 
-const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, clientSecret}) => {
+const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, clientSecret }) => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
   const sendData = useSendData();
-  
 
   const subscribeHandler = async (planId: string) => {
     try {
       const resData = await sendData("POST", "/subscribe", true, {
         planId: planId,
       });
-  
+
       navigate('/resources');
-    } 
-    catch (error) {
+    } catch (error) {
       console.error('Error subscribing to plan:', error);
-      toast.error('Failed subscribe. Please try again.');
+      toast.error('Failed to subscribe. Please try again.');
     }
   };
 
@@ -82,10 +80,10 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, 
         <h2>Payment</h2>
         <button onClick={onClose}>Close</button>
         <form onSubmit={handleSubmit}>
-          <br/>
+          <br />
           <CardElement className="CardElement" />
           <button type="submit" disabled={!stripe}>
-            Pay ${amount}
+            Pay Rs.{amount}
           </button>
         </form>
       </div>

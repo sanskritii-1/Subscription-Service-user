@@ -98,7 +98,7 @@ const Subscriptions: React.FC = () => {
                 <i className="fas fa-list"></i>
                 <span>{subscription.features}</span>
               </div>
-              <p className="card-price">${subscription.price} USD</p>
+              <p className="card-price">Rs. {subscription.price}</p>
             </div>
             <button className="card-button" onClick={() => paymentHandler(subscription._id)} >Subscribe now</button>
           </div>
@@ -126,7 +126,7 @@ const Subscriptions: React.FC = () => {
                 <i className="fas fa-list"></i>
                 <span>{subscription.features}</span>
               </div>
-              <p className="card-price">${subscription.price} USD</p>
+              <p className="card-price">Rs.{subscription.price} </p>
             </div>
             <button className="card-button" onClick={() => paymentHandler(subscription._id)} >Subscribe now</button>
           </div>
