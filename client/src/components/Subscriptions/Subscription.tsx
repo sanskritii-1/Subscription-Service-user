@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import Payment from '../Payment/Payment'
 
 const Subscriptions: React.FC = () => {
+  const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false);
   const [paymentDetails, setPaymentDetails] = useState({ amount: 0, planId: '', clientSecret: '' });
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
@@ -40,6 +41,11 @@ const Subscriptions: React.FC = () => {
       if (!selectedSubscription) {
         throw new Error('Selected subscription not found');
       }
+
+      if (selectedSubscription.price === 0) {
+        await subscribeHandler(planId);
+        return;
+      }
   
       const response = await sendData2("POST", "create-payment-intent", true, {
         amount: selectedSubscription.price,
@@ -63,7 +69,12 @@ const Subscriptions: React.FC = () => {
     }
   };
   
-  
+  const subscribeHandler = async (planId: string) => {
+      const resData = await sendData("POST", "/subscribe", true, {
+        planId: planId,
+      });
+      navigate('/resources');
+  };
 
   const handleSearch = (query: string) => {
     const filtered = subscriptions.filter(subscription =>
