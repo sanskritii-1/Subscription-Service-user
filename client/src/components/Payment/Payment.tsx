@@ -64,9 +64,11 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, 
       // alert("Payment error: " + error.message);
       toast.error(error.message || 'Payment failed\nTry again')
     }  else if (paymentIntent && paymentIntent.status === 'succeeded') {
-      await subscribeHandler(planId);
       onClose();
-      // alert('Payment successful!');
+      toast.success('Payment successful!');
+      setTimeout(async () => {
+        await subscribeHandler(planId);
+      }, 2000);
     } 
     // else {
     //   console.error('Payment failed');
@@ -76,16 +78,17 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, 
 
   return (
     isOpen ? (
-      <div className="PaymentModal">
-        <h2>Payment</h2>
-        <button onClick={onClose}>Close</button>
-        <form onSubmit={handleSubmit}>
-          <br />
-          <CardElement className="CardElement" />
-          <button type="submit" disabled={!stripe}>
-            Pay Rs.{amount}
-          </button>
-        </form>
+    <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-content" onClick={e => e.stopPropagation()}>
+          <button className="close-button" onClick={onClose}>X</button>
+          <h2>Payment</h2>
+          <form onSubmit={handleSubmit}>
+            <CardElement className="CardElement" />
+            <button type="submit" disabled={!stripe}>
+              Pay Rs.{amount}
+            </button>
+          </form>
+        </div>
       </div>
     ) : null
   );
