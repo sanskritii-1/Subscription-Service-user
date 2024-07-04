@@ -9,7 +9,7 @@
 
 .search {
   padding: 5px;
-  background-color: #eaeaea;
+  background-color: #fffcfc;
   border: 1px solid #0a0a0a;
   border-radius: 10px;
   text-align: center;
@@ -24,8 +24,9 @@
 
 .search input {
   padding: 8px;
-  background-color: #eaeaea;
-  border: 5px solid #7e7777;
+  /* background-color: #eaeaea; */
+  /* border: 5px solid #7e7777; */
+  border: none;
   border-radius: 5px;
   text-align: center;
   width: 100%;

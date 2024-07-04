@@ -38,8 +38,9 @@ const Subscriptions: React.FC = () => {
         throw new Error('Selected subscription not found');
       }
   
-      const response = await sendData2("POST", "create-payment-intent", false, {
+      const response = await sendData2("POST", "create-payment-intent", true, {
         amount: selectedSubscription.price,
+        planId
       });
   
       console.log('Payment Intent response:', response);

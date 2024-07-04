@@ -100,9 +100,7 @@ body {
 }
 
 .Subscription_Page {
-  background-image: url("https://images.saymedia-content.com/.image/t_share/MTkyOTkyMzE2OTQ3MDQ3NjQ1/website-background-templates.png");
-  background-size: cover; 
-  background-repeat: no-repeat; 
+  /* background-image: url("https://images.saymedia-content.com/.image/t_share/MTkyOTkyMzE2OTQ3MDQ3NjQ1/website-background-templates.png"); */
   background-position: center; 
   min-height: 100vh; 
   display: flex;

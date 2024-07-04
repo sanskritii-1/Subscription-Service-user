@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Plan, { IPlan } from "../models/plan";
 import { CustomError } from "../middleware/error";
-import Subscription, { ISubscription } from "../models/transaction";
+import Subscription, { ISubscription } from "../models/subscription";
 import { JwtPayload } from "jsonwebtoken";
 import UserResource, { IUserResources } from "../models/userResources";
 import { allPlans } from "../data/plans";

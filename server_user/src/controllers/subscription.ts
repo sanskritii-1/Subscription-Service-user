@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import Joi from 'joi';
-import Subscription, { ISubscription } from '../models/transaction';
+import Subscription, { ISubscription } from '../models/subscription';
 import Plan, { IPlan } from '../models/plan';
 import User, { IUser } from '../models/user';
 import { JwtPayload } from 'jsonwebtoken';

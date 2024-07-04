@@ -63,15 +63,17 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, 
 
     if (error) {
       console.error(error);
-      alert("Payment error: " + error.message);
+      // alert("Payment error: " + error.message);
+      toast.error(error.message || 'Payment failed\nTry again')
     }  else if (paymentIntent && paymentIntent.status === 'succeeded') {
       await subscribeHandler(planId);
       onClose();
-      alert('Payment successful!');
-    } else {
-      console.error('Payment failed');
-      alert('Payment failed. Please try again.');
-    }
+      // alert('Payment successful!');
+    } 
+    // else {
+    //   console.error('Payment failed');
+    //   alert('Payment failed. Please try again.');
+    // }
   };
 
   return (
