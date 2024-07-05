@@ -48,7 +48,7 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
             await addUserResource(userId, plan.grpId);
         }
         else{
-            return next({status: 409, message:"Already subscribed to another plan.\nConsider unsubscribing"})
+            return next({status: 409, message:"Already subscribed a free or any another plan.\nConsider unsubscribing"})
         }
 
 
