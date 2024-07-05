@@ -1,5 +1,7 @@
 # To run the application
 
+The application consists of 2 folders, the client and the server.
+
 ## Client directory
 
 ### `npm i` 
@@ -27,5 +29,5 @@ File to check the environment variables required to run the server.
 
 ### `npm start`
 
-Runs the server on port 5000 or the port mentioned in the env variable.\
+Runs the server on port 7001 or the port mentioned in the env variable.\
 Automatically restarts the server on changes.

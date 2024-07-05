@@ -9,7 +9,7 @@ declare module "jsonwebtoken" {
     }
 }
 
-interface CustomRequest extends Request{
+export interface CustomRequest extends Request{
     id?: string | JwtPayload;
 }
 

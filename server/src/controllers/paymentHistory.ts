@@ -4,10 +4,7 @@ import { JwtPayload } from 'jsonwebtoken';
 import Subscription, {ISubscription} from '../models/subscription';
 import Plan, { IPlan } from '../models/plan';
 import {success,error} from "../utils/response"
-
-interface CustomRequest extends Request{
-  id?:string | JwtPayload;
-}
+import { CustomRequest } from '../middleware/auth';
 
 export const getPaymentHistory = async (req: CustomRequest, res: Response, next:NextFunction) => {
   const userId = <JwtPayload>req.id; // Assuming user ID is stored in req.user

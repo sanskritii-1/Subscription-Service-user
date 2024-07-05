@@ -4,14 +4,12 @@ import Transaction from '../models/transaction';
 import { JwtPayload } from 'jsonwebtoken';
 import { config } from '../config/appConfig';
 import { getEnvVariable } from '../utils';
+import { CustomRequest } from '../middleware/auth';
 
 const stripe = new Stripe('sk_test_51POayCP5gAI9NfaClujHfCfssJYtu7fQ30mlnZ29Bk2HfoiusIDHCDsJCBATmkMFUHoOgwEMhTWVwSCBvWozdqDn00tnni3x0Z', {
   apiVersion: '2024-06-20'
 });
 
-interface CustomRequest extends Request {
-  id?: string | JwtPayload;
-}
 export const createPaymentIntent = async (req: CustomRequest, res: Response): Promise<void> => {
   const { amount } = req.body;
 

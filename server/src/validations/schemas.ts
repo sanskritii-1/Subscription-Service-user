@@ -28,3 +28,8 @@ export const subscribeValidationSchema = Joi.object({
 export const unsubscribeValidationSchema = Joi.object({
     planName: Joi.string().required(),
 })
+
+export const paymentValidationSchema = Joi.object({
+    amount: Joi.number().required(),
+    planId: Joi.string().length(24).hex().required(),
+})

@@ -1,6 +1,5 @@
 import express, { Request, Response, Express,NextFunction } from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 import connectDB from './config/dbConfig';
 import authenticationRoute from './routes/authentication';
 import paymentHistoryRoutes from './routes/paymentHistory';

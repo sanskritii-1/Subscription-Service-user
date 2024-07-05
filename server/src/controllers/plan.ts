@@ -6,10 +6,7 @@ import UserResource, { IUserResources } from "../models/userResource";
 import { allPlans } from "../data/plans";
 import {success,error} from "../utils/response"
 import mongoose from "mongoose";
-
-interface CustomRequest extends Request {
-  id?: string | JwtPayload;
-}
+import { CustomRequest } from "../middleware/auth";
 
 export const getPlans = async (req: Request, res: Response, next: NextFunction):Promise<Response|void> => {
   try {

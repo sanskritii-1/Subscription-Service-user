@@ -6,10 +6,7 @@ import UserResource, { IUserResources } from "../models/userResource";
 import {success,error} from "../utils/response"
 import Plan from "../models/plan";
 import Subscription from "../models/subscription";
-
-interface CustomRequest extends Request{
-    id?:string | JwtPayload;
-}
+import { CustomRequest } from "../middleware/auth";
 
 export const getResources = async (req: CustomRequest, res: Response, next: NextFunction):Promise<Response|void> => {
     try {
@@ -41,7 +38,6 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
             title: resource.rId.title,
             description: resource.rId.description,
             blur_url: resource.rId.blur_url,
-            // access: resource.access
         }));
 
         const grpResourceIds = new Set((plan.grpId as any).resources.map((resource: any) => resource.rId._id.toString()));
@@ -72,7 +68,7 @@ export const accessResource = async (req: CustomRequest, res: Response, next:Nex
         // console.log("founduser in resources: ", foundUser)
 
         if(!foundUser){
-            return next({status: 500, message: "Transaction record not found. Subscribe to a plan"})
+            return next({status: 500, message: "Transaction record not found"})
         } 
 
         const resource = foundUser.leftResources.find(resource => resource.rId.equals(req.body.imageId));

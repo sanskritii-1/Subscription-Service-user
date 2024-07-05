@@ -7,11 +7,8 @@ import UserResource, { IUserResources } from '../models/userResource';
 import {success,error} from "../utils/response"
 import mongoose from 'mongoose';
 import ResourceGrp, { IResourceGrp } from '../models/resourceGrp';
+import { CustomRequest } from '../middleware/auth';
 
-
-interface CustomRequest extends Request {
-    id?: string | JwtPayload;
-}
 
 const addUserResource = async (userId: string, grpId: mongoose.Types.ObjectId | IResourceGrp) => {
     try {
