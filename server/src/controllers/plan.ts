@@ -7,14 +7,18 @@ import { allPlans } from "../data/plans";
 import {success,error} from "../utils/response"
 import mongoose from "mongoose";
 import { CustomRequest } from "../middleware/auth";
+import { CustomError } from "../middleware/error";
 
 export const getPlans = async (req: Request, res: Response, next: NextFunction):Promise<Response|void> => {
   try {
     // await Plan.insertMany(allPlans);
     const plans = await Plan.find();
     if (plans.length == 0) {
-      return next({status: 500, message: "No subscription plans found"})
+      const err:CustomError = new Error('No subscription plans found');
+      err.status = 500;
+      return next(err);
     }
+
     return res.status(200).json(success(200, {plans}));
   }
   catch (error) {
@@ -31,7 +35,9 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response, next: Ne
     const subscription = await Subscription.findOne({ userId }).sort({startDate:-1});
 
     if (!subscription) {
-      return next({status: 404, message: 'Subscribe to a plan'})
+      const err:CustomError = new Error('Subscribe to a plan');
+      err.status = 404;
+      return next(err);
     }
 
     const planId = subscription.planId as unknown as string;;

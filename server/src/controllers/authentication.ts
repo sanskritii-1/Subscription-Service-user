@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { generateAccessToken } from "../middleware/auth";
 import { JwtPayload } from "jsonwebtoken";
 import {success,error} from "../utils/response"
-
+import { CustomError } from "../middleware/error";
 
 export const register = async (req: Request, res: Response, next: NextFunction):Promise<Response|void> => {
     try {        
@@ -11,7 +11,9 @@ export const register = async (req: Request, res: Response, next: NextFunction):
 
         const foundUser = await User.findOne<IUser>({email: data.email});
         if(foundUser){
-            return next({status: 409, message: "User already registered"})
+            const err:CustomError = new Error('User already registered');
+            err.status = 409;
+            return next(err);
         }
 
         const newUser = new User(data);
@@ -31,7 +33,9 @@ export const login = async (req: Request, res:Response, next:NextFunction):Promi
 
         const user = await User.findOne<IUser>({ email });
         if (!user || !(await user.comparePassword(password))){
-            return next({status: 400, message: "Incorrect email or password"})
+            const err:CustomError = new Error('Incorrect email or password')
+            err.status = 400;
+            return next(err);
         }
 
         const payload:JwtPayload={

@@ -8,7 +8,7 @@ import {success,error} from "../utils/response"
 import mongoose from 'mongoose';
 import ResourceGrp, { IResourceGrp } from '../models/resourceGrp';
 import { CustomRequest } from '../middleware/auth';
-
+import { CustomError } from '../middleware/error';
 
 const addUserResource = async (userId: string, grpId: mongoose.Types.ObjectId | IResourceGrp) => {
     try {
@@ -35,20 +35,26 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
         const plan = await Plan.findById<IPlan>(planId);
 
         if (!user) {
-            return next({ status: 404, message: "User not found" });
+            const err:CustomError = new Error('User not found');
+            err.status = 500;
+            return next(err);
         }
 
         if (!plan) {
-            return next({ status: 404, message: "Plan not found" });
+            const err:CustomError = new Error('Plan not found');
+            err.status = 500;
+            return next(err);
         }
-
+        
         const prevTransact = await Subscription.findOne<ISubscription>({userId: userId}).sort({startDate:-1});
         
         if(plan.price!==0 || !prevTransact || new Date(prevTransact.endDate) < new Date()){
             await addUserResource(userId, plan.grpId);
         }
         else{
-            return next({status: 409, message:"Already subscribed a free or any another plan.\nConsider unsubscribing"})
+            const err:CustomError = new Error('Already subscribed to a plan.\nConsider unsubscribing');
+            err.status = 409;
+            return next(err);
         }
 
 
@@ -92,13 +98,17 @@ export const unsubscribe = async (req: CustomRequest, res: Response, next: NextF
         // }
 
         if (plan?.price === 0) {
-            return next({ status: 400, message: "Cannot unsubscribe to a free plan" });
+            const err:CustomError = new Error('Cannot unsubscribe to a free plan');
+            err.status = 400;
+            return next(err);
         }
-
+        
         const freePlan = await Plan.findOne<IPlan>({ price: 0 });
-
+        
         if (!freePlan) {
-            return next({ status: 500, message: "No free plan found" })
+            const err:CustomError = new Error('No free plan found');
+            err.status = 500;
+            return next(err);
         }
 
         const startDate = new Date();

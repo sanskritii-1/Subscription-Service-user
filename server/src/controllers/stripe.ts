@@ -10,7 +10,7 @@ const stripe = new Stripe('sk_test_51POayCP5gAI9NfaClujHfCfssJYtu7fQ30mlnZ29Bk2H
   apiVersion: '2024-06-20'
 });
 
-export const createPaymentIntent = async (req: CustomRequest, res: Response): Promise<void> => {
+export const createPaymentIntent = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
   const { amount } = req.body;
 
   try {
@@ -34,12 +34,7 @@ export const createPaymentIntent = async (req: CustomRequest, res: Response): Pr
       clientSecret: paymentIntent.client_secret,
     });
   } catch (error) {
-    console.error('Error creating PaymentIntent:', error); // Log the error details
-    if (error instanceof Error) {
-      res.status(500).send({ error: error.message });
-    } else {
-      res.status(500).send({ error: 'An unknown error occurred' });
-    }
+    next(error);
   }
 };
 
@@ -59,9 +54,7 @@ export const webhook = async (req: Request, res: Response, next: NextFunction) =
     const endpointSecret = getEnvVariable(config.WEBHOOK_SECRET);
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
   } catch (err: any) {
-    console.log("in webhook catch", err.message)
-    res.status(400).send(`Webhook Error: ${err.message}`);
-    return;
+    return next(err);
   }
 
   let paymentIntent = event.data.object as Stripe.PaymentIntent;

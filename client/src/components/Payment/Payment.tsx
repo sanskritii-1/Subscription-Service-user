@@ -31,7 +31,6 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, 
       navigate('/resources');
     } catch (error) {
       console.error('Error subscribing to plan:', error);
-      toast.error('Failed to subscribe. Please try again.');
     }
   };
 

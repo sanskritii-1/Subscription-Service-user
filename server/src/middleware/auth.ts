@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { getEnvVariable } from "../utils";
 import { config } from "../config/appConfig";
+import { CustomError } from "./error";
 
 declare module "jsonwebtoken" {
     export interface JwtPayload {
@@ -22,7 +23,9 @@ export const authMiddleware = (req: CustomRequest, res:Response, next: NextFunct
         const authHeader = req.headers['authorization'];
         const token = authHeader?.split(' ')[1];
         if(!token){
-            return next({status:401, message: "Token not found: Unauthorised access"})
+            const err:CustomError = new Error('Unauthorised access');
+            err.status = 401;
+            return next(err);
         }
         
         // checking validity of access token and adding payload (user info) to req

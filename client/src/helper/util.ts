@@ -30,7 +30,8 @@ export function useSendData() {
 
       if(data.code===401){
         toast.error('Unathorised Access')
-        return navigate('/login')
+        navigate('/login')
+        throw new Error(data.message || 'Unauthorised access')
       }
       if (!response.ok) {
         toast.error(data.message || 'An error occurred');

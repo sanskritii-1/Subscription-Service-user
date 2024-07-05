@@ -32,7 +32,7 @@ export interface CustomError extends Error {
 export const ErrorMiddleware = (err: CustomError, req: Request, res: Response, next: NextFunction) => {
     logger.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
     const status = err.status || 500;
-    let msg = err.message || "Internal Server Error";
+    let msg = err.message;
     if(err.status===500){
         msg = "Some error occured"
     }

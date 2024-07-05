@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import { IUser } from '../models/user';
 import { JwtPayload } from 'jsonwebtoken';
 import Subscription, {ISubscription} from '../models/subscription';
 import Plan, { IPlan } from '../models/plan';

@@ -65,15 +65,19 @@ const Subscriptions: React.FC = () => {
 
     } catch (error) {
       console.error('Error subscribing to plan:', error);
-      toast.error('Failed to subscribe. Please try again.');
     }
   };
   
   const subscribeHandler = async (planId: string) => {
+    try {
       const resData = await sendData("POST", "/subscribe", true, {
         planId: planId,
       });
-      navigate('/resources');
+      navigate('/resources'); 
+    } 
+    catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSearch = (query: string) => {

@@ -7,6 +7,7 @@ import {success,error} from "../utils/response"
 import Plan from "../models/plan";
 import Subscription from "../models/subscription";
 import { CustomRequest } from "../middleware/auth";
+import { CustomError } from "../middleware/error";
 
 export const getResources = async (req: CustomRequest, res: Response, next: NextFunction):Promise<Response|void> => {
     try {
@@ -30,7 +31,9 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
         }).exec();
 
         if (!plan){
-            return next({status:500, message: "Plan not found"})
+            const err:CustomError = new Error('Plan not found');
+            err.status = 500;
+            return next(err);
         }
 
         const resourcesAccessible = (plan.grpId as any).resources.map((resource: any) => ({
@@ -68,27 +71,35 @@ export const accessResource = async (req: CustomRequest, res: Response, next:Nex
         // console.log("founduser in resources: ", foundUser)
 
         if(!foundUser){
-            return next({status: 500, message: "Transaction record not found"})
+            const err:CustomError = new Error('Transaction record not found');
+            err.status = 500;
+            return next(err);
         } 
 
         const resource = foundUser.leftResources.find(resource => resource.rId.equals(req.body.imageId));
 
         if(!resource){
-            return next({status: 400, message: "Subscribe to a higher tier"})
+            const err:CustomError = new Error('Subscribe to a higher tier');
+            err.status = 400;
+            return next(err);
         }
-
+        
         if(resource.access === 0){
-            return next({status: 403, message: "Cannot access anymore resources"})
+            const err:CustomError = new Error('Cannot access anymore resources');
+            err.status = 403;
+            return next(err);
         }
-
+        
         if(resource.access > 0){
             await UserResource.updateOne({userId: userId.id, "leftResources.rId": req.body.imageId}, {$inc: {"leftResources.$.access":-1}});
         }
-
+        
         const image_details = await Resource.findOne<IResource>({_id:req.body.imageId});
-
+        
         if(!image_details){
-            return next({status:404, message: "Resource not found"})
+            const err:CustomError = new Error('Resource not found');
+            err.status = 404;
+            return next(err);
         }
 
         return res.status(200).json(success(200,{url: image_details.url}));
