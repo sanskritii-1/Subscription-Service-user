@@ -3,8 +3,6 @@ import Header from './Header';
 import './Subscription.css';
 import { useSendData } from '../../helper/util';
 import { useNavigate } from 'react-router-dom';
-import { useSendData2 } from '../../helper/util2';
-import toast from 'react-hot-toast';
 import Payment from '../Payment/Payment'
 
 const Subscriptions: React.FC = () => {
@@ -13,7 +11,6 @@ const Subscriptions: React.FC = () => {
   const [paymentDetails, setPaymentDetails] = useState({ amount: 0, planId: '', clientSecret: '' });
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
   const sendData = useSendData();
-  const sendData2 = useSendData2();
   const [filteredSubscriptions, setFilteredSubscriptions] = useState<any[]>([]);
 
   useEffect(() => {
@@ -47,7 +44,7 @@ const Subscriptions: React.FC = () => {
         return;
       }
   
-      const response = await sendData2("POST", "create-payment-intent", true, {
+      const response = await sendData("POST", "create-payment-intent", true, {
         amount: selectedSubscription.price,
         planId
       });

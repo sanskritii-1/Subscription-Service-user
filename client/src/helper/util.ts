@@ -38,7 +38,7 @@ export function useSendData() {
         throw new Error(data.message || 'An error occurred');
       }
 
-      if (data.status === 'ok'&& data.result.message) {
+      if (data.status === 'ok' && data.result.message) {
         toast.success(data.result.message || 'Operation successful');
       }
 
