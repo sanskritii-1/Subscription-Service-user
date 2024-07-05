@@ -1,14 +1,14 @@
 import React from "react";
 import "./App.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/Login";
+import SignupPage from "./pages/Signup";
 import HomePage from "./pages/Home";
 import TestPage from "./pages/Test";
-import PaymentHistoryPage from "./pages/PaymentHistoryPage";
-import CurrentPlanPage from "./pages/CurrentPlanPage";
-import SubscriptionPage from "./pages/Subscription_Page";
-import ResourcePage from "./pages/Resources";
+import PaymentHistoryPage from "./pages/PaymentHistory";
+import CurrentPlanPage from "./pages/CurrentPlan";
+import SubscriptionPage from "./pages/Subscription";
+import ResourcePage from "./pages/Resource";
 
 function App() {
   const routers = createBrowserRouter([
