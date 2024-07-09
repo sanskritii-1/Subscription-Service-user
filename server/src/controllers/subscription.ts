@@ -9,6 +9,7 @@ import mongoose from 'mongoose';
 import ResourceGrp, { IResourceGrp } from '../models/resourceGrp';
 import { CustomRequest } from '../middleware/auth';
 import { CustomError } from '../middleware/error';
+import {sendEmail} from "../mailer"
 
 const addUserResource = async (userId: string, grpId: mongoose.Types.ObjectId | IResourceGrp) => {
     try {
@@ -75,6 +76,18 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
         });
 
         await newSubscription.save();
+             
+        //EMAIL NOTIFICATION
+        const email= user.email;
+        const name =user.name;
+        const planName=plan.name;
+
+        await sendEmail({
+            to: email,
+            subject: 'Plan Purchase Confirmation',
+            text: `Hi ${name}, You have successfully purchased the ${planName} plan.`
+        });
+
 
         return res.status(201).json(success(201, { message: 'Subscription purchased successfully' }));
     } catch (err) {
@@ -88,6 +101,10 @@ export const unsubscribe = async (req: CustomRequest, res: Response, next: NextF
         const planName = req.body.planName;
         // const leftResources = req.body.leftResources;
         const payloadData = <JwtPayload>req.id;
+        const userId = payloadData.id;
+
+        const user = await User.findById<IUser>(userId);
+
 
         const plan = await Plan.findOne<IPlan>({ name: planName });
 
@@ -129,6 +146,19 @@ export const unsubscribe = async (req: CustomRequest, res: Response, next: NextF
         //     await UserResource.updateOne<IUserResources>({ userId: payloadData.id }, { $set: { leftResources: freePlan.resources } });
         // }
         addUserResource(payloadData.id, freePlan.grpId);
+
+         //EMAIL NOTIFICATION
+         if(user){
+            const email= user.email;
+            const name= user.name;
+
+          await sendEmail({
+            to: email,
+            subject: 'Plan unsubscribed successfully',
+            text: `Hi ${name}, This is confirmation mail that you have unsubscribed the ${planName} plan.`
+        });
+        }
+
 
         return res.status(201).json(success(201, { message: 'Successfully unsubscribed' }));
     }
