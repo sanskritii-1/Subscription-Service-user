@@ -2,11 +2,11 @@ import { NextFunction, Request, Response } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 import Subscription, {ISubscription} from '../models/subscription';
 import Plan, { IPlan } from '../models/plan';
-import {success,error} from "../utils/response"
-import { CustomRequest } from '../middleware/auth';
+import {success} from "../utils/response"
+import { CustomRequest } from '../middlewares/auth';
 
 export const getPaymentHistory = async (req: CustomRequest, res: Response, next:NextFunction) => {
-  const userId = <JwtPayload>req.id; // Assuming user ID is stored in req.user
+  const userId = <JwtPayload>req.id;
 
   try {
     const paymentHistory = await Subscription.find<ISubscription>({ userId: userId.id });

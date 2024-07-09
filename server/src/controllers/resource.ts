@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import Resource, { IResource } from "../models/resource";
-import {images} from "../data/images";
 import UserResource, { IUserResources } from "../models/userResource";
-import {success,error} from "../utils/response"
+import {success} from "../utils/response"
 import Plan from "../models/plan";
 import Subscription from "../models/subscription";
-import { CustomRequest } from "../middleware/auth";
-import { CustomError } from "../middleware/error";
+import { CustomRequest } from "../middlewares/auth";
+import { CustomError } from "../middlewares/error";
 
 export const getResources = async (req: CustomRequest, res: Response, next: NextFunction):Promise<Response|void> => {
     try {

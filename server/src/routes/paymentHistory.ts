@@ -1,6 +1,6 @@
 import express from 'express';
 import { getPaymentHistory } from '../controllers/paymentHistory';
-import { authMiddleware } from '../middleware/auth';
+import { authMiddleware } from '../middlewares/auth';
 
 const router = express.Router();
 

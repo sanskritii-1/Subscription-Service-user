@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getPlans } from '../controllers/plan';
 import { getCurrentPlan} from '../controllers/plan';
-import { authMiddleware } from "../middleware/auth";
+import { authMiddleware } from "../middlewares/auth";
 
 const router = Router();
 

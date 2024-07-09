@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { CustomError } from "../middleware/error";
+import { CustomError } from "./error";
 import Joi from "joi";
 
 export const ValidationMiddleware = (schema: Joi.Schema) => {

@@ -1,8 +1,8 @@
 import express from 'express';
 import { createPaymentIntent, webhook } from '../controllers/stripe';
-import { authMiddleware } from '../middleware/auth';
+import { authMiddleware } from '../middlewares/auth';
 import { paymentValidationSchema } from '../validations/schemas';
-import { ValidationMiddleware } from '../middleware/validation';
+import { ValidationMiddleware } from '../middlewares/validation';
 
 const router = express.Router();
 

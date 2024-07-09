@@ -1,7 +1,7 @@
 import { getResources, accessResource } from "../controllers/resource";
 import express from "express";
-import { authMiddleware } from "../middleware/auth";
-import { ValidationMiddleware } from "../middleware/validation";
+import { authMiddleware } from "../middlewares/auth";
+import { ValidationMiddleware } from "../middlewares/validation";
 import { accessResourceValidationSchema } from "../validations/schemas";
 
 const router = express.Router();

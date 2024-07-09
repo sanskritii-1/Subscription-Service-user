@@ -1,14 +1,14 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import Subscription, { ISubscription } from '../models/subscription';
 import Plan, { IPlan } from '../models/plan';
 import User, { IUser } from '../models/user';
 import { JwtPayload } from 'jsonwebtoken';
-import UserResource, { IUserResources } from '../models/userResource';
-import {success,error} from "../utils/response"
+import UserResource from '../models/userResource';
+import {success} from "../utils/response"
 import mongoose from 'mongoose';
 import ResourceGrp, { IResourceGrp } from '../models/resourceGrp';
-import { CustomRequest } from '../middleware/auth';
-import { CustomError } from '../middleware/error';
+import { CustomRequest } from '../middlewares/auth';
+import { CustomError } from '../middlewares/error';
 
 const addUserResource = async (userId: string, grpId: mongoose.Types.ObjectId | IResourceGrp) => {
     try {
@@ -36,13 +36,13 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
 
         if (!user) {
             const err:CustomError = new Error('User not found');
-            err.status = 500;
+            err.status = 404;
             return next(err);
         }
 
         if (!plan) {
             const err:CustomError = new Error('Plan not found');
-            err.status = 500;
+            err.status = 404;
             return next(err);
         }
         
@@ -107,7 +107,7 @@ export const unsubscribe = async (req: CustomRequest, res: Response, next: NextF
         
         if (!freePlan) {
             const err:CustomError = new Error('No free plan found');
-            err.status = 500;
+            err.status = 404;
             return next(err);
         }
 

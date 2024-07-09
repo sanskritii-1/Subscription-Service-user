@@ -4,7 +4,7 @@ import Transaction from '../models/transaction';
 import { JwtPayload } from 'jsonwebtoken';
 import { config } from '../config/appConfig';
 import { getEnvVariable } from '../utils';
-import { CustomRequest } from '../middleware/auth';
+import { CustomRequest } from '../middlewares/auth';
 import { success } from '../utils/response';
 
 const stripe = new Stripe('sk_test_51POayCP5gAI9NfaClujHfCfssJYtu7fQ30mlnZ29Bk2HfoiusIDHCDsJCBATmkMFUHoOgwEMhTWVwSCBvWozdqDn00tnni3x0Z', {

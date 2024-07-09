@@ -2,20 +2,18 @@ import { NextFunction, Request, Response } from "express";
 import Plan, { IPlan } from "../models/plan";
 import Subscription, { ISubscription } from "../models/subscription";
 import { JwtPayload } from "jsonwebtoken";
-import UserResource, { IUserResources } from "../models/userResource";
-import { allPlans } from "../data/plans";
-import {success,error} from "../utils/response"
+import UserResource from "../models/userResource";
+import {success} from "../utils/response"
 import mongoose from "mongoose";
-import { CustomRequest } from "../middleware/auth";
-import { CustomError } from "../middleware/error";
+import { CustomRequest } from "../middlewares/auth";
+import { CustomError } from "../middlewares/error";
 
 export const getPlans = async (req: Request, res: Response, next: NextFunction):Promise<Response|void> => {
   try {
-    // await Plan.insertMany(allPlans);
     const plans = await Plan.find();
     if (plans.length == 0) {
       const err:CustomError = new Error('No subscription plans found');
-      err.status = 500;
+      err.status = 404;
       return next(err);
     }
 
@@ -32,7 +30,7 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response, next: Ne
     // console.log("hi", req.id);
     const userId = (req.id as JwtPayload).id as string;
     // console.log(userId);
-    const subscription = await Subscription.findOne({ userId }).sort({startDate:-1});
+    const subscription = await Subscription.findOne<ISubscription>({ userId }).sort({startDate:-1});
 
     if (!subscription) {
       const err:CustomError = new Error('Subscribe to a plan');

@@ -1,9 +1,9 @@
 import User, { IUser } from "../models/user";
 import { NextFunction, Request, Response } from "express";
-import { generateAccessToken } from "../middleware/auth";
+import { generateAccessToken } from "../middlewares/auth";
 import { JwtPayload } from "jsonwebtoken";
-import {success,error} from "../utils/response"
-import { CustomError } from "../middleware/error";
+import {success} from "../utils/response"
+import { CustomError } from "../middlewares/error";
 
 export const register = async (req: Request, res: Response, next: NextFunction):Promise<Response|void> => {
     try {        

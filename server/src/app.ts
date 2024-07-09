@@ -6,7 +6,7 @@ import paymentHistoryRoutes from './routes/paymentHistory';
 import resourceRoute from './routes/resource';
 import planRoute from './routes/plan'
 import subscriptionRoutes from './routes/subscription';
-import { ErrorMiddleware } from './middleware/error';
+import { ErrorMiddleware } from './middlewares/error';
 import stripeRoutes from './routes/stripe';
 
 // Create an Express application
@@ -30,7 +30,7 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Hello, TypeScript + Node.js + Express!');
 });
 
-import { authMiddleware } from './middleware/auth';
+import { authMiddleware } from './middlewares/auth';
 app.get('/protected', authMiddleware, (req: Request, res: Response) => {
     res.send('Hello, from protected route');
 });

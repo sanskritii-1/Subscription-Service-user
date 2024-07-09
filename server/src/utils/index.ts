@@ -1,5 +1,4 @@
-import { config } from "../config/appConfig";
-import { CustomError } from "../middleware/error";
+import { CustomError } from "../middlewares/error";
 
 export const getEnvVariable = (val: string|undefined):string => {
     if(!val){
