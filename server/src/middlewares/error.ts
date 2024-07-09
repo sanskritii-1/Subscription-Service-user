@@ -12,7 +12,7 @@ if (!fs.existsSync(logDir)) {
 
 const transport: DailyRotateFile = new DailyRotateFile({
     filename: path.join(logDir, 'application-%DATE%.log'),
-    datePattern: 'YYYY-MM-DD-HH',
+    datePattern: 'YYYY-MM-DD',
     zippedArchive: true,
     maxSize: '20m',
     maxFiles: '14d'

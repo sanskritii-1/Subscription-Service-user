@@ -4,6 +4,7 @@ import { generateAccessToken } from "../middlewares/auth";
 import { JwtPayload } from "jsonwebtoken";
 import {success} from "../utils/response"
 import { CustomError } from "../middlewares/error";
+import {sendEmail} from "../mailer"
 
 export const register = async (req: Request, res: Response, next: NextFunction):Promise<Response|void> => {
     try {        
@@ -11,16 +12,26 @@ export const register = async (req: Request, res: Response, next: NextFunction):
 
         const foundUser = await User.findOne<IUser>({email: data.email});
         if(foundUser){
-            const err:CustomError = new Error('User already registered');
-            err.status = 409;
-            return next(err);
+            return next({status: 409, message: "User already registered"})
         }
 
         const newUser = new User(data);
         const userData: IUser = await newUser.save();
+
+        // EMAIL NOTIFICATION
+
+        const email=data.email;
+        const name=data.name;
+
+        await sendEmail({
+            to: email,
+            subject: 'Welcome to Our Service',
+            text: `Hi ${name}, thank you for registering with us.`
+        });
         
         // return res.status(201).json({msg: "User created"});
         return res.status(201).json(success(201, {message: "Registration Successful"}));
+
     } 
     catch (err) {
         next(err)
