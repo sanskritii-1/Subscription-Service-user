@@ -88,7 +88,6 @@ const Subscriptions: React.FC = () => {
     <div className='subscriptions-container'>
       <Header onSearch={handleSearch} />
       <h2 className='subscriptions-header'>Available Subscriptions :</h2>
-      <br></br>
       <div className='cards'>
 
         {filteredSubscriptions.length === 0 ? subscriptions.map((subscription) => (

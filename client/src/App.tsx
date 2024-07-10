@@ -9,9 +9,14 @@ import PaymentHistoryPage from "./pages/PaymentHistory";
 import CurrentPlanPage from "./pages/CurrentPlan";
 import SubscriptionPage from "./pages/Subscription";
 import ResourcePage from "./pages/Resource";
+import PageNotFound from "./components/PageNotFound/PageNotFound";
 
 function App() {
   const routers = createBrowserRouter([
+    {
+      path: "*",
+      element: <PageNotFound/>,
+    },
     {
       path: "/",
       element: <HomePage />,

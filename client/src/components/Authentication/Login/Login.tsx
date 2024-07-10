@@ -60,7 +60,7 @@ const Login: React.FC = () => {
             <button type="submit">Login</button>
           </div>
           <div>
-            <Link to="/register" className={classes.link}>
+            <Link to="/register" style={{"color":"white"}} className={classes.link}>
               Don't have an account? Create one!
             </Link>
           </div>

@@ -3,7 +3,6 @@ import ImageCard from './ImageCard';
 import styles from './Resource.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useSendData } from '../../helper/util';
-// import { sendData } from '../../helper/util';
 
 interface resource {
   _id: string,
@@ -61,7 +60,7 @@ const Resources: React.FC = () => {
           {inaccessible.length !== 0 &&
             <div className={styles.outGrp}>
 
-              <h1 className={styles.heading}>Inaccessible Resources</h1>
+              <h1 className={styles.heading}>Subscribe to the higher plan to view the following resources</h1>
               <div className={styles.container}>
                 {inaccessible.map((image, index) => (
                   <ImageCard
