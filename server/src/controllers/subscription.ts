@@ -15,10 +15,14 @@ import Transaction, { ITransaction } from '../models/transaction';
 const addUserResource = async (userId: string, grpId: mongoose.Types.ObjectId | IResourceGrp) => {
     try {
         const grp = await ResourceGrp.findOne<IResourceGrp>({ _id: grpId })
-
+        if(!grp){
+            const err: CustomError = new Error("Resource for the group not found");
+            err.status = 404;
+            throw err;
+        }
         await UserResource.findOneAndUpdate(
             { userId: userId },
-            { $set: { leftResources: grp?.resources } },
+            { $set: { leftResources: grp.resources } },
             { upsert: true }
         )
     }

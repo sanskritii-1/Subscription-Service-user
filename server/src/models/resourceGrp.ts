@@ -1,7 +1,8 @@
 import mongoose, { Document, Schema, model } from "mongoose";
+import { IResource } from "./resource";
 
-interface IResourceAccess {
-    rId: mongoose.Types.ObjectId;
+export interface IResourceAccess {
+    rId: mongoose.Types.ObjectId | IResource;
     access: number;
 }
 

@@ -8,7 +8,8 @@ import Subscription from "../models/subscription";
 import { CustomRequest } from "../middlewares/auth";
 import { CustomError } from "../middlewares/error";
 import mongoose from "mongoose";
-import { IResourceGrp } from "../models/resourceGrp";
+import { IResourceAccess, IResourceGrp } from "../models/resourceGrp";
+import ResourceAnalytic, { IResourceAnalytic } from "../models/resourceAnalytic";
 
 interface resourceType{
     _id: mongoose.Types.ObjectId,
@@ -48,18 +49,18 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
             return next(err);
         }
 
-        const resourcesAccessible = (plan.grpId as any).resources.map((resource: grpType) => ({
+        const resourcesAccessible = (plan.grpId as IResourceGrp).resources.map((resource:IResourceAccess) => ({
             _id: resource.rId._id,
-            title: resource.rId.title,
-            description: resource.rId.description,
-            blur_url: resource.rId.blur_url,
+            title: (resource.rId as IResource).title,
+            description: (resource.rId as IResource).description,
+            blur_url: (resource.rId as IResource).blur_url,
         }));
 
-        const grpResourceIds = new Set((plan.grpId as IResourceGrp).resources.map((resource) => resource.rId._id.toString()));
+        const grpResourceIds = new Set((plan.grpId as IResourceGrp).resources.map((resource: IResourceAccess) => resource.rId._id));
         
         const resourcesInaccessible = allResources
-            .filter((resource:any) => !grpResourceIds.has(resource._id.toString()))
-            .map((resource:any) => ({
+            .filter((resource:IResource) => !grpResourceIds.has(resource._id))
+            .map((resource:IResource) => ({
                 _id: resource._id,
                 title: resource.title,
                 description: resource.description,
@@ -105,6 +106,7 @@ export const accessResource = async (req: CustomRequest, res: Response, next:Nex
         if(resource.access > 0){
             await UserResource.updateOne({userId: userId.id, "leftResources.rId": req.body.imageId}, {$inc: {"leftResources.$.access":-1}});
         }
+
         
         const image_details = await Resource.findOne<IResource>({_id:req.body.imageId});
         
@@ -114,6 +116,12 @@ export const accessResource = async (req: CustomRequest, res: Response, next:Nex
             return next(err);
         }
 
+        await ResourceAnalytic.findOneAndUpdate(
+            { resourceId: image_details._id },
+            { $inc: { usage: 1 } },
+            { upsert: true }
+        )
+        
         return res.status(200).json(success(200,{url: image_details.url}));
 
     } 

@@ -1,8 +1,10 @@
 import mongoose, { Document } from "mongoose";
+import { IUser } from "./user";
+import { IPlan } from "./plan";
 
 export interface ITransaction extends Document{
-    userId: mongoose.Types.ObjectId,
-    planId: mongoose.Types.ObjectId,
+    userId: mongoose.Types.ObjectId | IUser,
+    planId: mongoose.Types.ObjectId | IPlan,
     paymentIntentId: string,
     amount: number,
     paymentMethod: string,
@@ -10,7 +12,7 @@ export interface ITransaction extends Document{
     receipt: string,
 }
 
-const transactionSchema = new mongoose.Schema({
+const transactionSchema = new mongoose.Schema<ITransaction>({
     userId:{
         type: mongoose.Types.ObjectId,
         required: true,
@@ -45,6 +47,6 @@ const transactionSchema = new mongoose.Schema({
     timestamps: true,
 })
 
-const Transaction = mongoose.model('Transaction', transactionSchema);
+const Transaction = mongoose.model<ITransaction>('Transaction', transactionSchema);
 
 export default Transaction;
