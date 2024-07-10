@@ -29,7 +29,6 @@ export const register = async (req: Request, res: Response, next: NextFunction):
             text: `Hi ${name}, thank you for registering with us.`
         });
         
-        // return res.status(201).json({msg: "User created"});
         return res.status(201).json(success(201, {message: "Registration Successful"}));
 
     } 
@@ -43,8 +42,13 @@ export const login = async (req: Request, res:Response, next:NextFunction):Promi
         const{email,password} = req.body;
 
         const user = await User.findOne<IUser>({ email });
-        if (!user || !(await user.comparePassword(password))){
-            const err:CustomError = new Error('Incorrect email or password')
+        if (!user){
+            const err:CustomError = new Error('User not registered');
+            err.status = 401;
+            return next(err);
+        }
+        if(!(await user.comparePassword(password))){
+            const err:CustomError = new Error('Incorrect email or password');
             err.status = 400;
             return next(err);
         }
@@ -56,7 +60,6 @@ export const login = async (req: Request, res:Response, next:NextFunction):Promi
 
         const accessToken:string = generateAccessToken(payload);
         
-        // return res.status(200).json({token: accessToken});
         return res.status(200).json(success(200, { token: accessToken ,message:"Login Successful"}));
     } 
     catch (error) {

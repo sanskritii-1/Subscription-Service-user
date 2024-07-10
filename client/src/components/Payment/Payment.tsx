@@ -64,10 +64,7 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, 
       toast.error(error.message || 'Payment failed\nTry again')
     }  else if (paymentIntent && paymentIntent.status === 'succeeded') {
       onClose();
-      toast.success('Payment successful!');
-      setTimeout(async () => {
         await subscribeHandler(planId);
-      }, 2000);
     } 
     // else {
     //   console.error('Payment failed');

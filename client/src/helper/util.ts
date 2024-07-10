@@ -29,7 +29,7 @@ export function useSendData() {
       // console.log('data received util: ', data);
 
       if(data.code===401){
-        toast.error('Unathorised Access')
+        toast.error(data.message || 'Unathorised Access')
         navigate('/login')
         throw new Error(data.message || 'Unauthorised access')
       }

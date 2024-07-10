@@ -53,10 +53,10 @@ export default function CurrentPlan() {
       {(
         <div className={classes.planContainer}>
           {!currentPlan ? (
-            <h1 style={{ color: "white" }}>Not Subscribed to any Plan</h1>
+            <h1 style={{ color: "#7e2a14" }}>Not Subscribed to any Plan</h1>
           ) : (
             <>
-              <h1 style={{ color: "black" }}>{currentPlan.planName} Plan</h1>
+              <h1 style={{ color: "#7e2a14" }}>{currentPlan.planName} Plan</h1>
               <p>Purchase Date: {currentPlan.purchaseDate}</p>
               <p>Duration: {currentPlan.duration} Months</p>
               <p>Remaining Access: </p>

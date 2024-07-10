@@ -17,7 +17,7 @@ export const getPaymentHistory = async (req: CustomRequest, res: Response, next:
       response.push({
         amount: plan?.price,
         name: plan?.name,
-        date: new Date(ele.startDate).toLocaleDateString(),
+        date: new Date(ele.startDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }),
       })
     }
     return res.status(200).json(success(200,{response}));

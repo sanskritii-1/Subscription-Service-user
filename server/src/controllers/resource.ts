@@ -7,6 +7,19 @@ import Plan from "../models/plan";
 import Subscription from "../models/subscription";
 import { CustomRequest } from "../middlewares/auth";
 import { CustomError } from "../middlewares/error";
+import mongoose from "mongoose";
+import { IResourceGrp } from "../models/resourceGrp";
+
+interface resourceType{
+    _id: mongoose.Types.ObjectId,
+    title: string,
+    description: string,
+    blur_url: string,
+}
+interface grpType{
+    rId: resourceType,
+    access: number,
+}
 
 export const getResources = async (req: CustomRequest, res: Response, next: NextFunction):Promise<Response|void> => {
     try {
@@ -27,22 +40,22 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
                 path: 'resources.rId', 
                 model: 'Resource' 
             }
-        }).exec();
+        });
 
         if (!plan){
             const err:CustomError = new Error('Plan not found');
-            err.status = 500;
+            err.status = 404;
             return next(err);
         }
 
-        const resourcesAccessible = (plan.grpId as any).resources.map((resource: any) => ({
+        const resourcesAccessible = (plan.grpId as any).resources.map((resource: grpType) => ({
             _id: resource.rId._id,
             title: resource.rId.title,
             description: resource.rId.description,
             blur_url: resource.rId.blur_url,
         }));
 
-        const grpResourceIds = new Set((plan.grpId as any).resources.map((resource: any) => resource.rId._id.toString()));
+        const grpResourceIds = new Set((plan.grpId as IResourceGrp).resources.map((resource) => resource.rId._id.toString()));
         
         const resourcesInaccessible = allResources
             .filter((resource:any) => !grpResourceIds.has(resource._id.toString()))
@@ -71,7 +84,7 @@ export const accessResource = async (req: CustomRequest, res: Response, next:Nex
 
         if(!foundUser){
             const err:CustomError = new Error('Transaction record not found');
-            err.status = 500;
+            err.status = 404;
             return next(err);
         } 
 

@@ -26,7 +26,7 @@ body {
   border: 3px solid #000000;
   border-radius: 8px;
   padding: 10px;
-  flex: 0 1 calc(25% - 20px); 
+  flex: 0 1 calc(25% - 20px);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -67,7 +67,7 @@ body {
 }
 
 .card-button {
-  background-color: #ff007f; /* Pink color for the button */
+  background-color: #ff007f;
   color: white;
   border: none;
   padding: 15px 20px;
@@ -75,7 +75,7 @@ body {
   cursor: pointer;
   font-size: 16px;
   text-transform: uppercase;
-  margin: 20px; 
+  margin: 20px;
 }
 
 .card-button:hover {
@@ -84,26 +84,25 @@ body {
 
 @media (max-width: 1200px) {
   .card {
-    flex: 0 1 calc(33.333% - 20px); /* Three cards per row on medium screens */
+    flex: 0 1 calc(33.333% - 20px);
   }
 }
 
 @media (max-width: 768px) {
   .card {
-    flex: 0 1 calc(50% - 20px); /* Two cards per row on smaller screens */
+    flex: 0 1 calc(50% - 20px);
   }
 }
 
 @media (max-width: 480px) {
   .card {
-    flex: 0 1 100%; /* One card per row on very small screens */
+    flex: 0 1 100%;
   }
 }
 
 .Subscription_Page {
-  /* background-image: url("https://images.saymedia-content.com/.image/t_share/MTkyOTkyMzE2OTQ3MDQ3NjQ1/website-background-templates.png"); */
-  background-position: center; 
-  min-height: 100vh; 
+  background-position: center;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: #efe3e3;
