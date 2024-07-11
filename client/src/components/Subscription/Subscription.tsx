@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from './Header';
-import './Subscription.css';
+import classes from './Subscription.module.css';
 import { useSendData } from '../../helper/util';
 import { useNavigate } from 'react-router-dom';
 import Payment from '../Payment/Payment'
@@ -85,22 +85,22 @@ const Subscriptions: React.FC = () => {
   };
 
   return (
-    <div className='subscriptions-container'>
+    <div className={classes.subscriptionsContainer}>
       <Header onSearch={handleSearch} />
-      <h2 className='subscriptions-header'>Available Subscriptions :</h2>
-      <div className='cards'>
+      <h2 className={classes.subscriptionsHeader}>Available Subscriptions :</h2>
+      <div className={classes.cards}>
 
         {filteredSubscriptions.length === 0 ? subscriptions.map((subscription) => (
-          <div key={subscription._id} className='card'>
-            <div className="card-header">
+          <div key={subscription._id} className={classes.card}>
+            <div className={classes.cardHeader}>
               <h3>{subscription.name}</h3>
             </div>
-            <div className="card-body">
-              <div className="card-detail">
+            <div className={classes.cardBody}>
+              <div className={classes.cardDetail}>
                 <i className="fas fa-clock"></i>
                 <span>{subscription.duration} months</span>
               </div>
-              <div className="card-detail">
+              <div className={classes.cardDetail}>
                 <i className="fas fa-database"></i>
                 <span>
                   {subscription.resources === -1
@@ -108,29 +108,27 @@ const Subscriptions: React.FC = () => {
                     : `${subscription.resources} Resource Access`}
                 </span>
               </div>
-              {subscription.features &&
-              <div className="card-detail">
+              <div className={classes.cardDetail}>
                 <i className="fas fa-list"></i>
                 <span>{subscription.features}</span>
               </div>
-              }
-              <p className="card-price">Rs. {subscription.price}</p>
+              <p className={classes.cardPrice}>Rs. {subscription.price}</p>
             </div>
-            <button className="card-button" onClick={() => paymentHandler(subscription._id)} >Subscribe now</button>
+            <button className={classes.cardButton} onClick={() => paymentHandler(subscription._id)} >Subscribe now</button>
           </div>
         )) 
         
         : filteredSubscriptions.map((subscription) => (
-          <div key={subscription._id} className='card'>
-            <div className="card-header">
+          <div key={subscription._id} className={classes.card}>
+            <div className={classes.cardHeader}>
               <h3>{subscription.name}</h3>
             </div>
-            <div className="card-body">
-              <div className="card-detail">
+            <div className={classes.cardBody}>
+              <div className={classes.cardDetail}>
                 <i className="fas fa-clock"></i>
                 <span>{subscription.duration} months</span>
               </div>
-              <div className="card-detail">
+              <div className={classes.cardDetail}>
                 <i className="fas fa-database"></i>
                 <span>
                   {subscription.resources === -1
@@ -138,15 +136,13 @@ const Subscriptions: React.FC = () => {
                     : `${subscription.resources} Resource Access`}
                 </span>
               </div>
-              {subscription.features &&
-              <div className="card-detail">
+              <div className={classes.cardDetail}>
                 <i className="fas fa-list"></i>
                 <span>{subscription.features}</span>
               </div>
-              }
-              <p className="card-price">Rs. {subscription.price} </p>
+              <p className={classes.cardPrice}>Rs. {subscription.price} </p>
             </div>
-            <button className="card-button" onClick={() => paymentHandler(subscription._id)} >Subscribe now</button>
+            <button className={classes.cardButton} onClick={() => paymentHandler(subscription._id)} >Subscribe now</button>
           </div>
         ))}
       </div>

@@ -2,12 +2,12 @@ body {
   font-family: 'Arial', sans-serif;
 }
 
-.subscriptions-container {
+.subscriptionsContainer {
   padding: 10px;
   text-align: center;
 }
 
-.subscriptions-header {
+.subscriptionsHeader {
   color: rgb(247, 246, 248);
   color: black;
   padding: 20px;
@@ -35,7 +35,7 @@ body {
   overflow: hidden;
 }
 
-.card-header {
+.cardHeader {
   background-color: #000000;
   color: white;
   padding: 20px;
@@ -44,29 +44,29 @@ body {
   font-weight: bold;
 }
 
-.card-price {
+.cardPrice {
   font-size: 27px;
   font-weight: bold;
   margin: 20px 0;
 }
 
-.card-body {
+.cardBody {
   text-align: left;
   padding: 20px;
 }
 
-.card-detail {
+.cardDetail {
   display: flex;
   align-items: center;
   margin: 10px 0;
 }
 
-.card-detail i {
+.cardDetail i {
   margin-right: 7px;
   color: #0070f3;
 }
 
-.card-button {
+.cardButton {
   background-color: #ff007f;
   color: white;
   border: none;
@@ -78,7 +78,7 @@ body {
   margin: 20px;
 }
 
-.card-button:hover {
+.cardButton:hover {
   background-color: #cc0066;
 }
 

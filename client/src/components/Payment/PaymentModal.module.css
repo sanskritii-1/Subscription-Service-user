@@ -1,4 +1,4 @@
-.modal-overlay {
+.modalOverlay {
   position: fixed;
   top: 0px;
   left: 0;
@@ -10,7 +10,7 @@
   justify-content: center;
 }
 
-.modal-content {
+.modalContent {
   background: #ffffff;
   padding: 40px;
   border-radius: 5px;
@@ -20,11 +20,11 @@
   position: relative;
 }
 
-.modal-content h2 {
+.modalContent h2 {
   margin-bottom: 30px;
 }
 
-.modal-content .close-button {
+.modalContent .closeButton {
   position: absolute;
   top: 10px; 
   right: 10px;
@@ -34,11 +34,11 @@
   transition: color 0.3s ease;
 }
 
-.modal-content .close-button:hover {
+.modalContent .closeButton:hover {
   color: #b30000;
 }
 
-.modal-content .CardElement {
+.modalContent .CardElement {
   border: 3px solid #ccc;
   padding: 10px;
   border-radius: 4px;
@@ -47,7 +47,7 @@
   box-sizing: border-box;
 }
 
-.modal-content button {
+.modalContent button {
   background: #007bff;
   color: white;
   border: bold;
@@ -58,11 +58,11 @@
   transition: background 0.3s ease;
 }
 
-.modal-content button:hover {
+.modalContent button:hover {
   background: #0056b3;
 }
 
-.modal-content form {
+.modalContent form {
   display: flex;
   flex-direction: column;
   align-items: center;
