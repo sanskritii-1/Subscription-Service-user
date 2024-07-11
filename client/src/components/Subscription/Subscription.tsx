@@ -67,7 +67,7 @@ const Subscriptions: React.FC = () => {
   
   const subscribeHandler = async (planId: string) => {
     try {
-      const resData = await sendData("POST", "/subscribe", true, {
+      const resData = await sendData("POST", "subscribe", true, {
         planId: planId,
       });
       navigate('/resources'); 

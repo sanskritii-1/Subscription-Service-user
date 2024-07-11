@@ -24,7 +24,7 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, 
 
   const subscribeHandler = async (planId: string, paymentIntentId: string) => {
     try {
-      const resData = await sendData("POST", "/subscribe", true, {
+      const resData = await sendData("POST", "subscribe", true, {
         planId: planId,
         paymentIntentId
       });
