@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Header.css';
+import classes from './Header.module.css';
 import { GrSearch } from "react-icons/gr";
 import { useNavigate } from 'react-router-dom';
 
@@ -17,8 +17,8 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
   };
 
   return (
-    <div className="header">
-      <div className="search">
+    <div className={classes.header}>
+      <div className={classes.search}>
         <input type="text" placeholder="search subscriptions here..." value={searchQuery}
           onChange={handleSearchChange} />
       </div>

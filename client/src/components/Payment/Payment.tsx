@@ -1,7 +1,7 @@
 import React from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import './PaymentModal.css';
+import classes from './PaymentModal.module.css';
 import { useSendData } from '../../helper/util';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -74,12 +74,12 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, 
 
   return (
     isOpen ? (
-    <div className="modal-overlay" onClick={onClose}>
-        <div className="modal-content" onClick={e => e.stopPropagation()}>
-          <button className="close-button" onClick={onClose}>X</button>
+    <div className={classes.modalOverlay} onClick={onClose}>
+        <div className={classes.modalContent} onClick={e => e.stopPropagation()}>
+          <button className={classes.closeButton} onClick={onClose}>X</button>
           <h2>Payment</h2>
           <form onSubmit={handleSubmit}>
-            <CardElement className="CardElement" />
+            <CardElement className={classes.CardElement} />
             <button type="submit" disabled={!stripe}>
               Pay Rs.{amount}
             </button>
