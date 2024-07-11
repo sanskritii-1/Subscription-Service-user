@@ -39,13 +39,13 @@ const addUserResource = async (userId: string, grpId: mongoose.Types.ObjectId | 
 export const subscribe = async (req: CustomRequest, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
         const { planId } = req.body;
-        const paymentIntentId = req.body.paymentIntentId || '';
+        const paymentIntentId:string = req.body.paymentIntentId || '';
         const payloadData = req.id as JwtPayload;
         const userId = payloadData.id;
 
         const user = await User.findById<IUser>(userId);
         const plan = await Plan.findById<IPlan>(planId);
-        const transaction = await Transaction.findOne<ITransaction>({ userId });
+        const transaction = await Transaction.findOne<ITransaction>({ paymentIntentId });
 
         if (!user) {
             const err: CustomError = new Error('User not found');
@@ -57,30 +57,30 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
             err.status = 404;
             return next(err);
         }
-        if (!transaction && plan.price != 0) {
-            const err: CustomError = new Error('Transaction record not found');
-            err.status = 500;
-            return next(err);
-        }
-
-        if(plan.price!=0 && !paymentIntentId){
-            const err: CustomError = new Error("Payment not successful");
+        if (plan.price != 0 && !transaction) {
+            const err: CustomError = new Error('Transaction record not found. Payment not successful');
             err.status = 400;
             return next(err);
         }
-        else if(paymentIntentId){
-            if(await Subscription.findOne({paymentIntentId})){
+        else if(transaction){
+            if(await Subscription.findOne({transactionId: transaction._id})){
                 const err: CustomError = new Error("Purchase already done");
                 err.status = 400;
                 return next(err);
             }
-            const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-            if(paymentIntent.status!='succeeded'){
-                const err: CustomError = new Error("Payment not successful");
-                err.status = 400;
-                return next(err);
+            else if(transaction.status != 'succeeded'){
+                const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId, {expand: ['charges.data']});
+                if(paymentIntent.status!='succeeded'){
+                    const err: CustomError = new Error("Payment not successful");
+                    err.status = 400;
+                    return next(err);
+                }
+                else{
+                    transaction.status = 'succeeded';
+                    // console.log('sub: ', paymentIntent)
+                    await transaction.save();
+                }
             }
-
         }
 
         const prevTransact = await Subscription.findOne<ISubscription>({ userId: userId }).sort({ startDate: -1 });
@@ -103,7 +103,7 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
         const newSubscription = new Subscription({
             userId: userId,
             planId: planId,
-            paymentIntentId,
+            transactionId: transaction?._id || '',
             startDate: startDate,
             endDate: endDate,
         });

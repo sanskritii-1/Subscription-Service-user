@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import { NextFunction, Request, Response } from 'express';
-import Transaction from '../models/transaction';
+import Transaction, { ITransaction } from '../models/transaction';
 import { JwtPayload } from 'jsonwebtoken';
 import { config } from '../config/appConfig';
 import { getEnvVariable } from '../utils';
@@ -58,10 +58,16 @@ export const webhook = async (req: Request, res: Response, next: NextFunction) =
     return next(err);
   }
 
+
   let paymentIntent = event.data.object as Stripe.PaymentIntent;
   let status: string = '';
   let receipt = '';
   let paymentIntentId = paymentIntent.id;
+
+  const transact = await Transaction.findOne<ITransaction>({paymentIntentId});
+  if(transact?.status === 'succeeded'){
+    res.send();
+  }
 
   switch (event.type) {
     case 'payment_intent.succeeded':

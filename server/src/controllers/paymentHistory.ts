@@ -12,7 +12,7 @@ export const getPaymentHistory = async (req: CustomRequest, res: Response, next:
     const paymentHistory = await Subscription.find<ISubscription>({ userId: userId.id });
   
     const response = [];
-    for (const ele of paymentHistory){
+    for (const ele of (paymentHistory.reverse())){
       const plan = await Plan.findOne<IPlan>({_id: ele.planId});
       response.push({
         amount: plan?.price,

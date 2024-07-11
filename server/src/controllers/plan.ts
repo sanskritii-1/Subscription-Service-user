@@ -68,6 +68,7 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response, next: Ne
     ]);
 
     const purchaseDate = new Date(subscription.startDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const endDate = new Date(subscription.endDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
     const currentDate = new Date();
     const remainingDuration = Math.max(0, Math.ceil((subscription.endDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)));
 
@@ -75,6 +76,7 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response, next: Ne
       planName: currentPlan.name,
       duration: currentPlan.duration,
       purchaseDate: purchaseDate,
+      endDate,
       remainingResources,
       remainingDuration
     };

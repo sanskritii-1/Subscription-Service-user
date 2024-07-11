@@ -1,11 +1,12 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import { IUser } from './user';
 import { IPlan } from './plan';
+import { ITransaction } from './transaction';
 
 export interface ISubscription extends Document {
     userId: mongoose.Types.ObjectId | IUser;
     planId: mongoose.Types.ObjectId | IPlan;
-    paymentIntentId: string;
+    transactionId: mongoose.Types.ObjectId | ITransaction;
     startDate: Date;
     endDate: Date;
 }
@@ -13,7 +14,7 @@ export interface ISubscription extends Document {
 const subscriptionSchema = new Schema<ISubscription>({
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     planId: { type: Schema.Types.ObjectId, ref: 'Plan', required: true },
-    paymentIntentId: {
+    transactionId: {
         type: String,
         default: '',
         unique: true,

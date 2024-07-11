@@ -58,3 +58,23 @@
   padding: 2rem 0rem 0rem 0rem;
   font-size: 2.7rem;
 }
+
+.sortButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 10px 20px;
+}
+
+.sortButton {
+  background-color: #f49279;
+  border-color: #f49279;
+  border-radius: 5px;
+  width: 40px;
+  cursor: pointer;
+}
+
+.sortImg {
+  height: 17px;
+  width: 25px;
+}

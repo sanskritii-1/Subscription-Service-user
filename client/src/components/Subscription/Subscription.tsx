@@ -43,35 +43,35 @@ const Subscriptions: React.FC = () => {
         await subscribeHandler(planId);
         return;
       }
-  
+
       const response = await sendData("POST", "create-payment-intent", true, {
         amount: selectedSubscription.price,
         planId
       });
-  
+
       console.log('Payment Intent response:', response);
-  
+
       if (!response || !response.clientSecret) {
         throw new Error('Client secret not received');
       }
-  
+
       const { clientSecret } = response;
-  
+
       setPaymentDetails({ amount: selectedSubscription.price, planId, clientSecret });
-      setModalOpen(true); 
+      setModalOpen(true);
 
     } catch (error) {
       console.error('Error subscribing to plan:', error);
     }
   };
-  
+
   const subscribeHandler = async (planId: string) => {
     try {
       const resData = await sendData("POST", "subscribe", true, {
         planId: planId,
       });
-      navigate('/resources'); 
-    } 
+      navigate('/resources');
+    }
     catch (error) {
       console.log(error);
     }
@@ -108,43 +108,47 @@ const Subscriptions: React.FC = () => {
                     : `${subscription.resources} Resource Access`}
                 </span>
               </div>
-              <div className={classes.cardDetail}>
-                <i className="fas fa-list"></i>
-                <span>{subscription.features}</span>
-              </div>
+              {subscription.features &&
+                <div className={classes.cardDetail}>
+                  <i className="fas fa-list"></i>
+                  <span>{subscription.features}</span>
+                </div>
+              }
               <p className={classes.cardPrice}>Rs. {subscription.price}</p>
             </div>
             <button className={classes.cardButton} onClick={() => paymentHandler(subscription._id)} >Subscribe now</button>
           </div>
-        )) 
-        
-        : filteredSubscriptions.map((subscription) => (
-          <div key={subscription._id} className={classes.card}>
-            <div className={classes.cardHeader}>
-              <h3>{subscription.name}</h3>
+        ))
+
+          : filteredSubscriptions.map((subscription) => (
+            <div key={subscription._id} className={classes.card}>
+              <div className={classes.cardHeader}>
+                <h3>{subscription.name}</h3>
+              </div>
+              <div className={classes.cardBody}>
+                <div className={classes.cardDetail}>
+                  <i className="fas fa-clock"></i>
+                  <span>{subscription.duration} months</span>
+                </div>
+                <div className={classes.cardDetail}>
+                  <i className="fas fa-database"></i>
+                  <span>
+                    {subscription.resources === -1
+                      ? "Unlimited Resource Access"
+                      : `${subscription.resources} Resource Access`}
+                  </span>
+                </div>
+                {subscription.features &&
+                <div className={classes.cardDetail}>
+                  <i className="fas fa-list"></i>
+                  <span>{subscription.features}</span>
+                </div>
+              }
+                <p className={classes.cardPrice}>Rs. {subscription.price} </p>
+              </div>
+              <button className={classes.cardButton} onClick={() => paymentHandler(subscription._id)} >Subscribe now</button>
             </div>
-            <div className={classes.cardBody}>
-              <div className={classes.cardDetail}>
-                <i className="fas fa-clock"></i>
-                <span>{subscription.duration} months</span>
-              </div>
-              <div className={classes.cardDetail}>
-                <i className="fas fa-database"></i>
-                <span>
-                  {subscription.resources === -1
-                    ? "Unlimited Resource Access"
-                    : `${subscription.resources} Resource Access`}
-                </span>
-              </div>
-              <div className={classes.cardDetail}>
-                <i className="fas fa-list"></i>
-                <span>{subscription.features}</span>
-              </div>
-              <p className={classes.cardPrice}>Rs. {subscription.price} </p>
-            </div>
-            <button className={classes.cardButton} onClick={() => paymentHandler(subscription._id)} >Subscribe now</button>
-          </div>
-        ))}
+          ))}
       </div>
 
       {isModalOpen && (
@@ -156,7 +160,7 @@ const Subscriptions: React.FC = () => {
           clientSecret={paymentDetails.clientSecret}
         />
       )}
-      
+
     </div>
   );
 };

@@ -68,9 +68,8 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
             blur_url: (resource.rId as IResource).blur_url,
         }));
 
-        console.log('left: ', userResource)
         const grpResourceIds = new Set(userResource.leftResources.map((resource: IResourceAccess) => (resource.rId._id as mongoose.Types.ObjectId).toString()));
-        console.log('grpids: ', grpResourceIds)
+
         const resourcesInaccessible = allResources
             .filter((resource:IResource) => !grpResourceIds.has((resource._id as mongoose.Types.ObjectId).toString()))
             .map((resource:IResource) => ({
@@ -80,7 +79,6 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
                 blur_url: resource.blur_url,
             }));
 
-            console.log('inac: ', resourcesInaccessible)
         return res.status(200).json(success(200, {resourcesAccessible, resourcesInaccessible}));
     } 
     catch (err) {
