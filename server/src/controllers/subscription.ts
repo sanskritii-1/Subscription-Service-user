@@ -15,7 +15,7 @@ import Transaction, { ITransaction } from '../models/transaction';
 const addUserResource = async (userId: string, grpId: mongoose.Types.ObjectId | IResourceGrp) => {
     try {
         const grp = await ResourceGrp.findOne<IResourceGrp>({ _id: grpId })
-        if(!grp){
+        if (!grp) {
             const err: CustomError = new Error("Resource for the group not found");
             err.status = 404;
             throw err;
@@ -83,7 +83,7 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
 
         await newSubscription.save();
 
-        const email= user.email;
+        const email = user.email;
         const name = user.name;
         const planName = plan.name;
         const receipt = transaction?.receipt;
@@ -102,10 +102,35 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
 };
 
 
+export const freePlanSubscribe = async (userId: string) => {
+    const freePlan = await Plan.findOne<IPlan>({ price: 0 });
+
+    if (!freePlan) {
+        const err: CustomError = new Error('No free plan found');
+        err.status = 404;
+        // return next(err);
+        throw err;
+    }
+
+    const startDate = new Date();
+    const endDate = new Date(startDate);
+    endDate.setTime(endDate.getTime() + ((freePlan.duration) * 30 * 24 * 60 * 60 * 1000));
+    endDate.setDate(Math.min(endDate.getDate(), new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0).getDate()));
+
+    const sub = new Subscription({
+        userId: userId,
+        planId: freePlan._id,
+        startDate: startDate,
+        endDate: endDate,
+    })
+    await sub.save();
+
+    addUserResource(userId, freePlan.grpId);
+}
+
 export const unsubscribe = async (req: CustomRequest, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
         const planName = req.body.planName;
-        // const leftResources = req.body.leftResources;
         const payloadData = <JwtPayload>req.id;
         const userId = payloadData.id;
 
@@ -114,44 +139,19 @@ export const unsubscribe = async (req: CustomRequest, res: Response, next: NextF
 
         const plan = await Plan.findOne<IPlan>({ name: planName });
 
-        // if (!plan) {
-        //     const err: CustomError = new Error("Your plan is not found");
-        //     err.status = 404;
-        //     throw err;
-        // }
+        if (!plan) {
+            const err: CustomError = new Error("Your plan is not found");
+            err.status = 404;
+            throw err;
+        }
 
-        if (plan?.price === 0) {
+        if (plan.price === 0) {
             const err: CustomError = new Error('Cannot unsubscribe to a free plan');
             err.status = 400;
             return next(err);
         }
 
-        const freePlan = await Plan.findOne<IPlan>({ price: 0 });
-
-        if (!freePlan) {
-            const err: CustomError = new Error('No free plan found');
-            err.status = 404;
-            return next(err);
-        }
-
-        const startDate = new Date();
-        const endDate = new Date(startDate);
-        endDate.setTime(endDate.getTime() + ((freePlan.duration) * 30 * 24 * 60 * 60 * 1000));
-        endDate.setDate(Math.min(endDate.getDate(), new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0).getDate()));
-
-        const unsub = new Subscription({
-            userId: payloadData.id,
-            planId: freePlan._id,
-            startDate: startDate,
-            endDate: endDate,
-        })
-        await unsub.save();
-
-
-        // if (leftResources > freePlan.resources || leftResources===-1) {
-        //     await UserResource.updateOne<IUserResources>({ userId: payloadData.id }, { $set: { leftResources: freePlan.resources } });
-        // }
-        addUserResource(payloadData.id, freePlan.grpId);
+        await freePlanSubscribe(userId);
 
         if (user) {
             const email = user.email;

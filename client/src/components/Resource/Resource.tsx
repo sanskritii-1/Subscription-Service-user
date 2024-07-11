@@ -59,8 +59,10 @@ const Resources: React.FC = () => {
           </div>
           {inaccessible.length !== 0 &&
             <div className={styles.outGrp}>
-
-              <h1 className={styles.heading}>Subscribe to the higher plan to view the following resources</h1>
+              <div className={styles.heading}>
+              <h1>Advanced Member Exclusives</h1>
+              <p>Upgrade now to unlock exclusive access to premium resources</p>
+              </div>
               <div className={styles.container}>
                 {inaccessible.map((image, index) => (
                   <ImageCard
