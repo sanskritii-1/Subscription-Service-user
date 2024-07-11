@@ -38,6 +38,11 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response, next: Ne
       // return next(err);
       return;
     }
+    if(subscription.endDate < new Date()){
+      const err: CustomError = new Error('Previous plan expired');
+      err.status = 409;
+      return next(err);
+    }
 
     const planId = subscription.planId as unknown as string;;
     const currentPlan = await Plan.findById(planId) as IPlan;

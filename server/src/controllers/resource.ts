@@ -10,6 +10,7 @@ import { CustomError } from "../middlewares/error";
 import mongoose from "mongoose";
 import { IResourceAccess, IResourceGrp } from "../models/resourceGrp";
 import ResourceAnalytic, { IResourceAnalytic } from "../models/resourceAnalytic";
+import { freePlanSubscribe } from "./subscription";
 
 interface resourceType{
     _id: mongoose.Types.ObjectId,
@@ -34,9 +35,9 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
             err.status = 400;
             return next(err);
         }
-        // if(subscription.endDate < new Date()){
-        //     http.
-        // }
+        if(subscription.endDate < new Date()){
+            freePlanSubscribe(userId);
+        }
         // const planId = subscription.planId;
         
         // const plan = await Plan.findById(planId).populate({
