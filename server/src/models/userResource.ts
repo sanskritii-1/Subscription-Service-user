@@ -1,8 +1,9 @@
 import mongoose, { Document } from "mongoose";
 import { IUser } from "./user";
+import { IResource } from "./resource";
 
 interface IResourceAccess {
-    rId: mongoose.Types.ObjectId;
+    rId: mongoose.Types.ObjectId | IResource;
     access: number;
 }
 

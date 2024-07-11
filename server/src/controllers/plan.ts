@@ -33,9 +33,10 @@ export const getCurrentPlan = async (req: CustomRequest, res: Response, next: Ne
     const subscription = await Subscription.findOne<ISubscription>({ userId }).sort({ startDate: -1 });
 
     if (!subscription) {
-      const err: CustomError = new Error('Subscribe to a plan');
-      err.status = 404;
-      return next(err);
+      // const err: CustomError = new Error('Subscribe to a plan');
+      // err.status = 404;
+      // return next(err);
+      return;
     }
 
     const planId = subscription.planId as unknown as string;;

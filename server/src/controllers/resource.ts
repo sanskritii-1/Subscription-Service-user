@@ -29,34 +29,45 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
         const userId = (req.id as JwtPayload).id as string;
         const allResources = await Resource.find<IResource>({}, 'title description blur_url');
         const subscription = await Subscription.findOne({ userId }).sort({startDate:-1});
-        if(!subscription || subscription.endDate < new Date()){
-            return next({status:400, message: "Subscribe to a plan"})
+        if(!subscription){
+            const err:CustomError = new Error('Subscribe to a plan');
+            err.status = 400;
+            return next(err);
         }
-
-        const planId = subscription.planId;
+        // if(subscription.endDate < new Date()){
+        //     http.
+        // }
+        // const planId = subscription.planId;
         
-        const plan = await Plan.findById(planId).populate({
-            path: 'grpId',
-            populate: {
-                path: 'resources.rId', 
-                model: 'Resource' 
-            }
-        });
+        // const plan = await Plan.findById(planId).populate({
+        //     path: 'grpId',
+        //     populate: {
+        //         path: 'resources.rId', 
+        //         model: 'Resource' 
+        //     }
+        // });
 
-        if (!plan){
-            const err:CustomError = new Error('Plan not found');
-            err.status = 404;
+        // if (!plan){
+        //     const err:CustomError = new Error('Plan not found');
+        //     err.status = 404;
+        //     return next(err);
+        // }
+        const userResource = await UserResource.findOne({userId}).populate('leftResources.rId');
+
+        if(!userResource){
+            const err: CustomError = new Error("Resource record for user not found");
+            err.status = 500;
             return next(err);
         }
 
-        const resourcesAccessible = (plan.grpId as IResourceGrp).resources.map((resource:IResourceAccess) => ({
+        const resourcesAccessible = userResource.leftResources.map((resource:IResourceAccess) => ({
             _id: resource.rId._id,
             title: (resource.rId as IResource).title,
             description: (resource.rId as IResource).description,
             blur_url: (resource.rId as IResource).blur_url,
         }));
 
-        const grpResourceIds = new Set((plan.grpId as IResourceGrp).resources.map((resource: IResourceAccess) => resource.rId._id));
+        const grpResourceIds = new Set(userResource.leftResources.map((resource: IResourceAccess) => resource.rId._id));
         
         const resourcesInaccessible = allResources
             .filter((resource:IResource) => !grpResourceIds.has(resource._id))
@@ -98,7 +109,7 @@ export const accessResource = async (req: CustomRequest, res: Response, next:Nex
         }
         
         if(resource.access === 0){
-            const err:CustomError = new Error('Cannot access anymore resources');
+            const err:CustomError = new Error('Cannot access this resource anymore');
             err.status = 403;
             return next(err);
         }
