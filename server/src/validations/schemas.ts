@@ -23,6 +23,7 @@ export const accessResourceValidationSchema = Joi.object({
 
 export const subscribeValidationSchema = Joi.object({
     planId: Joi.string().length(24).hex().required(),
+    paymentIntentId: Joi.string(),
 });
 
 export const unsubscribeValidationSchema = Joi.object({

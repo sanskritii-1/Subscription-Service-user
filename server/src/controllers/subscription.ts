@@ -11,6 +11,11 @@ import { CustomRequest } from '../middlewares/auth';
 import { CustomError } from '../middlewares/error';
 import { sendEmail } from "../mailer"
 import Transaction, { ITransaction } from '../models/transaction';
+import Stripe from 'stripe';
+
+const stripe = new Stripe('sk_test_51POayCP5gAI9NfaClujHfCfssJYtu7fQ30mlnZ29Bk2HfoiusIDHCDsJCBATmkMFUHoOgwEMhTWVwSCBvWozdqDn00tnni3x0Z', {
+    apiVersion: '2024-06-20'
+  });
 
 const addUserResource = async (userId: string, grpId: mongoose.Types.ObjectId | IResourceGrp) => {
     try {
@@ -34,6 +39,7 @@ const addUserResource = async (userId: string, grpId: mongoose.Types.ObjectId | 
 export const subscribe = async (req: CustomRequest, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
         const { planId } = req.body;
+        const paymentIntentId = req.body.paymentIntentId || '';
         const payloadData = req.id as JwtPayload;
         const userId = payloadData.id;
 
@@ -57,6 +63,26 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
             return next(err);
         }
 
+        if(plan.price!=0 && !paymentIntentId){
+            const err: CustomError = new Error("Payment not successful");
+            err.status = 400;
+            return next(err);
+        }
+        else if(paymentIntentId){
+            if(await Subscription.findOne({paymentIntentId})){
+                const err: CustomError = new Error("Purchase already done");
+                err.status = 400;
+                return next(err);
+            }
+            const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+            if(paymentIntent.status!='succeeded'){
+                const err: CustomError = new Error("Payment not successful");
+                err.status = 400;
+                return next(err);
+            }
+
+        }
+
         const prevTransact = await Subscription.findOne<ISubscription>({ userId: userId }).sort({ startDate: -1 });
 
         if (plan.price !== 0 || !prevTransact || new Date(prevTransact.endDate) < new Date()) {
@@ -77,6 +103,7 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
         const newSubscription = new Subscription({
             userId: userId,
             planId: planId,
+            paymentIntentId,
             startDate: startDate,
             endDate: endDate,
         });
@@ -86,12 +113,11 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
         const email = user.email;
         const name = user.name;
         const planName = plan.name;
-        const receipt = transaction?.receipt;
 
         await sendEmail({
             to: email,
             subject: 'Plan Purchase Confirmation',
-            text: `Hi ${name}, You have successfully purchased the ${planName} plan.\n${receipt ? `\nTo view the transaction details:\n${receipt}` : ''}`
+            text: `Hi ${name}, You have successfully purchased the ${planName} plan.`
         });
 
 

@@ -5,6 +5,7 @@ import { IPlan } from './plan';
 export interface ISubscription extends Document {
     userId: mongoose.Types.ObjectId | IUser;
     planId: mongoose.Types.ObjectId | IPlan;
+    paymentIntentId: string;
     startDate: Date;
     endDate: Date;
 }
@@ -12,6 +13,11 @@ export interface ISubscription extends Document {
 const subscriptionSchema = new Schema<ISubscription>({
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     planId: { type: Schema.Types.ObjectId, ref: 'Plan', required: true },
+    paymentIntentId: {
+        type: String,
+        default: '',
+        unique: true,
+    },
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
 }, { timestamps: true });

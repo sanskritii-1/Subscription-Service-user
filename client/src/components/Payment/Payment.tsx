@@ -22,10 +22,11 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, 
   const navigate = useNavigate();
   const sendData = useSendData();
 
-  const subscribeHandler = async (planId: string) => {
+  const subscribeHandler = async (planId: string, paymentIntentId: string) => {
     try {
       const resData = await sendData("POST", "/subscribe", true, {
         planId: planId,
+        paymentIntentId
       });
 
       navigate('/resources');
@@ -62,10 +63,10 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, 
       console.error(error);
       // alert("Payment error: " + error.message);
       toast.error(error.message || 'Payment failed\nTry again')
-    }  else if (paymentIntent && paymentIntent.status === 'succeeded') {
+    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
       onClose();
-        await subscribeHandler(planId);
-    } 
+      await subscribeHandler(planId, paymentIntent.id);
+    }
     // else {
     //   console.error('Payment failed');
     //   alert('Payment failed. Please try again.');
@@ -74,7 +75,7 @@ const PaymentForm: React.FC<PaymentProps> = ({ isOpen, onClose, amount, planId, 
 
   return (
     isOpen ? (
-    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-overlay" onClick={onClose}>
         <div className="modal-content" onClick={e => e.stopPropagation()}>
           <button className="close-button" onClick={onClose}>X</button>
           <h2>Payment</h2>

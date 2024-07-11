@@ -52,7 +52,6 @@ const Login: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            minLength={8}
           />
         </div>
         <div className={classes.flex}>
