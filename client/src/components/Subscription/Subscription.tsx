@@ -108,11 +108,11 @@ const Subscriptions: React.FC = () => {
                     : `${subscription.resources} Resource Access`}
                 </span>
               </div>
-              <div className="card-detail">
+              <div className={classes.cardDetail}>
                 <i className="fas fa-list"></i>
                 <span>{subscription.features}</span>
               </div>
-              <p className="card-price">Rs. {subscription.price}</p>
+              <p className={classes.cardPrice}>Rs. {subscription.price}</p>
             </div>
             <button className={classes.cardButton} onClick={() => paymentHandler(subscription._id)} >Subscribe now</button>
           </div>
@@ -136,11 +136,11 @@ const Subscriptions: React.FC = () => {
                     : `${subscription.resources} Resource Access`}
                 </span>
               </div>
-              <div className="card-detail">
+              <div className={classes.cardDetail}>
                 <i className="fas fa-list"></i>
                 <span>{subscription.features}</span>
               </div>
-              <p className="card-price">Rs. {subscription.price} </p>
+              <p className={classes.cardPrice}>Rs. {subscription.price} </p>
             </div>
             <button className={classes.cardButton} onClick={() => paymentHandler(subscription._id)} >Subscribe now</button>
           </div>
