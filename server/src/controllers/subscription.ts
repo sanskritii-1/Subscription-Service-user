@@ -36,44 +36,43 @@ const addUserResource = async (userId: string, grpId: mongoose.Types.ObjectId | 
     }
 }
 
-export const subscribe = async (req: CustomRequest, res: Response, next: NextFunction): Promise<Response | void> => {
-    try {
-        const { planId } = req.body;
-        const paymentIntentId:string = req.body.paymentIntentId || '';
-        const payloadData = req.id as JwtPayload;
-        const userId = payloadData.id;
-
-        const user = await User.findById<IUser>(userId);
+export const subscribeAction = async (userId: string, planId: string, paymentIntentId: string) => {
+    const user = await User.findById<IUser>(userId);
         const plan = await Plan.findById<IPlan>(planId);
         const transaction = await Transaction.findOne<ITransaction>({ paymentIntentId });
 
         if (!user) {
             const err: CustomError = new Error('User not found');
             err.status = 404;
-            return next(err);
+            // return next(err);
+            throw err;
         }
         if (!plan) {
             const err: CustomError = new Error('Plan not found');
             err.status = 404;
-            return next(err);
+            // return next(err);
+            throw err;
         }
         if (plan.price != 0 && !transaction) {
             const err: CustomError = new Error('Transaction record not found. Payment not successful');
             err.status = 400;
-            return next(err);
+            // return next(err);
+            throw err;
         }
         else if(transaction){
             if(await Subscription.findOne({transactionId: transaction._id})){
                 const err: CustomError = new Error("Purchase already done");
                 err.status = 400;
-                return next(err);
+                // return next(err);
+                throw err;
             }
             else if(transaction.status != 'succeeded'){
-                const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId, {expand: ['charges.data']});
+                const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
                 if(paymentIntent.status!='succeeded'){
                     const err: CustomError = new Error("Payment not successful");
                     err.status = 400;
-                    return next(err);
+                    // return next(err);
+                    throw err;
                 }
                 else{
                     transaction.status = 'succeeded';
@@ -91,9 +90,9 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
         else {
             const err: CustomError = new Error('Already subscribed to a plan.\nConsider unsubscribing');
             err.status = 409;
-            return next(err);
+            // return next(err);
+            throw err;
         }
-
 
         const startDate = new Date();
         const endDate = new Date(startDate);
@@ -119,7 +118,16 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
             subject: 'Plan Purchase Confirmation',
             text: `Hi ${name}, You have successfully purchased the ${planName} plan.`
         });
+}
 
+export const subscribe = async (req: CustomRequest, res: Response, next: NextFunction): Promise<Response | void> => {
+    try {
+        const planId: string = req.body.planId;
+        const paymentIntentId:string = req.body.paymentIntentId || '';
+        const payloadData = req.id as JwtPayload;
+        const userId = payloadData.id;
+
+        await subscribeAction(userId, planId, paymentIntentId);
 
         return res.status(201).json(success(201, { message: 'Subscription purchased successfully' }));
     } catch (err) {

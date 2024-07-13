@@ -6,6 +6,8 @@ import { config } from '../config/appConfig';
 import { getEnvVariable } from '../utils';
 import { CustomRequest } from '../middlewares/auth';
 import { success } from '../utils/response';
+import { CustomError } from '../middlewares/error';
+import { subscribeAction } from './subscription';
 
 const stripe = new Stripe('sk_test_51POayCP5gAI9NfaClujHfCfssJYtu7fQ30mlnZ29Bk2HfoiusIDHCDsJCBATmkMFUHoOgwEMhTWVwSCBvWozdqDn00tnni3x0Z', {
   apiVersion: '2024-06-20'
@@ -16,7 +18,7 @@ export const createPaymentIntent = async (req: CustomRequest, res: Response, nex
 
   try {
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount * 100, 
+      amount: amount * 100,
       currency: 'inr',
     });
 
@@ -31,7 +33,7 @@ export const createPaymentIntent = async (req: CustomRequest, res: Response, nex
     await newTransact.save();
 
     console.log('PaymentIntent created:');
-    res.status(200).json(success(200,{
+    res.status(200).json(success(200, {
       clientSecret: paymentIntent.client_secret,
     }));
   } catch (error) {
@@ -48,9 +50,9 @@ export const webhook = async (req: Request, res: Response, next: NextFunction) =
     console.log('no sig error')
     return next({ status: 400, message: "webhook error: invalid signature" })
   }
-  
+
   let event;
-  
+
   try {
     const endpointSecret = getEnvVariable(config.WEBHOOK_SECRET);
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
@@ -63,16 +65,22 @@ export const webhook = async (req: Request, res: Response, next: NextFunction) =
   let status: string = '';
   let receipt = '';
   let paymentIntentId = paymentIntent.id;
-  console.log('pid: ', paymentIntent);
+  // console.log('pid: ', paymentIntent);
 
-  const transact = await Transaction.findOne<ITransaction>({paymentIntentId});
-  if(transact?.status === 'succeeded'){
+  const transact = await Transaction.findOne<ITransaction>({ paymentIntentId });
+  if (transact?.status === 'succeeded') {
     return res.send();
   }
 
   switch (event.type) {
     case 'payment_intent.succeeded':
-      status = paymentIntent.status;
+      // status = paymentIntent.status;
+      if (!transact) {
+        const err: CustomError = new Error("Transaction record not found");
+        err.status = 404;
+        return next(err);
+      }
+      await subscribeAction(transact.userId.toString(), transact.planId.toString(), paymentIntentId);
       console.log('in webhook', event.type);
       break;
 
@@ -82,11 +90,17 @@ export const webhook = async (req: Request, res: Response, next: NextFunction) =
       console.log(`Failure reason: ${paymentIntent.last_payment_error?.message}`);
       break;
 
+    case 'payment_intent.processing':
+      console.log('in webhook', event.type);
+      status = 'processing';
+      break;
+
     case 'charge.succeeded':
+      console.log('in webhook', event.type);
       let chargeIntent = event.data.object as Stripe.Charge
-      console.log('paymentintent in charge suc: ', paymentIntent)
+      // console.log('paymentintent in charge suc: ', paymentIntent)
       receipt = chargeIntent.receipt_url || '';
-      console.log('receipt: ', receipt);
+      // console.log('receipt: ', receipt);
       paymentIntentId = chargeIntent.payment_intent as string;
       break;
 
@@ -94,12 +108,12 @@ export const webhook = async (req: Request, res: Response, next: NextFunction) =
       console.log(`Unhandled event type ${event.type}`);
   }
 
-  console.log('payment intent: ', paymentIntent);
+  // console.log('payment intent in webhook: ', paymentIntent);
 
   if (status) {
     await Transaction.findOneAndUpdate({ paymentIntentId }, { status })
   }
-  if(receipt){
+  if (receipt) {
     await Transaction.findOneAndUpdate({ paymentIntentId }, { receipt })
   }
 
