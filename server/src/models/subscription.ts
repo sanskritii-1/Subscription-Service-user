@@ -15,8 +15,9 @@ const subscriptionSchema = new Schema<ISubscription>({
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     planId: { type: Schema.Types.ObjectId, ref: 'Plan', required: true },
     transactionId: {
-        type: String,
-        default: '',
+        type: mongoose.Types.ObjectId,
+        ref: 'Transaction',
+        default: null,
         unique: true,
     },
     startDate: { type: Date, required: true },

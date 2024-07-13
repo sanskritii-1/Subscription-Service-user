@@ -48,13 +48,13 @@ export const webhook = async (req: Request, res: Response, next: NextFunction) =
     console.log('no sig error')
     return next({ status: 400, message: "webhook error: invalid signature" })
   }
-
+  
   let event;
-
+  
   try {
     const endpointSecret = getEnvVariable(config.WEBHOOK_SECRET);
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-  } catch (err: any) {
+  } catch (err: unknown) {
     return next(err);
   }
 
@@ -63,10 +63,11 @@ export const webhook = async (req: Request, res: Response, next: NextFunction) =
   let status: string = '';
   let receipt = '';
   let paymentIntentId = paymentIntent.id;
+  console.log('pid: ', paymentIntent);
 
   const transact = await Transaction.findOne<ITransaction>({paymentIntentId});
   if(transact?.status === 'succeeded'){
-    res.send();
+    return res.send();
   }
 
   switch (event.type) {

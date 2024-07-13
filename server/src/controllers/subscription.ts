@@ -103,7 +103,7 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
         const newSubscription = new Subscription({
             userId: userId,
             planId: planId,
-            transactionId: transaction?._id || '',
+            transactionId: transaction?._id || null,
             startDate: startDate,
             endDate: endDate,
         });
