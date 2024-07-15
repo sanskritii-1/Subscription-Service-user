@@ -1,7 +1,8 @@
 import { config } from "./config/appConfig";
 import Mailjet from 'node-mailjet';
+import { getEnvVariable } from "./utils";
 
-const mailjet = Mailjet.apiConnect(config.MAILJET_API_KEY, config.MAILJET_SECRET_KEY);
+const mailjet = Mailjet.apiConnect(getEnvVariable(config.MAILJET_API_KEY), getEnvVariable(config.MAILJET_SECRET_KEY));
 
 interface SendEmailParams {
   to: string;

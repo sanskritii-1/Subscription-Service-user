@@ -12,18 +12,20 @@ import { CustomError } from '../middlewares/error';
 import { sendEmail } from "../mailer"
 import Transaction, { ITransaction } from '../models/transaction';
 import Stripe from 'stripe';
+import { getEnvVariable } from '../utils';
+import { config } from '../config/appConfig';
 
-const stripe = new Stripe('sk_test_51POayCP5gAI9NfaClujHfCfssJYtu7fQ30mlnZ29Bk2HfoiusIDHCDsJCBATmkMFUHoOgwEMhTWVwSCBvWozdqDn00tnni3x0Z', {
+const stripe = new Stripe(getEnvVariable(config.STRIPE_PRIVATE_KEY), {
     apiVersion: '2024-06-20'
   });
 
-const addUserResource = async (userId: string, grpId: mongoose.Types.ObjectId | IResourceGrp) => {
+const addUserResource = async (userId: string, grpId: mongoose.Types.ObjectId | IResourceGrp, next: NextFunction) => {
     try {
         const grp = await ResourceGrp.findOne<IResourceGrp>({ _id: grpId })
         if (!grp) {
             const err: CustomError = new Error("Resource for the group not found");
             err.status = 404;
-            throw err;
+            return next(err);
         }
         await UserResource.findOneAndUpdate(
             { userId: userId },
@@ -36,98 +38,97 @@ const addUserResource = async (userId: string, grpId: mongoose.Types.ObjectId | 
     }
 }
 
-export const subscribeAction = async (userId: string, planId: string, paymentIntentId: string) => {
+export const subscribeAction = async (userId: string, planId: string, paymentIntentId: string, next: NextFunction) => {
     const user = await User.findById<IUser>(userId);
-        const plan = await Plan.findById<IPlan>(planId);
-        const transaction = await Transaction.findOne<ITransaction>({ paymentIntentId });
+    const plan = await Plan.findById<IPlan>(planId);
+    const transaction = await Transaction.findOne<ITransaction>({ paymentIntentId });
 
-        if (!user) {
-            const err: CustomError = new Error('User not found');
-            err.status = 404;
-            // return next(err);
-            throw err;
-        }
-        if (!plan) {
-            const err: CustomError = new Error('Plan not found');
-            err.status = 404;
-            // return next(err);
-            throw err;
-        }
-        if (plan.price != 0 && !transaction) {
-            const err: CustomError = new Error('Transaction record not found. Payment not successful');
-            err.status = 400;
-            // return next(err);
-            throw err;
-        }
-        else if(transaction){
-            if(await Subscription.findOne({transactionId: transaction._id})){
-                const err: CustomError = new Error("Purchase already done");
-                err.status = 400;
-                // return next(err);
-                throw err;
-            }
-            else if(transaction.status != 'succeeded'){
-                const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-                if(paymentIntent.status!='succeeded'){
-                    const err: CustomError = new Error("Payment not successful");
-                    err.status = 400;
-                    // return next(err);
-                    throw err;
-                }
-                else{
-                    transaction.status = 'succeeded';
-                    // console.log('sub: ', paymentIntent)
-                    await transaction.save();
-                }
-            }
-        }
-
-        const prevTransact = await Subscription.findOne<ISubscription>({ userId: userId }).sort({ startDate: -1 });
-
-        if (plan.price !== 0 || !prevTransact || new Date(prevTransact.endDate) < new Date()) {
-            await addUserResource(userId, plan.grpId);
-        }
-        else {
-            const err: CustomError = new Error('Already subscribed to a plan.\nConsider unsubscribing');
+    if (!user) {
+        const err: CustomError = new Error('User not found');
+        err.status = 404;
+        return next(err);
+        // throw err;
+    }
+    if (!plan) {
+        const err: CustomError = new Error('Plan not found');
+        err.status = 404;
+        return next(err);
+        // throw err;
+    }
+    if (plan.price != 0 && !transaction) {
+        const err: CustomError = new Error('Transaction record not found. Payment not successful');
+        err.status = 404;
+        return next(err);
+        // throw err;
+    }
+    else if (transaction) {
+        if (await Subscription.findOne({ transactionId: transaction._id })) {
+            const err: CustomError = new Error("Purchase already done");
             err.status = 409;
-            // return next(err);
-            throw err;
+            return next(err);
+            // throw err;
         }
+        else if (transaction.status != 'succeeded') {
+            const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+            if (paymentIntent.status != 'succeeded') {
+                const err: CustomError = new Error("Payment not successful");
+                err.status = 400;
+                return next(err);
+                // throw err;
+            }
+            else {
+                transaction.status = 'succeeded';
+                await transaction.save();
+            }
+        }
+    }
 
-        const startDate = new Date();
-        const endDate = new Date(startDate);
-        endDate.setTime(endDate.getTime() + ((plan.duration) * 30 * 24 * 60 * 60 * 1000));
-        endDate.setDate(Math.min(endDate.getDate(), new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0).getDate()));
+    const prevTransact = await Subscription.findOne<ISubscription>({ userId: userId }).sort({ startDate: -1 });
 
-        const newSubscription = new Subscription({
-            userId: userId,
-            planId: planId,
-            transactionId: transaction?._id || null,
-            startDate: startDate,
-            endDate: endDate,
-        });
+    if (plan.price !== 0 || !prevTransact || new Date(prevTransact.endDate) < new Date()) {
+        await addUserResource(userId, plan.grpId, next);
+    }
+    else {
+        const err: CustomError = new Error('Already subscribed to a plan.\nConsider unsubscribing');
+        err.status = 409;
+        return next(err);
+        // throw err;
+    }
 
-        await newSubscription.save();
+    const startDate = new Date();
+    const endDate = new Date(startDate);
+    endDate.setTime(endDate.getTime() + ((plan.duration) * 30 * 24 * 60 * 60 * 1000));
+    endDate.setDate(Math.min(endDate.getDate(), new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0).getDate()));
 
-        const email = user.email;
-        const name = user.name;
-        const planName = plan.name;
+    const newSubscription = new Subscription({
+        userId: userId,
+        planId: planId,
+        transactionId: transaction?._id || null,
+        startDate: startDate,
+        endDate: endDate,
+    });
 
-        await sendEmail({
-            to: email,
-            subject: 'Plan Purchase Confirmation',
-            text: `Hi ${name}, You have successfully purchased the ${planName} plan.`
-        });
+    await newSubscription.save();
+
+    const email = user.email;
+    const name = user.name;
+    const planName = plan.name;
+
+    await sendEmail({
+        to: email,
+        subject: 'Plan Purchase Confirmation',
+        text: `Hi ${name}, You have successfully purchased the ${planName} plan.`
+    });
 }
 
 export const subscribe = async (req: CustomRequest, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
         const planId: string = req.body.planId;
-        const paymentIntentId:string = req.body.paymentIntentId || '';
+        const paymentIntentId: string = req.body.paymentIntentId || '';
         const payloadData = req.id as JwtPayload;
         const userId = payloadData.id;
 
-        await subscribeAction(userId, planId, paymentIntentId);
+        await subscribeAction(userId, planId, paymentIntentId, next);
 
         return res.status(201).json(success(201, { message: 'Subscription purchased successfully' }));
     } catch (err) {
@@ -136,14 +137,14 @@ export const subscribe = async (req: CustomRequest, res: Response, next: NextFun
 };
 
 
-export const freePlanSubscribe = async (userId: string) => {
+export const freePlanSubscribe = async (userId: string, next: NextFunction) => {
     const freePlan = await Plan.findOne<IPlan>({ price: 0 });
 
     if (!freePlan) {
         const err: CustomError = new Error('No free plan found');
         err.status = 404;
-        // return next(err);
-        throw err;
+        return next(err);
+        // throw err;
     }
 
     const startDate = new Date();
@@ -159,7 +160,7 @@ export const freePlanSubscribe = async (userId: string) => {
     })
     await sub.save();
 
-    addUserResource(userId, freePlan.grpId);
+    addUserResource(userId, freePlan.grpId, next);
 }
 
 export const unsubscribe = async (req: CustomRequest, res: Response, next: NextFunction): Promise<Response | void> => {
@@ -176,7 +177,7 @@ export const unsubscribe = async (req: CustomRequest, res: Response, next: NextF
         if (!plan) {
             const err: CustomError = new Error("Your plan is not found");
             err.status = 404;
-            throw err;
+            return next(err);
         }
 
         if (plan.price === 0) {
@@ -185,7 +186,7 @@ export const unsubscribe = async (req: CustomRequest, res: Response, next: NextF
             return next(err);
         }
 
-        await freePlanSubscribe(userId);
+        await freePlanSubscribe(userId, next);
 
         if (user) {
             const email = user.email;

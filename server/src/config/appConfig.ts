@@ -7,6 +7,7 @@ export const config = {
     DB_NAME: process.env.DBNAME || "subscription",
     ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET||"hiii",
     WEBHOOK_SECRET: process.env.WEBHOOK_SECRET,
-    MAILJET_API_KEY :"d380c61ae288e7552fedc2d90775a385",
-    MAILJET_SECRET_KEY :"acb8eeabca4e4d889744679dcb4b54d1"
+    MAILJET_API_KEY : process.env.MAILJET_API_KEY,
+    MAILJET_SECRET_KEY : process.env.MAILJET_SECRET_KEY,
+    STRIPE_PRIVATE_KEY: process.env.STRIPE_PRIVATE_KEY,
 }

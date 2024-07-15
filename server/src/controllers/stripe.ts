@@ -9,9 +9,11 @@ import { success } from '../utils/response';
 import { CustomError } from '../middlewares/error';
 import { subscribeAction } from './subscription';
 
-const stripe = new Stripe('sk_test_51POayCP5gAI9NfaClujHfCfssJYtu7fQ30mlnZ29Bk2HfoiusIDHCDsJCBATmkMFUHoOgwEMhTWVwSCBvWozdqDn00tnni3x0Z', {
+
+const stripe = new Stripe(getEnvVariable(config.STRIPE_PRIVATE_KEY), {
   apiVersion: '2024-06-20'
 });
+
 
 export const createPaymentIntent = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
   const { amount } = req.body;
@@ -80,7 +82,7 @@ export const webhook = async (req: Request, res: Response, next: NextFunction) =
         err.status = 404;
         return next(err);
       }
-      await subscribeAction(transact.userId.toString(), transact.planId.toString(), paymentIntentId);
+      await subscribeAction(transact.userId.toString(), transact.planId.toString(), paymentIntentId, next);
       console.log('in webhook', event.type);
       break;
 
@@ -100,7 +102,6 @@ export const webhook = async (req: Request, res: Response, next: NextFunction) =
       let chargeIntent = event.data.object as Stripe.Charge
       // console.log('paymentintent in charge suc: ', paymentIntent)
       receipt = chargeIntent.receipt_url || '';
-      // console.log('receipt: ', receipt);
       paymentIntentId = chargeIntent.payment_intent as string;
       break;
 
@@ -108,7 +109,6 @@ export const webhook = async (req: Request, res: Response, next: NextFunction) =
       console.log(`Unhandled event type ${event.type}`);
   }
 
-  // console.log('payment intent in webhook: ', paymentIntent);
 
   if (status) {
     await Transaction.findOneAndUpdate({ paymentIntentId }, { status })

@@ -36,7 +36,7 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
             return next(err);
         }
         if(subscription.endDate < new Date()){
-            freePlanSubscribe(userId);
+            freePlanSubscribe(userId, next);
         }
         // const planId = subscription.planId;
         
