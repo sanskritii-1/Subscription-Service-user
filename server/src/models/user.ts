@@ -1,6 +1,30 @@
 import mongoose, {CallbackError, Document} from "mongoose";
 import bcrypt from "bcryptjs";
-
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - email
+ *         - name
+ *         - password
+ *       properties:
+ *         email:
+ *           type: string
+ *           description: The user's email id
+ *         name:
+ *           type: string
+ *           description: The user's name
+ *         password:
+ *           type: string
+ *           description: The user's hashed password
+ *       example:
+ *         email: johndoe@gmail.com
+ *         name: John Doe
+ *         password: 5f4dcc3b5aa765d61d8327deb882cf99
+ */
 export interface IUser extends Document{
     email: string,
     name: string,
