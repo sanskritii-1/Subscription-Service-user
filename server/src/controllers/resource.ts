@@ -57,7 +57,7 @@ export const getResources = async (req: CustomRequest, res: Response, next: Next
 
         if(!userResource){
             const err: CustomError = new Error("Resource record for user not found");
-            err.status = 500;
+            err.status = 404;
             return next(err);
         }
 
